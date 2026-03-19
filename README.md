@@ -1,4 +1,4 @@
-# AgileWebDev project README
+# AgileWebDev project
 
 |  UWA ID  | Name                         | GitHub Username |
 |----------|------------------------------|-----------------|
