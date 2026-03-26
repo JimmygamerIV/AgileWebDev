@@ -1,0 +1,782 @@
+BEGIN:VCALENDAR
+PRODID:-//Allocate//iCal4j 1.0//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Australia/Perth
+LAST-MODIFIED:20251211T094730Z
+TZURL:https://www.tzurl.org/zoneinfo-outlook/Australia/Perth
+X-LIC-LOCATION:Australia/Perth
+BEGIN:STANDARD
+TZNAME:AWST
+TZOFFSETFROM:+0800
+TZOFFSETTO:+0800
+DTSTART:19700101T000000
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260227T120000
+DTEND;TZID=Australia/Perth:20260227T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid0
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260306T120000
+DTEND;TZID=Australia/Perth:20260306T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid1
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260313T120000
+DTEND;TZID=Australia/Perth:20260313T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid2
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260320T120000
+DTEND;TZID=Australia/Perth:20260320T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid3
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260327T120000
+DTEND;TZID=Australia/Perth:20260327T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid4
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260403T120000
+DTEND;TZID=Australia/Perth:20260403T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid5
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260417T120000
+DTEND;TZID=Australia/Perth:20260417T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid6
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260424T120000
+DTEND;TZID=Australia/Perth:20260424T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid7
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260501T120000
+DTEND;TZID=Australia/Perth:20260501T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid8
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260508T120000
+DTEND;TZID=Australia/Perth:20260508T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid9
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260515T120000
+DTEND;TZID=Australia/Perth:20260515T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid10
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260522T120000
+DTEND;TZID=Australia/Perth:20260522T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid11
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260402T170000
+DTEND;TZID=Australia/Perth:20260402T190000
+SUMMARY:Computer Networks\, Test-01
+LOCATION:106.G58 ARTS.  Murdoch Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Test-01\, 02\nComputer Networks\nStaff: -\nLocation: 106.G58 ARTS.  Murdoch Lecture Theatre
+UID:uid12
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260304T160000
+DTEND;TZID=Australia/Perth:20260304T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid13
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260311T160000
+DTEND;TZID=Australia/Perth:20260311T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid14
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260318T160000
+DTEND;TZID=Australia/Perth:20260318T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid15
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260325T160000
+DTEND;TZID=Australia/Perth:20260325T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid16
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260401T160000
+DTEND;TZID=Australia/Perth:20260401T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid17
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260415T160000
+DTEND;TZID=Australia/Perth:20260415T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid18
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260422T160000
+DTEND;TZID=Australia/Perth:20260422T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid19
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260429T160000
+DTEND;TZID=Australia/Perth:20260429T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid20
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260506T160000
+DTEND;TZID=Australia/Perth:20260506T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid21
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260513T160000
+DTEND;TZID=Australia/Perth:20260513T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid22
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260520T160000
+DTEND;TZID=Australia/Perth:20260520T180000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:241.203 COMPUTER SCIENCE.Computer Lab
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 06\nSecure Coding\nStaff: -\nLocation: 241.203 COMPUTER SCIENCE.Computer Lab
+UID:uid23
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260225T140000
+DTEND;TZID=Australia/Perth:20260225T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid24
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260304T140000
+DTEND;TZID=Australia/Perth:20260304T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid25
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260311T140000
+DTEND;TZID=Australia/Perth:20260311T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid26
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260318T140000
+DTEND;TZID=Australia/Perth:20260318T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid27
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260325T140000
+DTEND;TZID=Australia/Perth:20260325T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid28
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260401T140000
+DTEND;TZID=Australia/Perth:20260401T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid29
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260415T140000
+DTEND;TZID=Australia/Perth:20260415T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid30
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260422T140000
+DTEND;TZID=Australia/Perth:20260422T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid31
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260429T140000
+DTEND;TZID=Australia/Perth:20260429T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid32
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260506T140000
+DTEND;TZID=Australia/Perth:20260506T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid33
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260513T140000
+DTEND;TZID=Australia/Perth:20260513T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid34
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260520T140000
+DTEND;TZID=Australia/Perth:20260520T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01\nSecure Coding\nStaff: -\nLocation: 223.G40 MATHEMATICS.  Weatherburn Lecture Theatre
+UID:uid35
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260305T120000
+DTEND;TZID=Australia/Perth:20260305T140000
+SUMMARY:Agile Web Development\, Lab-01
+LOCATION:HACKH: [  G09] Fay Gale Studio
+DESCRIPTION:CITS3403_SEM-1_CR\, Lab-01\, 04\nAgile Web Development\nStaff: -\nLocation: HACKH: [  G09] Fay Gale Studio
+UID:uid36
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260326T120000
+DTEND;TZID=Australia/Perth:20260326T140000
+SUMMARY:Agile Web Development\, Lab-02
+LOCATION:HACKH: [  G09] Fay Gale Studio
+DESCRIPTION:CITS3403_SEM-1_CR\, Lab-02\, 04\nAgile Web Development\nStaff: -\nLocation: HACKH: [  G09] Fay Gale Studio
+UID:uid37
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260423T120000
+DTEND;TZID=Australia/Perth:20260423T140000
+SUMMARY:Agile Web Development\, Lab-03
+LOCATION:HACKH: [  G09] Fay Gale Studio
+DESCRIPTION:CITS3403_SEM-1_CR\, Lab-03\, 04\nAgile Web Development\nStaff: -\nLocation: HACKH: [  G09] Fay Gale Studio
+UID:uid38
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260227T100000
+DTEND;TZID=Australia/Perth:20260227T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid39
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260306T100000
+DTEND;TZID=Australia/Perth:20260306T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid40
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260313T100000
+DTEND;TZID=Australia/Perth:20260313T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid41
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260320T100000
+DTEND;TZID=Australia/Perth:20260320T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid42
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260327T100000
+DTEND;TZID=Australia/Perth:20260327T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid43
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260403T100000
+DTEND;TZID=Australia/Perth:20260403T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid44
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260417T100000
+DTEND;TZID=Australia/Perth:20260417T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid45
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260424T100000
+DTEND;TZID=Australia/Perth:20260424T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid46
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260501T100000
+DTEND;TZID=Australia/Perth:20260501T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid47
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260508T100000
+DTEND;TZID=Australia/Perth:20260508T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid48
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260515T100000
+DTEND;TZID=Australia/Perth:20260515T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid49
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260522T100000
+DTEND;TZID=Australia/Perth:20260522T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid50
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260225T160000
+DTEND;TZID=Australia/Perth:20260225T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid51
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260304T160000
+DTEND;TZID=Australia/Perth:20260304T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid52
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260311T160000
+DTEND;TZID=Australia/Perth:20260311T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid53
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260318T160000
+DTEND;TZID=Australia/Perth:20260318T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid54
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260325T160000
+DTEND;TZID=Australia/Perth:20260325T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid55
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260401T160000
+DTEND;TZID=Australia/Perth:20260401T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid56
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260415T160000
+DTEND;TZID=Australia/Perth:20260415T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid57
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260422T160000
+DTEND;TZID=Australia/Perth:20260422T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid58
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260429T160000
+DTEND;TZID=Australia/Perth:20260429T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid59
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260506T160000
+DTEND;TZID=Australia/Perth:20260506T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid60
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260513T160000
+DTEND;TZID=Australia/Perth:20260513T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid61
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260520T160000
+DTEND;TZID=Australia/Perth:20260520T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01_Clashable\nAgile Web Development\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid62
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260225T090000
+DTEND;TZID=Australia/Perth:20260225T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid63
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260304T090000
+DTEND;TZID=Australia/Perth:20260304T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid64
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260311T090000
+DTEND;TZID=Australia/Perth:20260311T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid65
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260325T090000
+DTEND;TZID=Australia/Perth:20260325T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid66
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260401T090000
+DTEND;TZID=Australia/Perth:20260401T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid67
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260415T090000
+DTEND;TZID=Australia/Perth:20260415T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid68
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260422T090000
+DTEND;TZID=Australia/Perth:20260422T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid69
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260429T090000
+DTEND;TZID=Australia/Perth:20260429T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid70
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260506T090000
+DTEND;TZID=Australia/Perth:20260506T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid71
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260513T090000
+DTEND;TZID=Australia/Perth:20260513T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid72
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260520T090000
+DTEND;TZID=Australia/Perth:20260520T110000
+SUMMARY:Introduction to Marketing\, Lecture-01
+LOCATION:352.G130 SOCIAL SCIENCE.  Lecture Theatre
+DESCRIPTION:MKTG1203_SEM-1_CR\, Lecture-01\, 01\nIntroduction to Marketing\nStaff: -\nLocation: 352.G130 SOCIAL SCIENCE.  Lecture Theatre
+UID:uid73
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260306T090000
+DTEND;TZID=Australia/Perth:20260306T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid74
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260313T090000
+DTEND;TZID=Australia/Perth:20260313T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid75
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260320T090000
+DTEND;TZID=Australia/Perth:20260320T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid76
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260327T090000
+DTEND;TZID=Australia/Perth:20260327T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid77
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260403T090000
+DTEND;TZID=Australia/Perth:20260403T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid78
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260417T090000
+DTEND;TZID=Australia/Perth:20260417T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid79
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260424T090000
+DTEND;TZID=Australia/Perth:20260424T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid80
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260501T090000
+DTEND;TZID=Australia/Perth:20260501T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid81
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260508T090000
+DTEND;TZID=Australia/Perth:20260508T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid82
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260515T090000
+DTEND;TZID=Australia/Perth:20260515T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid83
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260324T093027Z
+DTSTART;TZID=Australia/Perth:20260522T090000
+DTEND;TZID=Australia/Perth:20260522T100000
+SUMMARY:Introduction to Marketing\, Tutorial-01
+LOCATION:BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+DESCRIPTION:MKTG1203_SEM-1_CR\, Tutorial-01\, 20\nIntroduction to Marketing\nStaff: -\nLocation: BUSN: [ 260] Sir Bruce MacKinlay Tutorial Room
+UID:uid84
+END:VEVENT
+END:VCALENDAR

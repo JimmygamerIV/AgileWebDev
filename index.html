@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UWA Map</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="module" src="script.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #styleToggle {
+            margin-bottom: 10px;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>UWA Map – Social Sciences LT</h2>
+    <button id="styleToggle">Switch to Default Style</button>
+    <div id="map"></div>
+</body>
+</html>
