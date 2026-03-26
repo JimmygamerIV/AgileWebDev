@@ -1,3 +1,0 @@
-https://api.mazemap.com/api/buildings/?campusid=309
-
-https://api.mazemap.com/api/pois/?campusid=309
