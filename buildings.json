@@ -1,0 +1,674 @@
+{
+    "101": {
+        "identifier": "101",
+        "name": "Winthrop Hall",
+        "full_name": "101 - Winthrop Hall",
+        "latitude": -31.976943045823425,
+        "longitude": 115.81788507806414
+    },
+    "102": {
+        "identifier": "102",
+        "name": "Administration Building",
+        "full_name": "102 - Administration Building",
+        "latitude": -31.97658836732572,
+        "longitude": 115.81721630364578
+    },
+    "103": {
+        "identifier": "103",
+        "name": "Hackett Hall",
+        "full_name": "103 - Hackett Hall",
+        "latitude": -31.976602109007796,
+        "longitude": 115.81852419684115
+    },
+    "104": {
+        "identifier": "104",
+        "name": "Lawrence Wilson Art Gallery",
+        "full_name": "104 - Lawrence Wilson Art Gallery",
+        "latitude": -31.97689488968455,
+        "longitude": 115.81610379544308
+    },
+    "106": {
+        "identifier": "106",
+        "name": "Arts",
+        "full_name": "106 - Arts",
+        "latitude": -31.97836717522285,
+        "longitude": 115.81867437839493
+    },
+    "107": {
+        "identifier": "107",
+        "name": "University Club of Western Australia",
+        "full_name": "107 - University Club of Western Australia",
+        "latitude": -31.978579765793732,
+        "longitude": 115.81956148848579
+    },
+    "108": {
+        "identifier": "108",
+        "name": "Administration East Building",
+        "full_name": "108 - Administration East Building",
+        "latitude": -31.976033643601905,
+        "longitude": 115.81852959880301
+    },
+    "120": {
+        "identifier": "120",
+        "name": "Trinity",
+        "full_name": "120 - Trinity",
+        "latitude": -31.9758665453618,
+        "longitude": 115.81531835416321
+    },
+    "122": {
+        "identifier": "122",
+        "name": "St. Catherine's",
+        "full_name": "122 - St. Catherine's",
+        "latitude": -31.974956563938186,
+        "longitude": 115.81694184778048
+    },
+    "123": {
+        "identifier": "123",
+        "name": "St. Thomas More (and Chapel)",
+        "full_name": "123 - St. Thomas More (and Chapel)",
+        "latitude": -31.974349288442276,
+        "longitude": 115.82020747374473
+    },
+    "124": {
+        "identifier": "124",
+        "name": "St. George's (and Chapel)",
+        "full_name": "124 - St. George's (and Chapel)",
+        "latitude": -31.973905236091756,
+        "longitude": 115.82148064673194
+    },
+    "131": {
+        "identifier": "131",
+        "name": "Recreation & Fitness Centre",
+        "full_name": "131 - Recreation & Fitness Centre",
+        "latitude": -31.976498676689282,
+        "longitude": 115.81953123996972
+    },
+    "139": {
+        "identifier": "139",
+        "name": "Reid Library",
+        "full_name": "139 - Reid Library",
+        "latitude": -31.978928653749154,
+        "longitude": 115.81772758275724
+    },
+    "142": {
+        "identifier": "142",
+        "name": "Music",
+        "full_name": "142 - Music",
+        "latitude": -31.97665151474231,
+        "longitude": 115.8204394338151
+    },
+    "143": {
+        "identifier": "143",
+        "name": "Octagon Theatre",
+        "full_name": "143 - Octagon Theatre",
+        "latitude": -31.977259051640747,
+        "longitude": 115.81922207257519
+    },
+    "144": {
+        "identifier": "144",
+        "name": "Dolphin Theatre",
+        "full_name": "144 - Dolphin Theatre",
+        "latitude": -31.976881294168663,
+        "longitude": 115.819468245467
+    },
+    "210": {
+        "identifier": "210",
+        "name": "Wilsmore & Tattersall Lecture Theatres",
+        "full_name": "210 - Wilsmore & Tattersall Lecture Theatres",
+        "latitude": -31.981407628324806,
+        "longitude": 115.81838691687102
+    },
+    "211": {
+        "identifier": "211",
+        "name": "Bayliss Building",
+        "full_name": "211 - Bayliss Building",
+        "latitude": -31.981989911203883,
+        "longitude": 115.81837605143755
+    },
+    "222": {
+        "identifier": "222",
+        "name": "EZONE North",
+        "full_name": "222 - EZONE North",
+        "latitude": -31.97938178272389,
+        "longitude": 115.8161019144421
+    },
+    "223": {
+        "identifier": "223",
+        "name": "Mathematics",
+        "full_name": "223 - Mathematics",
+        "latitude": -31.979292619652526,
+        "longitude": 115.81683903721081
+    },
+    "224": {
+        "identifier": "224",
+        "name": "Engineering - Civil & Mechanical",
+        "full_name": "224 - Engineering - Civil & Mechanical",
+        "latitude": -31.98065924504236,
+        "longitude": 115.81654696200994
+    },
+    "225": {
+        "identifier": "225",
+        "name": "Geography & Geology",
+        "full_name": "225 - Geography & Geology",
+        "latitude": -31.97764435548627,
+        "longitude": 115.81688494689739
+    },
+    "226": {
+        "identifier": "226",
+        "name": "Electrical & Electronic Engineering",
+        "full_name": "226 - Electrical & Electronic Engineering",
+        "latitude": -31.979101003628948,
+        "longitude": 115.81613190478946
+    },
+    "227": {
+        "identifier": "227",
+        "name": "Sanders Building",
+        "full_name": "227 - Sanders Building",
+        "latitude": -31.982213683568244,
+        "longitude": 115.81759721739498
+    },
+    "235": {
+        "identifier": "235",
+        "name": "General Purpose Building 3",
+        "full_name": "235 - General Purpose Building 3",
+        "latitude": -31.98219256221366,
+        "longitude": 115.81711461697822
+    },
+    "237": {
+        "identifier": "237",
+        "name": "39 Myers Street",
+        "full_name": "237 - 39 Myers Street",
+        "latitude": -31.98265820218805,
+        "longitude": 115.81787927612262
+    },
+    "238": {
+        "identifier": "238",
+        "name": "Myers Street Building",
+        "full_name": "238 - Myers Street Building",
+        "latitude": -31.982148706936048,
+        "longitude": 115.81648688536218
+    },
+    "241": {
+        "identifier": "241",
+        "name": "Computer Science",
+        "full_name": "241 - Computer Science",
+        "latitude": -31.977633902267737,
+        "longitude": 115.81616321758075
+    },
+    "242": {
+        "identifier": "242",
+        "name": "The CO2 Research Facility",
+        "full_name": "242 - The CO2 Research Facility",
+        "latitude": -31.98119187995805,
+        "longitude": 115.81696821905298
+    },
+    "245": {
+        "identifier": "245",
+        "name": "Physics",
+        "full_name": "245 - Physics",
+        "latitude": -31.97857482616289,
+        "longitude": 115.81683628817568
+    },
+    "272": {
+        "identifier": "272",
+        "name": "Robert Street Building",
+        "full_name": "272 - Robert Street Building",
+        "latitude": -31.9779650659646,
+        "longitude": 115.81615281639071
+    },
+    "274": {
+        "identifier": "274",
+        "name": "Irwin Street Building",
+        "full_name": "274 - Irwin Street Building",
+        "latitude": -31.979925205518793,
+        "longitude": 115.81698824842884
+    },
+    "275": {
+        "identifier": "275",
+        "name": "EZONE Central",
+        "full_name": "275 - EZONE Central",
+        "latitude": -31.97982274721754,
+        "longitude": 115.81613196909547
+    },
+    "329": {
+        "identifier": "329",
+        "name": "Guild Village",
+        "full_name": "329 - Guild Village",
+        "latitude": -31.98087157461065,
+        "longitude": 115.8194043066284
+    },
+    "330": {
+        "identifier": "330",
+        "name": "Cameron Hall",
+        "full_name": "330 - Cameron Hall",
+        "latitude": -31.980999642074384,
+        "longitude": 115.81970146865652
+    },
+    "338": {
+        "identifier": "338",
+        "name": "Law",
+        "full_name": "338 - Law",
+        "latitude": -31.979504707190596,
+        "longitude": 115.81979173299769
+    },
+    "344": {
+        "identifier": "344",
+        "name": "Anatomy",
+        "full_name": "344 - Anatomy",
+        "latitude": -31.981806191037407,
+        "longitude": 115.8196413641837
+    },
+    "345": {
+        "identifier": "345",
+        "name": "Curnow Building",
+        "full_name": "345 - Curnow Building",
+        "latitude": -31.98216072487937,
+        "longitude": 115.81975232896923
+    },
+    "346": {
+        "identifier": "346",
+        "name": "Physiology",
+        "full_name": "346 - Physiology",
+        "latitude": -31.98213097373981,
+        "longitude": 115.81909216505562
+    },
+    "347": {
+        "identifier": "347",
+        "name": "Psychology",
+        "full_name": "347 - Psychology",
+        "latitude": -31.981537826304884,
+        "longitude": 115.81900076307492
+    },
+    "348": {
+        "identifier": "348",
+        "name": "Bilya Marlee",
+        "full_name": "348 - Bilya Marlee",
+        "latitude": -31.9829906640779,
+        "longitude": 115.82037514021228
+    },
+    "349": {
+        "identifier": "349",
+        "name": "Shenton House",
+        "full_name": "349 - Shenton House",
+        "latitude": -31.981224123915386,
+        "longitude": 115.81978665994778
+    },
+    "351": {
+        "identifier": "351",
+        "name": "Social Sciences and Law Link",
+        "full_name": "351 - Social Sciences and Law Link",
+        "latitude": -31.979531864676918,
+        "longitude": 115.81923886733158
+    },
+    "352": {
+        "identifier": "352",
+        "name": "Social Sciences / UWA Student Central Building",
+        "full_name": "352 - Social Sciences / UWA Student Central Building",
+        "latitude": -31.980108394164226,
+        "longitude": 115.81901518847368
+    },
+    "401": {
+        "identifier": "401",
+        "name": "Institute of Agriculture & North West Wing Building",
+        "full_name": "401 - Institute of Agriculture & North West Wing Building",
+        "latitude": -31.983003721066027,
+        "longitude": 115.81945946681284
+    },
+    "402": {
+        "identifier": "402",
+        "name": "Soil Science & South East Wing",
+        "full_name": "402 - Soil Science & South East Wing",
+        "latitude": -31.98357804176873,
+        "longitude": 115.81970060303597
+    },
+    "405": {
+        "identifier": "405",
+        "name": "Agriculture Central Wing",
+        "full_name": "405 - Agriculture Central Wing",
+        "latitude": -31.98346403103543,
+        "longitude": 115.8191747729861
+    },
+    "409": {
+        "identifier": "409",
+        "name": "Botany & Biology",
+        "full_name": "409 - Botany & Biology",
+        "latitude": -31.984117908269862,
+        "longitude": 115.82046647378505
+    },
+    "410": {
+        "identifier": "410",
+        "name": "Botany Annexe 1",
+        "full_name": "410 - Botany Annexe 1",
+        "latitude": -31.983391392293104,
+        "longitude": 115.82053539088828
+    },
+    "411": {
+        "identifier": "411",
+        "name": "Botany Garage",
+        "full_name": "411 - Botany Garage",
+        "latitude": -31.98389202166438,
+        "longitude": 115.81999116119536
+    },
+    "413": {
+        "identifier": "413",
+        "name": "Botany Annexe 2",
+        "full_name": "413 - Botany Annexe 2",
+        "latitude": -31.98318063335974,
+        "longitude": 115.82051806936768
+    },
+    "415": {
+        "identifier": "415",
+        "name": "The Cottage",
+        "full_name": "415 - The Cottage",
+        "latitude": -31.98332274541822,
+        "longitude": 115.8202709388246
+    },
+    "416": {
+        "identifier": "416",
+        "name": "Building 416",
+        "full_name": "416 - Building 416",
+        "latitude": -31.985123236199335,
+        "longitude": 115.81905888400858
+    },
+    "426": {
+        "identifier": "426",
+        "name": "Agrochemical Applications Facility",
+        "full_name": "426 - Agrochemical Applications Facility",
+        "latitude": -31.983823536069174,
+        "longitude": 115.8191200310865
+    },
+    "427": {
+        "identifier": "427",
+        "name": "PC2 Plant House Building",
+        "full_name": "427 - PC2 Plant House Building",
+        "latitude": -31.984789295877373,
+        "longitude": 115.81933045718331
+    },
+    "428": {
+        "identifier": "428",
+        "name": "Glass Houses",
+        "full_name": "428 - Glass Houses",
+        "latitude": -31.984387333622195,
+        "longitude": 115.81956107167191
+    },
+    "429": {
+        "identifier": "429",
+        "name": "Glass Houses Service Building",
+        "full_name": "429 - Glass Houses Service Building",
+        "latitude": -31.984534298478902,
+        "longitude": 115.81967561264754
+    },
+    "430": {
+        "identifier": "430",
+        "name": "Agriculture - Phytotron Building",
+        "full_name": "430 - Agriculture - Phytotron Building",
+        "latitude": -31.98466491613983,
+        "longitude": 115.81934473414807
+    },
+    "432": {
+        "identifier": "432",
+        "name": "Combined Workshop",
+        "full_name": "432 - Combined Workshop",
+        "latitude": -31.984691481083672,
+        "longitude": 115.82031243570057
+    },
+    "441": {
+        "identifier": "441",
+        "name": "Business School",
+        "full_name": "441 - Business School",
+        "latitude": -31.985826773956305,
+        "longitude": 115.82071979924353
+    },
+    "443": {
+        "identifier": "443",
+        "name": "Human Movement Indoor Exercise Laboratory",
+        "full_name": "443 - Human Movement Indoor Exercise Laboratory",
+        "latitude": -31.98499745853029,
+        "longitude": 115.8184159609074
+    },
+    "444": {
+        "identifier": "444",
+        "name": "Human Movement",
+        "full_name": "444 - Human Movement",
+        "latitude": -31.985899693869253,
+        "longitude": 115.81853145067842
+    },
+    "446": {
+        "identifier": "446",
+        "name": "Barry J Marshall Library",
+        "full_name": "446 - Barry J Marshall Library",
+        "latitude": -31.98276180898625,
+        "longitude": 115.81839248022652
+    },
+    "449": {
+        "identifier": "449",
+        "name": "10-12 Parkway",
+        "full_name": "449 - 10-12 Parkway",
+        "latitude": -31.983615201957203,
+        "longitude": 115.81852194673834
+    },
+    "450": {
+        "identifier": "450",
+        "name": "14-16 Parkway",
+        "full_name": "450 - 14-16 Parkway",
+        "latitude": -31.98389885430572,
+        "longitude": 115.81842113180012
+    },
+    "451": {
+        "identifier": "451",
+        "name": "Kidz Galore Childcare",
+        "full_name": "451 - Kidz Galore Childcare",
+        "latitude": -31.984579594313473,
+        "longitude": 115.81844105657991
+    },
+    "452": {
+        "identifier": "452",
+        "name": "18 Parkway",
+        "full_name": "452 - 18 Parkway",
+        "latitude": -31.984285861332115,
+        "longitude": 115.81836062235513
+    },
+    "453": {
+        "identifier": "453",
+        "name": "Indian Ocean Marine Research Centre",
+        "full_name": "453 - Indian Ocean Marine Research Centre",
+        "latitude": -31.98157588684571,
+        "longitude": 115.81640396546871
+    },
+    "460": {
+        "identifier": "460",
+        "name": "University Hall - Sir George Currie Hall",
+        "full_name": "460 - University Hall - Sir George Currie Hall",
+        "latitude": -31.974148005970818,
+        "longitude": 115.81855843502578
+    },
+    "462": {
+        "identifier": "462",
+        "name": "University Hall - A House",
+        "full_name": "462 - University Hall - A House",
+        "latitude": -31.973993573136717,
+        "longitude": 115.81901583596796
+    },
+    "463": {
+        "identifier": "463",
+        "name": "University Hall - B House",
+        "full_name": "463 - University Hall - B House",
+        "latitude": -31.974070118103707,
+        "longitude": 115.8194634693527
+    },
+    "464": {
+        "identifier": "464",
+        "name": "University Hall - C House",
+        "full_name": "464 - University Hall - C House",
+        "latitude": -31.974480999221914,
+        "longitude": 115.81961981538738
+    },
+    "465": {
+        "identifier": "465",
+        "name": "University Hall - D House",
+        "full_name": "465 - University Hall - D House",
+        "latitude": -31.97463527334596,
+        "longitude": 115.819404911117
+    },
+    "469": {
+        "identifier": "469",
+        "name": "University Hall - E House",
+        "full_name": "469 - University Hall - E House",
+        "latitude": -31.974787652521275,
+        "longitude": 115.8197515881476
+    },
+    "470": {
+        "identifier": "470",
+        "name": "University Hall - L House",
+        "full_name": "470 - University Hall - L House",
+        "latitude": -31.973821370074383,
+        "longitude": 115.81885999268744
+    },
+    "471": {
+        "identifier": "471",
+        "name": "University Hall - K House",
+        "full_name": "471 - University Hall - K House",
+        "latitude": -31.97441403232989,
+        "longitude": 115.81916087403394
+    },
+    "472": {
+        "identifier": "472",
+        "name": "University Hall - J House",
+        "full_name": "472 - University Hall - J House",
+        "latitude": -31.974867096677784,
+        "longitude": 115.81899737244608
+    },
+    "606": {
+        "identifier": "606",
+        "name": "Water Sports Complex",
+        "full_name": "606 - Water Sports Complex",
+        "latitude": -31.976325798678268,
+        "longitude": 115.82192483322267
+    },
+    "607": {
+        "identifier": "607",
+        "name": "Boatshed - Matilda Bay",
+        "full_name": "607 - Boatshed - Matilda Bay",
+        "latitude": -31.976452931286286,
+        "longitude": 115.82239510455288
+    },
+    "653": {
+        "identifier": "653",
+        "name": "Love House - 28 Broadway",
+        "full_name": "653 - Love House - 28 Broadway",
+        "latitude": -31.97803963393194,
+        "longitude": 115.81432021633334
+    },
+    "655": {
+        "identifier": "655",
+        "name": "Broadway Building",
+        "full_name": "655 - Broadway Building",
+        "latitude": -31.977426377628735,
+        "longitude": 115.81432029619548
+    },
+    "656": {
+        "identifier": "656",
+        "name": "Masonic Hall",
+        "full_name": "656 - Masonic Hall",
+        "latitude": -31.97758752859018,
+        "longitude": 115.81432493986907
+    },
+    "657": {
+        "identifier": "657",
+        "name": "Tuart House",
+        "full_name": "657 - Tuart House",
+        "latitude": -31.97418840585171,
+        "longitude": 115.82311413225005
+    },
+    "658": {
+        "identifier": "658",
+        "name": "Michael Building (7 Fairway)",
+        "full_name": "658 - Michael Building (7 Fairway)",
+        "latitude": -31.977739708174305,
+        "longitude": 115.81493828830892
+    },
+    "661": {
+        "identifier": "661",
+        "name": "Park Avenue Building",
+        "full_name": "661 - Park Avenue Building",
+        "latitude": -31.97319528060022,
+        "longitude": 115.8227735273977
+    },
+    "671": {
+        "identifier": "671",
+        "name": "Park Avenue General Purpose Building",
+        "full_name": "671 - Park Avenue General Purpose Building",
+        "latitude": -31.973563992465007,
+        "longitude": 115.82326012529131
+    },
+    "672": {
+        "identifier": "672",
+        "name": "Forrest Hall",
+        "full_name": "672 - Forrest Hall",
+        "latitude": -31.975344449635344,
+        "longitude": 115.82233384152437
+    },
+    "681": {
+        "identifier": "681",
+        "name": "Architecture, Landscape, Visual Arts",
+        "full_name": "681 - Architecture, Landscape, Visual Arts",
+        "latitude": -31.97692009557089,
+        "longitude": 115.81283650279597
+    },
+    "682": {
+        "identifier": "682",
+        "name": "Education",
+        "full_name": "682 - Education",
+        "latitude": -31.976661237946523,
+        "longitude": 115.81320756998238
+    },
+    "683": {
+        "identifier": "683",
+        "name": "ALVA Studio",
+        "full_name": "683 - ALVA Studio",
+        "latitude": -31.97708115206558,
+        "longitude": 115.81210552229683
+    },
+    "684": {
+        "identifier": "684",
+        "name": "Cafeteria",
+        "full_name": "684 - Cafeteria",
+        "latitude": -31.977274760413962,
+        "longitude": 115.81229009772164
+    },
+    "685": {
+        "identifier": "685",
+        "name": "Conference Building",
+        "full_name": "685 - Conference Building",
+        "latitude": -31.977027030495634,
+        "longitude": 115.81250574217385
+    },
+    "686": {
+        "identifier": "686",
+        "name": "Nedlands Lecture Theatre",
+        "full_name": "686 - Nedlands Lecture Theatre",
+        "latitude": -31.976623556289773,
+        "longitude": 115.81254493507781
+    },
+    "687": {
+        "identifier": "687",
+        "name": "Clifton Street Building",
+        "full_name": "687 - Clifton Street Building",
+        "latitude": -31.976608578961873,
+        "longitude": 115.81205734864288
+    },
+    "689": {
+        "identifier": "689",
+        "name": "Early Learning Centre",
+        "full_name": "689 - Early Learning Centre",
+        "latitude": -31.976053259777093,
+        "longitude": 115.81193846824665
+    },
+    "B420": {
+        "identifier": "B420",
+        "name": "Zoology",
+        "full_name": "B420 - Zoology",
+        "latitude": -31.984812848502244,
+        "longitude": 115.82124805508813
+    }
+}
