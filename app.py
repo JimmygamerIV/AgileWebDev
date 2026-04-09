@@ -27,7 +27,7 @@ class User(db.Model):
     timetable_link = db.Column(db.Text)
 
 
-@app.route('/')
+
 @app.route('/signup', methods=["GET","POST"])
 def signup():
     if request.method == "POST":
@@ -66,7 +66,7 @@ def signup():
             return jsonify({"status": "error", "message": "Internal server error"}), 500
     return render_template("Signup.html")
 
-
+@app.route('/')
 @app.route("/signin",methods=["GET","POST"])
 def signin_page():
     if request.method == "POST":
