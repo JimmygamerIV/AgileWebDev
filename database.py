@@ -1,8 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base
+from pathlib import Path
 
-engine = create_engine("sqlite:///unimap.db")
+BASE_DIR = Path(__file__).parent
+engine = create_engine(f"sqlite:///{BASE_DIR}/unimap.db")
 
 Session = sessionmaker(bind=engine)
 

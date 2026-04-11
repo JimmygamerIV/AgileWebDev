@@ -1,6 +1,5 @@
 import urllib.request
 from icalendar import Calendar
-from sqlalchemy import create_engine
 from map_ics_uid_locations import resolve_location, build_alias_index, build_room_index
 import json
 from models import Event
@@ -11,7 +10,6 @@ url = "https://apps.cas.uwa.edu.au/even/rest/calendar/ical/bfa21375-c6be-4507-b8
 with urllib.request.urlopen(url) as response:
     cal = Calendar.from_ical(response.read())
 
-engine = create_engine("sqlite:///unimap.db")
 
 session = Session()
 
