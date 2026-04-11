@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="Signup.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='Signup.css') }}" />
   </head>
 
   <body>
@@ -29,7 +29,7 @@
           <button type="submit">Sign Up</button>
           <p class="signup-text">
             Already have an account?
-            <a href="Signin.html">Sign in here</a>
+            <a href="/signin">Sign in here</a>
           </p>
         </form>
       </div>
