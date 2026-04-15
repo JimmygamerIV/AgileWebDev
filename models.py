@@ -9,6 +9,7 @@ class User(Base):
     user_id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(15), nullable=False, unique=True)
     nickname = Column(String(20))
+    email = Column(String(100), unique=True)
     password_hash =  Column(Text, nullable=False)
     timetable_link = Column(Text)
 
