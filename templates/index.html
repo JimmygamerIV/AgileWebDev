@@ -21,19 +21,26 @@
         <div class="nav-center">
           <a href="/">Home</a>
           <a href="#">Friends</a>
-          <a href="#">Add Event</a>
+          <a href="{{ url_for('add_event') }}">Add Event</a>
         </div>
       </div>
 
       <div class="nav-right">
-        <a href="/signin">Logout</a>
+        <span class="logged-in-as">
+          Logged in as {{ current_user.nickname or current_user.username }} (ID: {{ current_user_id }})
+        </span>
+        <form class="logout-form" method="post" action="{{ url_for('logout') }}">
+          <button class="logout-btn" type="submit">Logout</button>
+        </form>
       </div>
     </nav>
 
     <div class="main-container">
       <div class="sidebar">
         <div class="card welcome">
-          <h3>Welcome, User!</h3>
+          <h3>Welcome, {{ current_user.nickname or current_user.username }}!</h3>
+          <p>User ID: {{ current_user_id }}</p>
+          <p> Username: {{ current_user.username }}</p>
         </div>
 
         <div class="card friends">
@@ -69,6 +76,7 @@
         </div>
       </div>
     </div>
+    <div id="sessionUserMeta" data-user-id="{{ current_user_id }}" data-username="{{ current_user.username }}"></div>
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="

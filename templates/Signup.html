@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Signup.css') }}" />
   </head>
 
   <body>
@@ -14,17 +16,25 @@
       <div class="card">
         <h1>Create your Account:</h1>
         <br />
-        <form class="login-form">
+        {% if error %}
+        <p class="form-error">{{ error }}</p>
+        {% endif %}
+        <form class="login-form" method="post" action="{{ url_for('signup') }}">
           <label>Username</label>
-          <input type="text" placeholder="eg. Michael Jones" />
+          <input type="text" name="username" placeholder="eg. Michael Jones" required />
           <label>Nickname</label>
-          <input type="text" placeholder="eg. Mike" />
+          <input type="text" name="nickname" placeholder="eg. Mike" />
           <label>New Password</label>
-          <input type="text" placeholder="Enter your New Password" />
+          <input type="password" name="password" placeholder="Enter your New Password" required />
           <label>Confirm New Password</label>
-          <input type="text" placeholder="Confirm your New Password" />
+          <input
+            type="password"
+            name="confirm_password"
+            placeholder="Confirm your New Password"
+            required
+          />
           <label>UWA Student Email</label>
-          <input type="email" placeholder="eg. Name@student.uwa.edu.au" />
+          <input type="email" name="email" placeholder="eg. Name@student.uwa.edu.au" />
           <br />
           <button type="submit">Sign Up</button>
           <p class="signup-text">

@@ -48,7 +48,33 @@ body {
 
 /* Push logout to far right */
 .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-left: auto;
+}
+
+.logged-in-as {
+  color: #fff;
+  font-size: 14px;
+}
+
+.logout-form {
+  margin: 0;
+}
+
+.logout-btn {
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background-color: #1d2a6b;
 }
 
 /* Main layout */
