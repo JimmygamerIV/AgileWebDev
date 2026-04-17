@@ -25,7 +25,7 @@ def index():
     events = db.query(Event).filter(
         Event.user_id == session['user_id'],
         Event.date >= date_today.strftime("%Y-%m-%d"),
-        #Event.date <= date_tomorrow.strftime("%Y-%m-%d")
+        Event.date <= date_tomorrow.strftime("%Y-%m-%d")
     ).order_by(Event.date, Event.start_time).all()
 
     db.close()
