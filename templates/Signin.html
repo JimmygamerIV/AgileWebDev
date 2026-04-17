@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/Signin.css')}}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Signin.css') }}" />
   </head>
 
   <body>
@@ -14,16 +16,19 @@
       <div class="card">
         <h1>Welcome to UWA Social Timetable!</h1>
         <p class="subtitle">Sign in to your account:</p>
-        <form class="login-form" id = "sign-form" method = "POST" action = "/signin">
+        {% if error %}
+        <p class="form-error">{{ error }}</p>
+        {% endif %}
+        <form class="login-form" method="post" action="{{ url_for('signin') }}">
           <label>Username</label>
-          <input type="text" name = "username" placeholder="Enter your username" />
+          <input type="text" name="username" placeholder="Enter your username" required />
           <label>Password</label>
-          <input type="password" name="password" placeholder="Enter your password" />
+          <input type="password" name="password" placeholder="Enter your password" required />
           <button type="submit">Sign In</button>
           <br />
           <p class="signup-text">
             Don't have an account?
-            <a href="{{url_for('signup')}}">Sign up here</a>
+            <a href="/signup">Sign up here</a>
           </p>
         </form>
       </div>

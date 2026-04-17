@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="{{url_for('static',filename='css/Signup.css')}}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Signup.css') }}" />
   </head>
 
   <body>
@@ -14,26 +16,34 @@
       <div class="card">
         <h1>Create your Account:</h1>
         <br />
-        <form class="login-form" id= "login" method = "POST" action="/signup">
+        {% if error %}
+        <p class="form-error">{{ error }}</p>
+        {% endif %}
+        <form class="login-form" method="post" action="{{ url_for('signup') }}">
           <label>Username</label>
-          <input type="text" name = "username" placeholder="eg. Michael Jones" />
+          <input type="text" name="username" placeholder="eg. Michael Jones" required />
           <label>Nickname</label>
-          <input type="text" name = "nickname" placeholder="eg. Mike" />
+          <input type="text" name="nickname" placeholder="eg. Mike" />
           <label>New Password</label>
-          <input type="password" name = "password" placeholder="Enter your New Password" />
+          <input type="password" name="password" placeholder="Enter your New Password" required />
           <label>Confirm New Password</label>
-          <input type="password" name = "confirm_password" placeholder="Confirm your New Password" />
+          <input
+            type="password"
+            name="confirm_password"
+            placeholder="Confirm your New Password"
+            required
+          />
           <label>UWA Student Email</label>
-          <input type="email" name = "email" placeholder="eg. Name@student.uwa.edu.au" />
+          <input type="email" name="email" placeholder="eg. Name@student.uwa.edu.au" />
           <br />
           <button type="submit">Sign Up</button>
           <p class="signup-text">
             Already have an account?
-            <a href="{{url_for('signin_page')}}">Sign in here</a>
+            <a href="/signin">Sign in here</a>
           </p>
         </form>
       </div>
     </div>
-    <script src = "{{url_for('static',filename='js/signup.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
   </body>
 </html>

@@ -5,7 +5,7 @@ body {
 
   background:
     linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)),
-    url("assets/images/UWA.png");
+    url("/static/assets/images/UWA.png");
 
   /* 
   background-image: url("assets/images/UWA.png");
@@ -69,6 +69,17 @@ body {
 
 .signup-text a:hover {
   text-decoration: underline;
+}
+
+.form-error {
+  width: 350px;
+  color: #b91c1c;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 0 0 16px 0;
+  box-sizing: border-box;
 }
 
 /* Title */
