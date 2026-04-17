@@ -19,7 +19,7 @@
         {% if error %}
         <p class="form-error">{{ error }}</p>
         {% endif %}
-        <form class="login-form" method="post" action="{{ url_for('signin') }}">
+        <form class="login-form" method="post" action="{{ url_for('auth.signin') }}">
           <label>Username</label>
           <input type="text" name="username" placeholder="Enter your username" required />
           <label>Password</label>
@@ -28,7 +28,7 @@
           <br />
           <p class="signup-text">
             Don't have an account?
-            <a href="/signup">Sign up here</a>
+            <a href="{{ url_for('auth.signup') }}">Sign up here</a>
           </p>
         </form>
       </div>

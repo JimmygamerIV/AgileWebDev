@@ -23,7 +23,7 @@
         <span class="logged-in-as">
           Logged in as {{ current_user.nickname or current_user.username }} (ID: {{ current_user_id }})
         </span>
-        <form class="logout-form" method="post" action="{{ url_for('logout') }}">
+        <form class="logout-form" method="post" action="{{ url_for('auth.logout') }}">
           <button class="logout-btn" type="submit">Logout</button>
         </form>
       </div>
