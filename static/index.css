@@ -128,4 +128,27 @@ body {
   border: 5px solid #bfbfbf; /* grey border */
   border-top: none; /* removes top border */
   overflow-y: auto;
+  height: 195px;
+}
+
+.event-item {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: #f0f4ff;
+    border-left: 4px solid #2f3c8f;
+    border-radius: 4px;
+}
+
+.event-name {
+    font-size: 13px;
+    font-weight: bold;
+    color: #2f3c8f;
+}
+
+.event-details {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
 }

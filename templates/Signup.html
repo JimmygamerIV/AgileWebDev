@@ -13,18 +13,30 @@
     <div class="container">
       <div class="card">
         <h1>Create your Account:</h1>
+        
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
         <br />
-        <form class="login-form">
+        <form class="login-form" action="/signup" method="POST">
           <label>Username</label>
-          <input type="text" placeholder="eg. Michael Jones" />
+          <input 
+            type="text"
+            name="username"
+            placeholder="eg. mike134"
+            pattern="\S+"
+            title="Username must not contain spaces"
+            required
+          />
           <label>Nickname</label>
-          <input type="text" placeholder="eg. Mike" />
+          <input type="text" name="nickname" placeholder="eg. Mike" />
           <label>New Password</label>
-          <input type="text" placeholder="Enter your New Password" />
+          <input type="password" name="password" placeholder="Enter your New Password" required/>
           <label>Confirm New Password</label>
-          <input type="text" placeholder="Confirm your New Password" />
+          <input type="password" name="confirm_password" placeholder="Confirm your New Password" required/>
           <label>UWA Student Email</label>
-          <input type="email" placeholder="eg. Name@student.uwa.edu.au" />
+          <input type="email" name="email" placeholder="eg. Name@student.uwa.edu.au" />
           <br />
           <button type="submit">Sign Up</button>
           <p class="signup-text">

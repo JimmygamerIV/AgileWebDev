@@ -46,9 +46,13 @@
             </div>
 
             <div class="upcoming-content">
-              <p>Class 1</p>
-              <p>Class 2</p>
-              <p>Class 3</p>
+              {% for event in events %}
+              <div class="event-item">
+                <span class="event-name">{{ event.event_name }}</span>
+                <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
+              </div>
+              {% endfor %}
+              
             </div>
           </div>
         </div>

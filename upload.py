@@ -37,6 +37,7 @@ for component in cal.walk():
 
         # Extract date and time separately
         day = start.strftime("%A")
+        date = start.strftime("%Y-%m-%d")
         start_time = start.strftime("%H:%M")
         end_time = end.strftime("%H:%M")
 
@@ -49,6 +50,7 @@ for component in cal.walk():
             event_name = event_name,
             location = location,
             day = day,
+            date = date,
             start_time = start_time,
             end_time = end_time
         )
