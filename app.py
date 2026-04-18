@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, session, request
+from flask import Flask, render_template, redirect, session, request, jsonify
 from database import init_db, Session
 from models import Event, User
 from auth import auth_bp
@@ -21,6 +21,8 @@ app.register_blueprint(auth_bp)
 
 
 BASE_DIR = Path(__file__).parent
+TIMETABLES_DIR = BASE_DIR / "timetables"
+TIMETABLES_DIR.mkdir(parents=True, exist_ok=True)
 
 with (BASE_DIR / "buildings.json").open(encoding="utf-8") as f:
     BUILDINGS = json.load(f)
@@ -82,6 +84,9 @@ def importICS(ics_content, user_id):
     finally:
         db.close()
 
+
+def user_timetable_path(user_id):
+    return TIMETABLES_DIR / f"user_{user_id}.ics"
 
 @app.route('/')
 def index():
@@ -159,6 +164,7 @@ def add_event():
             else:
                 try:
                     ics_content = uploaded_file.read()
+                    user_timetable_path(session['user_id']).write_bytes(ics_content)
                     preview_events = importICS(ics_content, session['user_id'])
                     success = "Timetable imported successfully."
                 except Exception:
@@ -172,6 +178,7 @@ def add_event():
                 try:
                     with urlopen(ics_url, timeout=20) as response:
                         ics_content = response.read()
+                    user_timetable_path(session['user_id']).write_bytes(ics_content)
                     preview_events = importICS(ics_content, session['user_id'])
                     success = "Timetable imported successfully."
                 except URLError:
@@ -180,12 +187,98 @@ def add_event():
                     error = "Could not parse the ICS content."
     
     return render_template("add_event.html",
-        error=error,
-        success=success,
-        preview_events=preview_events,
-        has_saved_timetable=False
+    error=error,
+    success=success,
+    preview_events=preview_events,
+    has_saved_timetable=user_timetable_path(session['user_id']).exists(),
+    username=user.nickname or user.username
     )
 
+
+@app.route('/timetable/restore', methods=['POST'])
+def restore_timetable():
+    if 'user_id' not in session:
+        return redirect('/signin')
+    
+    saved_path = user_timetable_path(session['user_id'])
+    if not saved_path.exists():
+        return render_template("add_event.html",
+            error="No saved timetable found.",
+            success=None,
+            preview_events=[],
+            has_saved_timetable=False
+        ), 404
+    
+    try:
+        ics_content = saved_path.read_bytes()
+        preview_events = importICS(ics_content, session['user_id'])
+        return render_template("add_event.html",
+            error=None,
+            success="Timetable restored successfully.",
+            preview_events=preview_events,
+            has_saved_timetable=True
+        )
+    except Exception:
+        return render_template("add_event.html",
+            error="Could not restore the saved timetable.",
+            success=None,
+            preview_events=[],
+            has_saved_timetable=True
+        ), 500
+
+@app.route('/api/events/me', methods=['GET'])
+def my_events():
+    if 'user_id' not in session:
+        return jsonify({"error": "Not authenticated"}), 401
+    
+    db = Session()
+    try:
+        events = db.query(Event).filter(
+            Event.user_id == session['user_id']
+        ).order_by(Event.date, Event.start_time).all()
+        
+        result = []
+        for e in events:
+            result.append({
+                "event_id": e.event_id,
+                "event_name": e.event_name or "Untitled",
+                "location": e.location or "",
+                "day": e.day or "",
+                "day_display": e.day or "",
+                "date":e.date or "",
+                "start_time": e.start_time or "",
+                "end_time": e.end_time or "",
+            })
+        
+        return jsonify({"user_id": session['user_id'], "events": result})
+    
+    finally:
+        db.close()
+
+
+@app.route('/api/events/<int:event_id>', methods=['DELETE'])
+def delete_event(event_id):
+    if 'user_id' not in session:
+        return jsonify({"error": "Not authenticated"}), 401
+    
+    db = Session()
+    try:
+        event = db.get(Event, event_id)
+        if event is None:
+            return jsonify({"error": "Event not found"}), 404
+        if event.user_id != session['user_id']:
+            return jsonify({"error": "Forbidden"}), 403
+        
+        db.delete(event)
+        db.commit()
+        return jsonify({"success": True, "event_id": event_id, "deleted": True})
+    
+    except Exception as e:
+        db.rollback()
+        return jsonify({"error": str(e)}), 500
+    
+    finally:
+        db.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
