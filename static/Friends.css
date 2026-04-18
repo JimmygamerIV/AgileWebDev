@@ -150,7 +150,8 @@ body {
 
 .accept {
   background: white;
-  border: 2px solid black;
+  border: 2px solid rgb(0, 255, 0);
+  color: rgb(0, 255, 0);
   cursor: pointer;
 }
 
