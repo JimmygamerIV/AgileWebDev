@@ -136,17 +136,37 @@ def seed_test_data():
     VALUES (2, 'John Pork', 'John Pork', 'john@email.com', 'test123')
     """)
 
+    cursor.execute("""
+    INSERT INTO users (user_id, username, nickname, email, password_hash)
+    VALUES (3, 'Bombardillo Crocadillo', 'Bombardillo Crocadillo', 'croc@email.com', 'test123')
+    """)
+
+    cursor.execute("""
+    INSERT INTO users (user_id, username, nickname, email, password_hash)
+    VALUES (4, 'Steve', 'Steve', 'steve@email.com', 'test123')
+    """)
+
     # 🟢 Insert fresh friend request
     cursor.execute("""
     INSERT INTO friend_requests (request_id, sender_id, receiver_id, status)
     VALUES (1, 2, 1, 'pending')
     """)
 
+    cursor.execute("""
+    INSERT INTO friend_requests (request_id, sender_id, receiver_id, status)
+    VALUES (2, 3, 1, 'pending')
+    """)
+
+    cursor.execute("""
+    INSERT INTO friend_requests (request_id, sender_id, receiver_id, status)
+    VALUES (3, 4, 1, 'pending')
+    """)
+
     conn.commit()
     conn.close()
 
 #Adds Test Users to Friends Page
-seed_test_data()
+#seed_test_data()
 
 if __name__ == "__main__":
     app.run(debug=True)
