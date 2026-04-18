@@ -40,58 +40,66 @@
 
           <!-- Friends list -->
           <div class="list">
-            {% for friend in friends %}
-            <div class="friend-item">
-              <div class="avatar"></div>
-              <span>{{ friend.username }}</span>
+            {% if friends %}
+              {% for friend in friends %}
+              <div class="friend-item">
+                <div class="avatar"></div>
+                <span>{{ friend.username }}</span>
 
-              <form method="POST" action="/remove_friend">
-                <input
-                  type="hidden"
-                  name="friend_id"
-                  value="{{ friend.user_id }}"
-                />
-                <button type="submit">Remove</button>
-              </form>
-            </div>
-            {% endfor %}
+                <form method="POST" action="/remove_friend">
+                  <input
+                    type="hidden"
+                    name="friend_id"
+                    value="{{ friend.user_id }}"
+                  />
+                  <button type="submit">Remove</button>
+                </form>
+              </div>
+              {% endfor %}
+            {% else %}
+              <p style="font-style: italic; color: #888;">You have no friends added yet.</p>
+            {% endif %}
           </div>
         </div>
 
         <!-- Friend Requests -->
         <div id="requests" class="tab-content hidden">
           <div class="list">
-            {% for req in requests %}
-            <div class="friend-item">
-              <div class="avatar"></div>
-              <span>{{ req['username'] }}</span>
+            {% if requests %}
+              {% for req in requests %}
+              <div class="friend-item">
+                <div class="avatar"></div>
+                <span>{{ req['username'] }}</span>
 
-              <div class="actions">
-                <form method="POST" action="/accept_request">
-                  <input
-                    type="hidden"
-                    name="request_id"
-                    value="{{ req['request_id'] }}"
-                  />
-                  <input
-                    type="hidden"
-                    name="sender_id"
-                    value="{{ req['user_id'] }}"
-                  />
-                  <button class="accept">Accept</button>
-                </form>
+                <div class="actions">
+                  <form method="POST" action="/accept_request">
+                    <input
+                      type="hidden"
+                      name="request_id"
+                      value="{{ req['request_id'] }}"
+                    />
+                    <input
+                      type="hidden"
+                      name="sender_id"
+                      value="{{ req['user_id'] }}"
+                    />
+                    <button class="accept">Accept</button>
+                  </form>
 
-                <form method="POST" action="/reject_request">
-                  <input
-                    type="hidden"
-                    name="request_id"
-                    value="{{ req['request_id'] }}"
-                  />
-                  <button class="reject">Reject</button>
-                </form>
+                  <form method="POST" action="/reject_request">
+                    <input
+                      type="hidden"
+                      name="request_id"
+                      value="{{ req['request_id'] }}"
+                    />
+                    <button class="reject">Reject</button>
+                  </form>
+                </div>
               </div>
-            </div>
-            {% endfor %}
+              {% endfor %}
+            {% else %}
+             <p style="font-style: italic; color: #888;">No incoming or outgoing friend requests.</p>
+            {% endif %} 
           </div>
         </div>
       </div>
