@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, session, request, jsonify
 from database import init_db, Session
-from models import Event, User
+from models import Event, User, Friend, FriendRequest
 from auth import auth_bp
 from datetime import date, timedelta, datetime
 from pathlib import Path
@@ -95,6 +95,7 @@ def index():
     
     db = Session()
     try:
+        user = db.query(User).filter(User.user_id == session['user_id']).first()
         all_events = db.query(Event).filter(Event.user_id == session['user_id']).order_by(Event.date, Event.start_time).all()
         events = []
 
@@ -131,7 +132,7 @@ def index():
     finally:
         db.close()
 
-    return render_template("index.html", events=events)
+    return render_template("index.html", events=events, username=user.username)
 
 
 @app.route('/add-event', methods=['GET', 'POST'])
@@ -277,6 +278,58 @@ def delete_event(event_id):
         db.rollback()
         return jsonify({"error": str(e)}), 500
     
+    finally:
+        db.close()
+
+
+@app.route('/friends')
+def friends():
+    if 'user_id' not in session:
+        return redirect('/signin')
+
+    db = Session()
+    try:
+        user_id = session['user_id']
+
+        friend_ids = []
+        # Get all friends for the user
+        f_rows = db.query(Friend).filter(Friend.user_id == user_id).all()
+
+        for i in f_rows:
+            friend_ids.append(i.friend_id)
+
+        friends_list = db.query(User).filter(User.user_id.in_(friend_ids)).all()
+
+        # Friend Requests
+        r_rows = db.query(FriendRequest).filter(
+            FriendRequest.receiver_id == user_id,
+            FriendRequest.status == 'pending'
+        ).all()
+
+        sender_ids = []
+        for i in r_rows:
+            sender_ids.append(i.sender_id)
+        
+        senders = db.query(User).filter(User.user_id.in_(sender_ids)).all()
+
+        requests = []
+        for r in r_rows:
+            for s in senders:
+                # Check if user found
+                if s.user_id == r.sender_id:
+                    requests.append({
+                        "request_id": r.request_id,
+                        "user_id": s.user_id,
+                        "username": s.username
+                    })
+                    break
+
+        return render_template(
+            "friends.html",
+            friends=friends_list,
+            requests=requests
+        )
+                
     finally:
         db.close()
 

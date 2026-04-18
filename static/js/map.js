@@ -102,7 +102,7 @@
 
   function updateToggleLabel() {
     styleToggleButton.textContent =
-      activeStyle === "white" ? "Switch to Default Style" : "Switch to White Style";
+      activeStyle === "white" ? "Switch to Detailed View" : "Switch to Simple View";
   }
 
   function toggleMapStyle() {
