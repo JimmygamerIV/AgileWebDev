@@ -72,3 +72,9 @@ def signin():
     
     db.close()
     return render_template("signin.html", error="The username or password you entered was incorrect")
+
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return redirect('/signin')
