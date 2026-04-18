@@ -17,7 +17,7 @@ def signup():
     confirm_password = request.form['confirm_password']
     email = request.form['email']
 
-    if not username or not password or not email:
+    if not username or not password:
         return render_template("signup.html", error="Please fill in all required fields.")
 
     if ' ' in username:
@@ -30,7 +30,10 @@ def signup():
 
     db = Session()
     existing_user = db.query(User).filter(User.username == username).first()
-    existing_email = db.query(User).filter(User.email == email).first()
+
+    existing_email = None
+    if email:
+        existing_email = db.query(User).filter(User.email == email).first()
 
     # Check if user already exists or email is registered
     if existing_user:

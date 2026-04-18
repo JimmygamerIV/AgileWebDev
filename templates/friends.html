@@ -64,19 +64,19 @@
             {% for req in requests %}
             <div class="friend-item">
               <div class="avatar"></div>
-              <span>{{ req.username }}</span>
+              <span>{{ req['username'] }}</span>
 
               <div class="actions">
                 <form method="POST" action="/accept_request">
                   <input
                     type="hidden"
                     name="request_id"
-                    value="{{ req.request_id }}"
+                    value="{{ req['request_id'] }}"
                   />
                   <input
                     type="hidden"
                     name="sender_id"
-                    value="{{ req.user_id }}"
+                    value="{{ req['user_id'] }}"
                   />
                   <button class="accept">Accept</button>
                 </form>
@@ -85,7 +85,7 @@
                   <input
                     type="hidden"
                     name="request_id"
-                    value="{{ req.request_id }}"
+                    value="{{ req['request_id'] }}"
                   />
                   <button class="reject">Reject</button>
                 </form>
@@ -96,6 +96,6 @@
         </div>
       </div>
     </div>
-    <script src="{{ url_for('static', filename='Friends.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/friends.js') }}"></script>
   </body>
 </html>

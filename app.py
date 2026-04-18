@@ -323,7 +323,7 @@ def friends():
                         "username": s.username
                     })
                     break
-
+        
         return render_template(
             "friends.html",
             friends=friends_list,

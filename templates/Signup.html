@@ -20,7 +20,7 @@
 
         <br />
         <form class="login-form" action="/signup" method="POST">
-          <label>Username</label>
+          <label>Username<span style="color: red;">*</span></label>
           <input 
             type="text"
             name="username"
@@ -31,11 +31,11 @@
           />
           <label>Nickname</label>
           <input type="text" name="nickname" placeholder="eg. Mike" />
-          <label>New Password</label>
+          <label>New Password<span style="color: red;">*</span></label>
           <input type="password" name="password" placeholder="Enter your New Password" required/>
-          <label>Confirm New Password</label>
+          <label>Confirm Password<span style="color: red;">*</span></label>
           <input type="password" name="confirm_password" placeholder="Confirm your New Password" required/>
-          <label>UWA Student Email</label>
+          <label>Email</label>
           <input type="email" name="email" placeholder="eg. Name@student.uwa.edu.au" />
           <br />
           <button type="submit">Sign Up</button>
