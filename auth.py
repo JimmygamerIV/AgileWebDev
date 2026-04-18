@@ -5,9 +5,12 @@ from models import User
 
 auth_bp = Blueprint("auth", __name__)
 
-@auth_bp.route('/signup', methods=['POST'])
+@auth_bp.route('/signup', methods=['GET', 'POST'])
 
 def signup():
+    if request.method == 'GET':
+        return render_template("signup.html")
+
     username = request.form['username']
     nickname = request.form['nickname']
     password = request.form['password']
@@ -49,9 +52,12 @@ def signup():
 
     return redirect('/signin')
 
-@auth_bp.route('/signin', methods=['POST'])
+@auth_bp.route('/signin', methods=['GET', 'POST'])
 
 def signin():
+    if request.method == 'GET':
+        return render_template("signin.html")
+
     username = request.form['username']
     password = request.form['password']
 
