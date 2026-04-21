@@ -15,7 +15,7 @@ def signup():
     nickname = request.form['nickname']
     password = request.form['password']
     confirm_password = request.form['confirm_password']
-    email = request.form['email']
+    email = request.form.get('email', '').strip() or None
 
     if not username or not password:
         return render_template("signup.html", error="Please fill in all required fields.")
