@@ -43,5 +43,6 @@ class Event(Base):
     event_name = Column(Text)
     location = Column(Text)
     day = Column(String(10))
+    date = Column(Text)
     start_time = Column(Text)
     end_time = Column(Text)

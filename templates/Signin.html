@@ -14,11 +14,14 @@
       <div class="card">
         <h1>Welcome to UWA Social Timetable!</h1>
         <p class="subtitle">Sign in to your account:</p>
-        <form class="login-form">
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form class="login-form" action="/signin" method="POST">
           <label>Username</label>
-          <input type="text" placeholder="Enter your username" />
+          <input type="text" name="username" placeholder="Enter your username" />
           <label>Password</label>
-          <input type="text" placeholder="Enter your password" />
+          <input type="password" name="password" placeholder="Enter your password" />
           <button type="submit">Sign In</button>
           <br />
           <p class="signup-text">
