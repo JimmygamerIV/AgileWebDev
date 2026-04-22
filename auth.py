@@ -1,9 +1,33 @@
-from flask import Blueprint, request, render_template, redirect, session
+from flask import Blueprint, g, request, render_template, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import Session
 from models import User
 
 auth_bp = Blueprint("auth", __name__)
+
+
+@auth_bp.before_app_request
+def load_current_user():
+    g.current_user = None
+    user_id = session.get("user_id")
+    if not user_id:
+        return
+
+    db = Session()
+    try:
+        user = db.get(User, user_id)
+        if user is None:
+            session.pop("user_id", None)
+            return
+
+        g.current_user = {
+            "user_id": user.user_id,
+            "username": user.username,
+            "nickname": user.nickname,
+            "email": user.email,
+        }
+    finally:
+        db.close()
 
 @auth_bp.route('/signup', methods=['GET', 'POST'])
 
