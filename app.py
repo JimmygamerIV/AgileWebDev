@@ -10,10 +10,12 @@ from map_ics_uid_locations import resolve_location, build_alias_index, build_roo
 from urllib.error import URLError
 from urllib.request import urlopen
 from urllib.parse import urlparse
-
+from dotenv import load_dotenv
+from config import Config
 
 app = Flask(__name__)
-app.secret_key = 'somesecretkey'
+app.config.from_object("config.Config")
+load_dotenv()
 
 init_db()
 
