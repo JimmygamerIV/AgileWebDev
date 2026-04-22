@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, session, request, jsonify
+from flask import Flask, g, render_template, redirect, session, request, jsonify
 from database import init_db, Session
 from models import Event, User, Friend, FriendRequest
 from auth import auth_bp
@@ -90,7 +90,8 @@ def user_timetable_path(user_id):
 
 @app.route('/')
 def index():
-    if 'user_id' not in session:
+    if g.current_user is None:
+        session.pop('user_id', None)
         return redirect('/signin')
     
     db = Session()
@@ -132,17 +133,14 @@ def index():
     finally:
         db.close()
 
-    return render_template("index.html", events=events, username=user.username)
+    return render_template("index.html", events=events, username=g.current_user["nickname"] or g.current_user["username"])
 
 
 @app.route('/add-event', methods=['GET', 'POST'])
 def add_event():
-    if 'user_id' not in session:
+    if g.current_user is None:
+        session.pop('user_id', None)
         return redirect('/signin')
-    
-    db = Session()
-    user = db.query(User).filter(User.user_id == session['user_id']).first()
-    db.close()
 
 
     error = None
@@ -192,7 +190,7 @@ def add_event():
     success=success,
     preview_events=preview_events,
     has_saved_timetable=user_timetable_path(session['user_id']).exists(),
-    username=user.nickname or user.username
+    username=g.current_user["nickname"] or g.current_user["username"]
     )
 
 
@@ -240,8 +238,6 @@ def my_events():
         
         result = []
         for e in events:
-            if e.date and date.fromisoformat(e.date) < date.today():
-                continue
             result.append({
                 "event_id": e.event_id,
                 "event_name": e.event_name or "Untitled",
