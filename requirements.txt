@@ -4,3 +4,4 @@ Werkzeug==2.3.7
 icalendar==5.0.11
 Flask-WTF==1.2.1
 python-dotenv==1.2.2
+email_validator==2.3.0
