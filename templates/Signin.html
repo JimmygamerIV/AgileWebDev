@@ -14,19 +14,31 @@
       <div class="card">
         <h1>Welcome to UWA Social Timetable!</h1>
         <p class="subtitle">Sign in to your account:</p>
+        
         {% if error %}
         <p style="color: red;">{{ error }}</p>
         {% endif %}
-        <form class="login-form" action="/signin" method="POST">
+
+        <form class="login-form" action="{{ url_for('auth.signin') }}" method="POST">
+          {{ form.hidden_tag() }}
+
           <label>Username</label>
-          <input type="text" name="username" placeholder="Enter your username" />
+          {{ form.username(placeholder="Enter your username") }}
+          {% for error in form.username.errors %}
+            <span style="color: red; font-size: 0.8em;">{{ error }}</span>
+          {% endfor %}
+
           <label>Password</label>
-          <input type="password" name="password" placeholder="Enter your password" />
+          {{ form.password(placeholder="Enter your password") }}
+          {% for error in form.password.errors %}
+            <span style="color: red; font-size: 0.8em;">{{ error }}</span>
+          {% endfor %}
+
           <button type="submit">Sign In</button>
           <br />
           <p class="signup-text">
             Don't have an account?
-            <a href="/signup">Sign up here</a>
+            <a href="{{ url_for('auth.signup') }}">Sign up here</a>
           </p>
         </form>
       </div>

@@ -1,1 +1,5 @@
-unimap.db
+__pycache__/
+*.pyc
+*.db
+.env
+*.ics

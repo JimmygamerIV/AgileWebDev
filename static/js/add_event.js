@@ -104,11 +104,15 @@
 
   async function deleteEvent(eventRow, eventId) {
     console.log(`[Delete] Sending DELETE request for event_id: ${eventId}`);
+    const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+
     const response = await fetch(`/api/events/${eventId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRFToken":csrfToken,
       },
+      body:JSON.stringify({})
     });
 
     console.log(`[Delete] Response status: ${response.status}`);
