@@ -238,6 +238,8 @@ def my_events():
         
         result = []
         for e in events:
+            if e.date and date.fromisoformat(e.date) < date.today():
+                continue
             result.append({
                 "event_id": e.event_id,
                 "event_name": e.event_name or "Untitled",
