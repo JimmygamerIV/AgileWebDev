@@ -1,0 +1,800 @@
+BEGIN:VCALENDAR
+PRODID:-//Allocate//iCal4j 1.0//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Australia/Perth
+LAST-MODIFIED:20260306T231828Z
+TZURL:https://www.tzurl.org/zoneinfo-outlook/Australia/Perth
+X-LIC-LOCATION:Australia/Perth
+BEGIN:STANDARD
+TZNAME:AWST
+TZOFFSETFROM:+0800
+TZOFFSETTO:+0800
+DTSTART:19700101T000000
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260227T120000
+DTEND;TZID=Australia/Perth:20260227T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid0
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260306T120000
+DTEND;TZID=Australia/Perth:20260306T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid1
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260313T120000
+DTEND;TZID=Australia/Perth:20260313T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid2
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260320T120000
+DTEND;TZID=Australia/Perth:20260320T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid3
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260327T120000
+DTEND;TZID=Australia/Perth:20260327T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid4
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260403T120000
+DTEND;TZID=Australia/Perth:20260403T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid5
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260417T120000
+DTEND;TZID=Australia/Perth:20260417T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid6
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260424T120000
+DTEND;TZID=Australia/Perth:20260424T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid7
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260501T120000
+DTEND;TZID=Australia/Perth:20260501T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid8
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260508T120000
+DTEND;TZID=Australia/Perth:20260508T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid9
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260515T120000
+DTEND;TZID=Australia/Perth:20260515T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid10
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260522T120000
+DTEND;TZID=Australia/Perth:20260522T140000
+SUMMARY:Computer Networks\, Lecture-01
+LOCATION:SSCI: [  G130] Social Sciences Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Lecture-01\, 01\nComputer Networks\nStaff: -\nLocation: SSCI: [  G130] Social Sciences Lecture Theatre
+UID:uid11
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260402T170000
+DTEND;TZID=Australia/Perth:20260402T190000
+SUMMARY:Computer Networks\, Test-01
+LOCATION:210.G108 WILSMORE TATTERSALL.  Wilsmore Lecture Theatre
+DESCRIPTION:CITS3002_SEM-1_CR\, Test-01\, 03\nComputer Networks\nStaff: -\nLocation: 210.G108 WILSMORE TATTERSALL.  Wilsmore Lecture Theatre
+UID:uid12
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260303T140000
+DTEND;TZID=Australia/Perth:20260303T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid13
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260310T140000
+DTEND;TZID=Australia/Perth:20260310T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid14
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260317T140000
+DTEND;TZID=Australia/Perth:20260317T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid15
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260324T140000
+DTEND;TZID=Australia/Perth:20260324T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid16
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260331T140000
+DTEND;TZID=Australia/Perth:20260331T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid17
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260414T140000
+DTEND;TZID=Australia/Perth:20260414T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid18
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260421T140000
+DTEND;TZID=Australia/Perth:20260421T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid19
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260428T140000
+DTEND;TZID=Australia/Perth:20260428T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid20
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260505T140000
+DTEND;TZID=Australia/Perth:20260505T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid21
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260512T140000
+DTEND;TZID=Australia/Perth:20260512T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid22
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260519T140000
+DTEND;TZID=Australia/Perth:20260519T160000
+SUMMARY:Secure Coding\, Lab-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3007_SEM-1_CR\, Lab-01\, 01\nSecure Coding\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid23
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260225T140000
+DTEND;TZID=Australia/Perth:20260225T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid24
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260304T140000
+DTEND;TZID=Australia/Perth:20260304T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid25
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260311T140000
+DTEND;TZID=Australia/Perth:20260311T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid26
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260318T140000
+DTEND;TZID=Australia/Perth:20260318T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid27
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260325T140000
+DTEND;TZID=Australia/Perth:20260325T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid28
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260401T140000
+DTEND;TZID=Australia/Perth:20260401T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid29
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260415T140000
+DTEND;TZID=Australia/Perth:20260415T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid30
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260422T140000
+DTEND;TZID=Australia/Perth:20260422T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid31
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260429T140000
+DTEND;TZID=Australia/Perth:20260429T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid32
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260506T140000
+DTEND;TZID=Australia/Perth:20260506T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid33
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260513T140000
+DTEND;TZID=Australia/Perth:20260513T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid34
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260520T140000
+DTEND;TZID=Australia/Perth:20260520T160000
+SUMMARY:Secure Coding\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3007_SEM-1_CR\, Lecture-01\, 01_Clashable\nSecure Coding\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid35
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260223T150000
+DTEND;TZID=Australia/Perth:20260223T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid36
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260302T150000
+DTEND;TZID=Australia/Perth:20260302T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid37
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260309T150000
+DTEND;TZID=Australia/Perth:20260309T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid38
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260316T150000
+DTEND;TZID=Australia/Perth:20260316T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid39
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260323T150000
+DTEND;TZID=Australia/Perth:20260323T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid40
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260330T150000
+DTEND;TZID=Australia/Perth:20260330T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid41
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260413T150000
+DTEND;TZID=Australia/Perth:20260413T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid42
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260420T150000
+DTEND;TZID=Australia/Perth:20260420T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid43
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260427T150000
+DTEND;TZID=Australia/Perth:20260427T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid44
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260504T150000
+DTEND;TZID=Australia/Perth:20260504T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid45
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260511T150000
+DTEND;TZID=Australia/Perth:20260511T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid46
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260518T150000
+DTEND;TZID=Australia/Perth:20260518T160000
+SUMMARY:Software Requirements and Design\, Lecture-01
+LOCATION:Lecture recording available if unable to attend.
+DESCRIPTION:CITS3301_SEM-1_CR\, Lecture-01\, 01_Clashable\nSoftware Requirements and Design\nStaff: -\nLocation: Lecture recording available if unable to attend.
+UID:uid47
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260226T090000
+DTEND;TZID=Australia/Perth:20260226T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid48
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260305T090000
+DTEND;TZID=Australia/Perth:20260305T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid49
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260312T090000
+DTEND;TZID=Australia/Perth:20260312T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid50
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260319T090000
+DTEND;TZID=Australia/Perth:20260319T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid51
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260326T090000
+DTEND;TZID=Australia/Perth:20260326T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid52
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260402T090000
+DTEND;TZID=Australia/Perth:20260402T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid53
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260416T090000
+DTEND;TZID=Australia/Perth:20260416T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid54
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260423T090000
+DTEND;TZID=Australia/Perth:20260423T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid55
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260430T090000
+DTEND;TZID=Australia/Perth:20260430T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid56
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260507T090000
+DTEND;TZID=Australia/Perth:20260507T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid57
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260514T090000
+DTEND;TZID=Australia/Perth:20260514T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid58
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260521T090000
+DTEND;TZID=Australia/Perth:20260521T110000
+SUMMARY:Software Requirements and Design\, Workshop-01
+LOCATION:EZONENTH: [ 209] Learning Studio - LAB
+DESCRIPTION:CITS3301_SEM-1_CR\, Workshop-01\, 06\nSoftware Requirements and Design\nStaff: -\nLocation: EZONENTH: [ 209] Learning Studio - LAB
+UID:uid59
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260305T120000
+DTEND;TZID=Australia/Perth:20260305T140000
+SUMMARY:Agile Web Development\, Lab-01
+LOCATION:HACKH: [  G09] Fay Gale Studio
+DESCRIPTION:CITS3403_SEM-1_CR\, Lab-01\, 04\nAgile Web Development\nStaff: -\nLocation: HACKH: [  G09] Fay Gale Studio
+UID:uid60
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260326T120000
+DTEND;TZID=Australia/Perth:20260326T140000
+SUMMARY:Agile Web Development\, Lab-02
+LOCATION:HACKH: [  G09] Fay Gale Studio
+DESCRIPTION:CITS3403_SEM-1_CR\, Lab-02\, 04\nAgile Web Development\nStaff: -\nLocation: HACKH: [  G09] Fay Gale Studio
+UID:uid61
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260423T120000
+DTEND;TZID=Australia/Perth:20260423T140000
+SUMMARY:Agile Web Development\, Lab-03
+LOCATION:HACKH: [  G09] Fay Gale Studio
+DESCRIPTION:CITS3403_SEM-1_CR\, Lab-03\, 04\nAgile Web Development\nStaff: -\nLocation: HACKH: [  G09] Fay Gale Studio
+UID:uid62
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260227T100000
+DTEND;TZID=Australia/Perth:20260227T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid63
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260306T100000
+DTEND;TZID=Australia/Perth:20260306T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid64
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260313T100000
+DTEND;TZID=Australia/Perth:20260313T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid65
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260320T100000
+DTEND;TZID=Australia/Perth:20260320T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid66
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260327T100000
+DTEND;TZID=Australia/Perth:20260327T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid67
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260403T100000
+DTEND;TZID=Australia/Perth:20260403T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid68
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260417T100000
+DTEND;TZID=Australia/Perth:20260417T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid69
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260424T100000
+DTEND;TZID=Australia/Perth:20260424T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid70
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260501T100000
+DTEND;TZID=Australia/Perth:20260501T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid71
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260508T100000
+DTEND;TZID=Australia/Perth:20260508T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid72
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260515T100000
+DTEND;TZID=Australia/Perth:20260515T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid73
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260522T100000
+DTEND;TZID=Australia/Perth:20260522T120000
+SUMMARY:Agile Web Development\, LecTut-01
+LOCATION:WTLTS: [  G108] Wilsmore Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, LecTut-01\, 01\nAgile Web Development\nStaff: -\nLocation: WTLTS: [  G108] Wilsmore Lecture Theatre
+UID:uid74
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260225T160000
+DTEND;TZID=Australia/Perth:20260225T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid75
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260304T160000
+DTEND;TZID=Australia/Perth:20260304T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid76
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260311T160000
+DTEND;TZID=Australia/Perth:20260311T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid77
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260318T160000
+DTEND;TZID=Australia/Perth:20260318T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid78
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260325T160000
+DTEND;TZID=Australia/Perth:20260325T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid79
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260401T160000
+DTEND;TZID=Australia/Perth:20260401T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid80
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260415T160000
+DTEND;TZID=Australia/Perth:20260415T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid81
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260422T160000
+DTEND;TZID=Australia/Perth:20260422T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid82
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260429T160000
+DTEND;TZID=Australia/Perth:20260429T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid83
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260506T160000
+DTEND;TZID=Australia/Perth:20260506T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid84
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260513T160000
+DTEND;TZID=Australia/Perth:20260513T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid85
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260423T041807Z
+DTSTART;TZID=Australia/Perth:20260520T160000
+DTEND;TZID=Australia/Perth:20260520T180000
+SUMMARY:Agile Web Development\, Lecture-01
+LOCATION:PHYS: [  G41] Ross Lecture Theatre
+DESCRIPTION:CITS3403_SEM-1_CR\, Lecture-01\, 01\nAgile Web Development\nStaff: -\nLocation: PHYS: [  G41] Ross Lecture Theatre
+UID:uid86
+END:VEVENT
+END:VCALENDAR
