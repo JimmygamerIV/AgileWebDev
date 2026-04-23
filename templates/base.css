@@ -1,0 +1,115 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* =========================
+   NAVBAR (UNIFIED FROM ALL PAGES)
+========================= */
+.navbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0px 30px;
+  box-sizing: border-box;
+  background-color: #2f3c8f;
+}
+
+/* Links inside navbar */
+.navbar a {
+  color: white;
+  text-decoration: none;
+  padding: 15px 15px;
+  transition: background-color 0.2s;
+}
+
+.navbar a:hover,
+.navbar a.active {
+  background-color: #1d2a6b;
+}
+
+/* Text inside navbar */
+.nav-left,
+.nav-center,
+.nav-right {
+  color: white;
+  font-size: 20px;
+}
+
+/* Layout grouping */
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.nav-center {
+  display: flex;
+}
+
+.nav-left {
+  font-weight: bold;
+}
+
+/* Push right section */
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =========================
+   LOGOUT BUTTON (CRITICAL FIX)
+========================= */
+.logout-form {
+  margin: 0;
+}
+
+.logout-btn {
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.2;
+}
+
+.logout-btn:hover {
+  background-color: #1d2a6b;
+}
+
+/* =========================
+   OPTIONAL ELEMENTS (USED IN SOME PAGES)
+========================= */
+.logged-in-as {
+  color: #fff;
+  font-size: 14px;
+}
+
+/* =========================
+   BOOTSTRAP OVERRIDES (IMPORTANT)
+========================= */
+
+/* Prevent Bootstrap from blowing up headings */
+h1,
+h2,
+h3 {
+  font-weight: normal;
+}
+
+/* Prevent Bootstrap buttons interfering */
+button {
+  font-family: Arial, sans-serif;
+}
+
+/* Remove Bootstrap link underline styles */
+a {
+  text-decoration: none;
+}

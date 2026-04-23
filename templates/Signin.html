@@ -1,35 +1,30 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='signin.css') }}" />
-  </head>
+{% extends "base.html" %} {% block title %}Sign In{% endblock %} {% block styles
+%}
+<link rel="stylesheet" href="{{ url_for('static', filename='signin.css') }}" />
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="card">
+    <h1>Welcome to UWA Social Timetable!</h1>
+    <p class="subtitle">Sign in to your account:</p>
 
-  <body>
-    <nav class="navbar">
-      <div class="nav-left">UWA Social Timetable</div>
-    </nav>
+    {% if error %}
+    <p style="color: red">{{ error }}</p>
+    {% endif %}
 
-    <div class="container">
-      <div class="card">
-        <h1>Welcome to UWA Social Timetable!</h1>
-        <p class="subtitle">Sign in to your account:</p>
-        {% if error %}
-        <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <form class="login-form" action="/signin" method="POST">
-          <label>Username</label>
-          <input type="text" name="username" placeholder="Enter your username" />
-          <label>Password</label>
-          <input type="password" name="password" placeholder="Enter your password" />
-          <button type="submit">Sign In</button>
-          <br />
-          <p class="signup-text">
-            Don't have an account?
-            <a href="/signup">Sign up here</a>
-          </p>
-        </form>
-      </div>
-    </div>
-  </body>
-</html>
+    <form class="login-form" method="POST" action="/signin">
+      <label>Username</label>
+      <input type="text" name="username" />
+
+      <label>Password</label>
+      <input type="password" name="password" />
+
+      <button type="submit">Sign In</button>
+    </form>
+
+    <p class="signup-text">
+      Don't have an account?
+      <a href="/signup">Sign up here</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
