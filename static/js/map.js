@@ -15,13 +15,14 @@
   }
 
   // Use the Social Sciences / Student Central area as a sensible campus default.
-  const location = {
+  const fallbackLocation = {
     name: "Social Sciences / UWA Student Central Building",
     lat: -31.980436934419682,
     lng: 115.81913327444458,
   };
 
-  const map = L.map("map").setView([location.lat, location.lng], 17);
+  const map = L.map("map").setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+  let classMarker = null;
 
   // Prevent browser-level page zoom gestures when interacting with the map area.
   mapElement.addEventListener(
@@ -115,6 +116,106 @@
     updateToggleLabel();
   }
 
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function popupHtml(classData) {
+    const friendNames = Array.isArray(classData.friend_nicknames) ? classData.friend_nicknames : [];
+    const friendsDisplay = friendNames.map((name) => escapeHtml(name)).join(", ");
+    const attendeeCount = Number(classData.other_attendees_count || 0);
+
+    const rawFloor = (classData.floor ?? "").toString().trim();
+    const normalizedFloor = rawFloor.toLowerCase();
+    const hasFloor =
+      rawFloor.length > 0 &&
+      normalizedFloor !== "null" &&
+      normalizedFloor !== "none" &&
+      normalizedFloor !== "n/a" &&
+      normalizedFloor !== "na" &&
+      normalizedFloor !== "unknown";
+
+    const attendanceSummary =
+      friendsDisplay.length > 0
+        ? `${attendeeCount} friends attending (${friendsDisplay})`
+        : `${attendeeCount} friends attending`;
+
+    const floorListItem = hasFloor
+      ? `<li><span style="font-weight: 600;">Floor:</span> ${escapeHtml(rawFloor)}</li>`
+      : "";
+
+    return `
+      <div>
+        <strong>${escapeHtml(classData.event_name || "Untitled")}</strong><br>
+        <ul style="margin: 8px 0 0 18px; padding: 0;">
+          <li><span style="font-weight: 600;">Building:</span> ${escapeHtml(classData.building_name || "Unknown building")}</li>
+          ${floorListItem}
+          <li><span style="font-weight: 600;">Time:</span> ${escapeHtml(classData.time_display || "Unknown")}</li>
+          <li><span style="font-weight: 600;">Room:</span> ${escapeHtml(classData.location_display || "Unknown")}</li>
+          <li>${attendanceSummary}</li>
+        </ul>
+      </div>
+    `;
+  }
+
+  function setMarker(lat, lng, popupText) {
+    if (classMarker) {
+      map.removeLayer(classMarker);
+    }
+
+    classMarker = L.marker([lat, lng]).addTo(map).bindPopup(popupText);
+    map.setView([lat, lng], 17);
+  }
+
+  async function loadCurrentClassMarker() {
+    try {
+      const response = await fetch("/api/map/current-class", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        setMarker(fallbackLocation.lat, fallbackLocation.lng, fallbackLocation.name);
+        return;
+      }
+
+      const payload = await response.json();
+      const classData = payload.class;
+
+      if (!classData) {
+        setMarker(
+          fallbackLocation.lat,
+          fallbackLocation.lng,
+          "No current or upcoming classes found."
+        );
+        return;
+      }
+
+      const lat = Number(classData.latitude);
+      const lng = Number(classData.longitude);
+
+      if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        setMarker(lat, lng, popupHtml(classData));
+        return;
+      }
+
+      setMarker(
+        fallbackLocation.lat,
+        fallbackLocation.lng,
+        "Current/next class found, but map coordinates were unavailable."
+      );
+    } catch (_error) {
+      setMarker(fallbackLocation.lat, fallbackLocation.lng, fallbackLocation.name);
+    }
+  }
+
   L.DomEvent.disableClickPropagation(styleToggleButton);
   L.DomEvent.disableScrollPropagation(styleToggleButton);
   styleToggleButton.addEventListener("click", toggleMapStyle);
@@ -138,5 +239,5 @@
   updateFullscreenButton();
   updateToggleLabel();
 
-  L.marker([location.lat, location.lng]).addTo(map).bindPopup(location.name);
+  loadCurrentClassMarker();
 })();
