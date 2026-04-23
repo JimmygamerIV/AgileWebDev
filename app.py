@@ -109,6 +109,7 @@ def is_event_currently_running(event, now=None):
     return start_dt <= now < end_dt
 
 
+
 def get_event_time_window(event):
     if not event.date or not event.start_time or not event.end_time:
         return None
@@ -187,6 +188,7 @@ def get_friend_ids(db, user_id):
 
     return friend_ids
 
+
 @app.route('/')
 def index():
     if g.current_user is None:
@@ -209,7 +211,7 @@ def index():
                 continue
             event_date = date.fromisoformat(e.date)
 
-            if event_date == today and e.start_time >= time_now:
+            if event_date == today and e.end_time and e.end_time > time_now:
                 events.append(e)
 
             elif event_date == tomorrow:
@@ -368,6 +370,8 @@ def delete_event(event_id):
             return jsonify({"error": "Event not found"}), 404
         if event.user_id != session['user_id']:
             return jsonify({"error": "Forbidden"}), 403
+        if is_event_currently_running(event):
+            return jsonify({"error": "This event is currently running and can only be deleted after it ends."}), 409
         
         db.delete(event)
         db.commit()
