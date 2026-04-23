@@ -94,6 +94,26 @@ def importICS(ics_content, user_id):
 def user_timetable_path(user_id):
     return TIMETABLES_DIR / f"user_{user_id}.ics"
 
+
+def is_event_currently_running(event, now=None):
+    if not event.date or not event.start_time or not event.end_time:
+        return False
+
+    try:
+        start_dt = datetime.strptime(f"{event.date} {event.start_time}", "%Y-%m-%d %H:%M")
+        end_dt = datetime.strptime(f"{event.date} {event.end_time}", "%Y-%m-%d %H:%M")
+    except ValueError:
+        return False
+
+    # Handle events that cross midnight.
+    if end_dt <= start_dt:
+        end_dt += timedelta(days=1)
+
+    if now is None:
+        now = datetime.now()
+
+    return start_dt <= now < end_dt
+
 @app.route('/')
 def index():
     if g.current_user is None:
@@ -116,7 +136,7 @@ def index():
                 continue
             event_date = date.fromisoformat(e.date)
 
-            if event_date == today and e.start_time >= time_now:
+            if event_date == today and e.end_time and e.end_time > time_now:
                 events.append(e)
 
             elif event_date == tomorrow:
@@ -240,6 +260,8 @@ def my_events():
         
         result = []
         for e in events:
+            if e.date and date.fromisoformat(e.date) < date.today():
+                continue
             result.append({
                 "event_id": e.event_id,
                 "event_name": e.event_name or "Untitled",
@@ -269,6 +291,8 @@ def delete_event(event_id):
             return jsonify({"error": "Event not found"}), 404
         if event.user_id != session['user_id']:
             return jsonify({"error": "Forbidden"}), 403
+        if is_event_currently_running(event):
+            return jsonify({"error": "This event is currently running and can only be deleted after it ends."}), 409
         
         db.delete(event)
         db.commit()
