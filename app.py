@@ -197,44 +197,40 @@ def index():
     
     db = Session()
     try:
-        user = db.query(User).filter(User.user_id == session['user_id']).first()
         all_events = db.query(Event).filter(Event.user_id == session['user_id']).order_by(Event.date, Event.start_time).all()
-        events = []
+
+        today_events = []
+        tomorrow_events = []
+        future_events = []
 
         today = date.today()
         tomorrow = today + timedelta(days=1)
         time_now = datetime.now().strftime("%H:%M")
 
-        # Add today's and tommorow's classes to the array
         for e in all_events:
             if not e.date:
                 continue
+
             event_date = date.fromisoformat(e.date)
 
-            if event_date == today and e.end_time and e.end_time > time_now:
-                events.append(e)
-
+            if event_date == today:
+                if not e.end_time or e.end_time > time_now:
+                    today_events.append(e)
             elif event_date == tomorrow:
-                events.append(e)
-        
-        # If there are no upcomming classes for the two days then add next furutre upcoming
-        if not events:
-            for e in all_events:
-                if not e.date:
-                    continue
+                tomorrow_events.append(e)
+            elif event_date > tomorrow:
+                future_events.append(e)
 
-                event_date = date.fromisoformat(e.date)
-                if event_date > tomorrow:
-                    events.append(e)
-
-                # Only add the next 2 upcoming events
-                if len(events) == 2:
-                    break
-                
     finally:
         db.close()
 
-    return render_template("index.html", events=events, username=g.current_user["nickname"] or g.current_user["username"])
+    return render_template(
+        "index.html",
+        today_events=today_events,
+        tomorrow_events=tomorrow_events,
+        future_events=future_events,
+        username=g.current_user["nickname"] or g.current_user["username"],
+    )
 
 
 @app.route('/add-event', methods=['GET', 'POST'])

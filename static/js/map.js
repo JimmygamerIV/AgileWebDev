@@ -3,14 +3,10 @@
   const styleToggleButton = document.getElementById("styleToggle");
   const fullscreenToggleButton = document.getElementById("fullscreenToggle");
   const mapBoxElement = document.querySelector(".map-box");
+  const classesPanelElement = document.querySelector(".upcoming");
+  const classesToggleButton = document.querySelector(".upcoming .toggle-btn");
 
-  if (
-    !mapElement ||
-    !styleToggleButton ||
-    !fullscreenToggleButton ||
-    !mapBoxElement ||
-    typeof L === "undefined"
-  ) {
+  if (!mapElement || !styleToggleButton || !fullscreenToggleButton || !mapBoxElement || typeof L === "undefined") {
     return;
   }
 
@@ -114,6 +110,26 @@
 
     activeLayer.addTo(map);
     updateToggleLabel();
+  }
+
+  function updateClassesToggleState() {
+    if (!classesPanelElement || !classesToggleButton) {
+      return;
+    }
+
+    const isCollapsed = classesPanelElement.classList.contains("collapsed");
+    classesToggleButton.textContent = isCollapsed ? "▲" : "▼";
+    classesToggleButton.setAttribute("aria-expanded", String(!isCollapsed));
+    classesToggleButton.setAttribute("title", isCollapsed ? "Expand classes" : "Collapse classes");
+  }
+
+  function toggleClassesPanel() {
+    if (!classesPanelElement) {
+      return;
+    }
+
+    classesPanelElement.classList.toggle("collapsed");
+    updateClassesToggleState();
   }
 
   function escapeHtml(value) {
@@ -238,6 +254,11 @@
 
   updateFullscreenButton();
   updateToggleLabel();
+  updateClassesToggleState();
+
+  if (classesToggleButton) {
+    classesToggleButton.addEventListener("click", toggleClassesPanel);
+  }
 
   loadCurrentClassMarker();
 })();

@@ -47,18 +47,52 @@
 
           <div class="upcoming">
             <div class="upcoming-header">
-              <span>Upcoming Classes:</span>
-              <button class="toggle-btn">▼</button>
+              <span>Classes</span>
+              <button class="toggle-btn" aria-expanded="true" title="Collapse classes">▼</button>
             </div>
 
             <div class="upcoming-content">
-              {% for event in events %}
-              <div class="event-item">
-                <span class="event-name">{{ event.event_name }}</span>
-                <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
+              <div class="classes-group today-group">
+                <div class="group-title">Today's classes</div>
+                {% if today_events %}
+                {% for event in today_events %}
+                <div class="event-item">
+                  <span class="event-name">{{ event.event_name }}</span>
+                  <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-group">No classes today</div>
+                {% endif %}
               </div>
-              {% endfor %}
-              
+
+              <div class="classes-group tomorrow-group">
+                <div class="group-title">Tomorrow's classes</div>
+                {% if tomorrow_events %}
+                {% for event in tomorrow_events %}
+                <div class="event-item">
+                  <span class="event-name">{{ event.event_name }}</span>
+                  <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-group">No classes tomorrow</div>
+                {% endif %}
+              </div>
+
+              <div class="classes-group future-group">
+                <div class="group-title">Future classes</div>
+                {% if future_events %}
+                {% for event in future_events %}
+                <div class="event-item">
+                  <span class="event-name">{{ event.event_name }}</span>
+                  <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-group">No future classes</div>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
