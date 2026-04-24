@@ -19,29 +19,39 @@
         {% endif %}
 
         <br />
-        <form class="login-form" action="/signup" method="POST">
+        <form class="login-form" action="{{ url_for('auth.signup') }}" method="POST">
+          {{ form.hidden_tag() }}
+          
           <label>Username<span style="color: red;">*</span></label>
-          <input 
-            type="text"
-            name="username"
-            placeholder="eg. mike134"
-            pattern="\S+"
-            title="Username must not contain spaces"
-            required
-          />
+          {{ form.username(placeholder="eg. mike134") }}
+          {% for error in form.username.errors %}
+            <span style="color: red; font-size: 0.8em;">{{ error }}</span>
+          {% endfor %}
+
           <label>Nickname</label>
-          <input type="text" name="nickname" placeholder="eg. Mike" />
+          {{ form.nickname(placeholder="eg. Mike") }}
+
           <label>New Password<span style="color: red;">*</span></label>
-          <input type="password" name="password" placeholder="Enter your New Password" required/>
+          {{ form.password(placeholder="Enter your New Password") }}
+
           <label>Confirm Password<span style="color: red;">*</span></label>
-          <input type="password" name="confirm_password" placeholder="Confirm your New Password" required/>
+          {{ form.confirm_password(placeholder="Confirm your New Password") }}
+          {% for error in form.confirm_password.errors %}
+            <span style="color: red; font-size: 0.8em;">{{ error }}</span>
+          {% endfor %}
+
           <label>Email</label>
-          <input type="email" name="email" placeholder="eg. Name@student.uwa.edu.au" />
+          {{ form.email(placeholder="eg. Name@student.uwa.edu.au") }}
+          {% for error in form.email.errors %}
+            <span style="color: red; font-size: 0.8em;">{{ error }}</span>
+          {% endfor %}
+
           <br />
           <button type="submit">Sign Up</button>
+          
           <p class="signup-text">
             Already have an account?
-            <a href="/signin">Sign in here</a>
+            <a href="{{ url_for('auth.signin') }}">Sign in here</a>
           </p>
         </form>
       </div>

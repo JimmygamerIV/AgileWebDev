@@ -1,1 +1,6 @@
-unimap.db
+__pycache__/
+.vscode/
+*.pyc
+*.db
+.env
+*.ics

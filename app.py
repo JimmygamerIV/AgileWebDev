@@ -10,23 +10,30 @@ from map_ics_uid_locations import resolve_location, build_alias_index, build_roo
 from urllib.error import URLError
 from urllib.request import urlopen
 from urllib.parse import urlparse
+from dotenv import load_dotenv
+from config import Config
+from forms import ImportTimetableForm,AddFriendForm,FriendActionForm
+from flask_wtf.csrf import CSRFProtect
 
-
+load_dotenv()
 app = Flask(__name__)
-app.secret_key = 'somesecretkey'
+app.config.from_object(Config)
+
+
 
 init_db()
-
 app.register_blueprint(auth_bp)
+csrf = CSRFProtect(app)
 
 
-BASE_DIR = Path(__file__).parent
-TIMETABLES_DIR = BASE_DIR / "timetables"
+TIMETABLES_DIR = app.config["TIMETABLES_DIR"]
 TIMETABLES_DIR.mkdir(parents=True, exist_ok=True)
+building_json = app.config["BUILDINGS_JSON"]
+pois_json = app.config["POIS_JSON"]
 
-with (BASE_DIR / "buildings.json").open(encoding="utf-8") as f:
+with (building_json).open(encoding="utf-8") as f:
     BUILDINGS = json.load(f)
-with (BASE_DIR / "pois.json").open(encoding="utf-8") as f:
+with (pois_json).open(encoding="utf-8") as f:
     POIS = json.load(f)
 
 ALIAS_INDEX = build_alias_index(BUILDINGS)
@@ -325,6 +332,8 @@ def index():
 
 @app.route('/add-event', methods=['GET', 'POST'])
 def add_event():
+
+    form = ImportTimetableForm()
     if g.current_user is None:
         session.pop('user_id', None)
         return redirect('/signin')
@@ -334,55 +343,46 @@ def add_event():
     success = None
     preview_events = []
     
-    if request.method == 'POST':
-        uploaded_file = request.files.get("ics_file")
-        ics_url = request.form.get("ics_url", "").strip()
-        
-        has_file = uploaded_file is not None and uploaded_file.filename != ""
-        has_url = bool(ics_url)
-        
-        if not has_file and not has_url:
+    if form.validate_on_submit():
+        uploaded_file = form.ics_file.data
+        ics_url = form.ics_url.data
+        if not (uploaded_file and uploaded_file.filename) and not ics_url:
             error = "Please upload a file or provide a URL."
-        
-        elif has_file:
-            if not uploaded_file.filename.endswith(".ics"):
-                error = "Only .ics files are supported."
-            else:
-                try:
-                    ics_content = uploaded_file.read()
-                    user_timetable_path(session['user_id']).write_bytes(ics_content)
-                    preview_events = importICS(ics_content, session['user_id'])
-                    success = "Timetable imported successfully."
-                except Exception:
+                
+        elif uploaded_file:
+            try:
+                ics_content = uploaded_file.read()
+                user_timetable_path(session['user_id']).write_bytes(ics_content)
+                preview_events = importICS(ics_content, session['user_id'])
+                success = "Timetable imported successfully."
+            except Exception:
                     error = "Could not parse this ICS file."
-        
+
         else:
-            parsed = urlparse(ics_url)
-            if parsed.scheme not in {"http", "https"}:
-                error = "Please provide a valid URL."
-            else:
-                try:
-                    with urlopen(ics_url, timeout=20) as response:
-                        ics_content = response.read()
-                    user_timetable_path(session['user_id']).write_bytes(ics_content)
-                    preview_events = importICS(ics_content, session['user_id'])
-                    success = "Timetable imported successfully."
-                except URLError:
-                    error = "Could not download from that URL."
-                except Exception:
-                    error = "Could not parse the ICS content."
+            try:
+                with urlopen(ics_url, timeout=20) as response:
+                    ics_content = response.read()
+                user_timetable_path(session['user_id']).write_bytes(ics_content)
+                preview_events = importICS(ics_content, session['user_id'])
+                success = "Timetable imported successfully."
+            except URLError:
+                error = "Could not download from that URL."
+            except Exception:
+                error = "Could not parse the ICS content."
     
     return render_template("add_event.html",
     error=error,
     success=success,
     preview_events=preview_events,
     has_saved_timetable=user_timetable_path(session['user_id']).exists(),
-    username=g.current_user["nickname"] or g.current_user["username"]
+    username=g.current_user["nickname"] or g.current_user["username"],
+    form=form
     )
 
 
 @app.route('/timetable/restore', methods=['POST'])
 def restore_timetable():
+    form = ImportTimetableForm()
     if 'user_id' not in session:
         return redirect('/signin')
     
@@ -392,7 +392,8 @@ def restore_timetable():
             error="No saved timetable found.",
             success=None,
             preview_events=[],
-            has_saved_timetable=False
+            has_saved_timetable=False,
+            form=form
         ), 404
     
     try:
@@ -402,14 +403,16 @@ def restore_timetable():
             error=None,
             success="Timetable restored successfully.",
             preview_events=preview_events,
-            has_saved_timetable=True
+            has_saved_timetable=True,
+            form=form
         )
     except Exception:
         return render_template("add_event.html",
             error="Could not restore the saved timetable.",
             success=None,
             preview_events=[],
-            has_saved_timetable=True
+            has_saved_timetable=True,
+            form=form
         ), 500
 
 @app.route('/api/events/me', methods=['GET'])
@@ -562,6 +565,8 @@ def friends():
     if 'user_id' not in session:
         return redirect('/signin')
 
+    add_form = AddFriendForm()
+    action_form = FriendActionForm()
     db = Session()
     try:
         user_id = session['user_id']
@@ -602,7 +607,9 @@ def friends():
         return render_template(
             "friends.html",
             friends=friends_list,
-            requests=requests
+            requests=requests,
+            add_form = add_form,
+            action_form = action_form
         )
                 
     finally:

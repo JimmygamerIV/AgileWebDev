@@ -22,7 +22,7 @@
       <div class="nav-right">
         <span class="logged-in-as">Logged in</span>
         <form class="logout-form" method="post" action="{{ url_for('auth.logout') }}">
-          <button class="logout-btn" type="submit">Logout</button>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/><button class="logout-btn" type="submit">Logout</button>
         </form>
       </div>
     </nav>
@@ -41,7 +41,7 @@
         {% endif %}
 
         <form method="post" enctype="multipart/form-data" class="upload-form">
-          <label for="icsFile">ICS File</label>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/><label for="icsFile">ICS File</label>
           <input id="icsFile" type="file" name="ics_file" accept=".ics,text/calendar" />
 
           <p class="input-divider">or</p>
