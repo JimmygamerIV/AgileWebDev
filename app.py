@@ -436,12 +436,13 @@ def current_class_map_data():
                 attendees.add(event.user_id)
 
         friend_ids = get_friend_ids(db, user_id)
+        friend_attendee_ids = attendees.intersection(friend_ids)
+
         friend_nicknames = []
-        if attendees:
-            attendee_users = db.query(User).filter(User.user_id.in_(attendees)).all()
+        if friend_attendee_ids:
+            attendee_users = db.query(User).filter(User.user_id.in_(friend_attendee_ids)).all()
             for attendee in attendee_users:
-                if attendee.user_id in friend_ids:
-                    friend_nicknames.append(attendee.nickname or attendee.username)
+                friend_nicknames.append(attendee.nickname or attendee.username)
 
         friend_nicknames.sort(key=str.lower)
 
@@ -457,7 +458,7 @@ def current_class_map_data():
                 "location_display": poi_id or (target_event.location or "Unknown location"),
                 "latitude": latitude,
                 "longitude": longitude,
-                "other_attendees_count": len(attendees),
+                "other_attendees_count": len(friend_attendee_ids),
                 "friend_nicknames": friend_nicknames,
             }
         })
