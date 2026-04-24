@@ -14,7 +14,9 @@ from dotenv import load_dotenv
 from config import Config
 from forms import ImportTimetableForm,AddFriendForm,FriendActionForm
 from flask_wtf.csrf import CSRFProtect
+from generate_env import generate_env
 
+generate_env()
 load_dotenv()
 app = Flask(__name__)
 app.config.from_object(Config)
