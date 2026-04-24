@@ -5,20 +5,26 @@
   const mapBoxElement = document.querySelector(".map-box");
   const classesPanelElement = document.querySelector(".upcoming");
   const classesToggleButton = document.querySelector(".upcoming .toggle-btn");
+  const stopSelectingButton = document.getElementById("stopSelectingBtn");
+  const classesDataElement = document.getElementById("classesMapData");
+  const classItemElements = Array.from(document.querySelectorAll(".event-item[data-event-id]"));
 
   if (!mapElement || !styleToggleButton || !fullscreenToggleButton || !mapBoxElement || typeof L === "undefined") {
     return;
   }
 
-  // Use the Social Sciences / Student Central area as a sensible campus default.
+  // Use Reid Library as the default campus center.
   const fallbackLocation = {
-    name: "Social Sciences / UWA Student Central Building",
-    lat: -31.980436934419682,
-    lng: 115.81913327444458,
+    name: "Reid Library",
+    lat: -31.978928653749154,
+    lng: 115.81772758275724,
   };
 
   const map = L.map("map").setView([fallbackLocation.lat, fallbackLocation.lng], 17);
-  let classMarker = null;
+  let activeMarkers = [];
+  let selectedEventId = null;
+  let classesData = [];
+  const classDataById = new Map();
 
   // Prevent browser-level page zoom gestures when interacting with the map area.
   mapElement.addEventListener(
@@ -141,6 +147,28 @@
       .replaceAll("'", "&#39;");
   }
 
+  function parseClassesData() {
+    if (!classesDataElement) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(classesDataElement.textContent || "[]");
+      if (!Array.isArray(parsed)) {
+        return;
+      }
+
+      classesData = parsed;
+      for (const classData of classesData) {
+        if (classData && classData.event_id !== undefined && classData.event_id !== null) {
+          classDataById.set(String(classData.event_id), classData);
+        }
+      }
+    } catch (_error) {
+      classesData = [];
+    }
+  }
+
   function popupHtml(classData) {
     const friendNames = Array.isArray(classData.friend_nicknames) ? classData.friend_nicknames : [];
     const friendsDisplay = friendNames.map((name) => escapeHtml(name)).join(", ");
@@ -179,56 +207,199 @@
     `;
   }
 
-  function setMarker(lat, lng, popupText) {
-    if (classMarker) {
-      map.removeLayer(classMarker);
+  function clearMarkers() {
+    for (const marker of activeMarkers) {
+      map.removeLayer(marker);
     }
-
-    classMarker = L.marker([lat, lng]).addTo(map).bindPopup(popupText);
-    map.setView([lat, lng], 17);
+    activeMarkers = [];
   }
 
-  async function loadCurrentClassMarker() {
-    try {
-      const response = await fetch("/api/map/current-class", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+  function updateStopSelectingButton() {
+    if (!stopSelectingButton) {
+      return;
+    }
+
+    const isSelecting = selectedEventId !== null;
+    stopSelectingButton.classList.toggle("visible", isSelecting);
+    stopSelectingButton.setAttribute("aria-hidden", String(!isSelecting));
+  }
+
+  function updateClassHighlights() {
+    const selectedId = selectedEventId === null ? "" : String(selectedEventId);
+    for (const classItem of classItemElements) {
+      classItem.classList.toggle("selected", classItem.dataset.eventId === selectedId);
+    }
+  }
+
+  function isOnlineClass(classData) {
+    const searchableText = `${classData?.event_name || ""} ${classData?.location_display || ""} ${classData?.building_name || ""}`.toLowerCase();
+    return /\bonline\b|\bvirtual\b|\bremote\b|\bzoom\b|\bteams\b|\bwebex\b|\bcollaborate\b/.test(searchableText);
+  }
+
+  function addMarkerForClass(classData, openPopup = false) {
+    if (isOnlineClass(classData)) {
+      return null;
+    }
+
+    const lat = Number(classData.latitude);
+    const lng = Number(classData.longitude);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+      return null;
+    }
+
+    const marker = L.marker([lat, lng]).addTo(map).bindPopup(popupHtml(classData));
+    activeMarkers.push(marker);
+
+    if (openPopup) {
+      marker.openPopup();
+      map.setView([lat, lng], 17);
+    }
+
+    return marker;
+  }
+
+  function getClassWindow(classData) {
+    if (!classData || !classData.date || !classData.start_time || !classData.end_time) {
+      return null;
+    }
+
+    const start = new Date(`${classData.date}T${classData.start_time}:00`);
+    let end = new Date(`${classData.date}T${classData.end_time}:00`);
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return null;
+    }
+
+    if (end <= start) {
+      end = new Date(end.getTime() + 24 * 60 * 60 * 1000);
+    }
+
+    return { start, end };
+  }
+
+  function getCurrentOrNextClassData() {
+    const now = new Date();
+    let currentClass = null;
+    let nextClass = null;
+
+    for (const classData of classesData) {
+      const window = getClassWindow(classData);
+      if (!window) {
+        continue;
+      }
+
+      if (window.start <= now && now < window.end) {
+        if (!currentClass || window.start < currentClass.start) {
+          currentClass = { start: window.start, classData };
+        }
+        continue;
+      }
+
+      if (window.start > now) {
+        if (!nextClass || window.start < nextClass.start) {
+          nextClass = { start: window.start, classData };
+        }
+      }
+    }
+
+    if (currentClass) {
+      return currentClass.classData;
+    }
+    if (nextClass) {
+      return nextClass.classData;
+    }
+
+    return null;
+  }
+
+  function renderDefaultClassMarker() {
+    clearMarkers();
+
+    const targetClass = getCurrentOrNextClassData();
+    if (targetClass) {
+      const marker = addMarkerForClass(targetClass, false);
+      if (marker) {
+        map.setView(marker.getLatLng(), 17);
+        return;
+      }
+
+      const fallbackMarker = L.marker([fallbackLocation.lat, fallbackLocation.lng])
+        .addTo(map)
+        .bindPopup(`${popupHtml(targetClass)}<div style="margin-top: 6px; font-size: 12px;">Map coordinates unavailable for this class.</div>`);
+      activeMarkers.push(fallbackMarker);
+      map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+      return;
+    }
+
+    const fallbackMarker = L.marker([fallbackLocation.lat, fallbackLocation.lng])
+        .addTo(map)
+        .bindPopup("No current or upcoming classes found.");
+    activeMarkers.push(fallbackMarker);
+    map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+  }
+
+  function selectClass(eventId) {
+    const classData = classDataById.get(String(eventId));
+    if (!classData) {
+      return;
+    }
+
+    selectedEventId = classData.event_id;
+    updateClassHighlights();
+    updateStopSelectingButton();
+
+    clearMarkers();
+    const marker = addMarkerForClass(classData, true);
+    if (marker) {
+      return;
+    }
+
+    const fallbackMarker = L.marker([fallbackLocation.lat, fallbackLocation.lng])
+      .addTo(map)
+      .bindPopup(`${popupHtml(classData)}<div style="margin-top: 6px; font-size: 12px;">Map coordinates unavailable for this class.</div>`)
+      .openPopup();
+
+    activeMarkers.push(fallbackMarker);
+    map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+  }
+
+  function stopSelecting() {
+    if (selectedEventId === null) {
+      return;
+    }
+
+    selectedEventId = null;
+    updateClassHighlights();
+    updateStopSelectingButton();
+    renderDefaultClassMarker();
+  }
+
+  function wireClassSelection() {
+    for (const classItem of classItemElements) {
+      const eventId = classItem.dataset.eventId;
+      if (!eventId) {
+        continue;
+      }
+
+      classItem.addEventListener("click", () => {
+        selectClass(eventId);
       });
 
-      if (!response.ok) {
-        setMarker(fallbackLocation.lat, fallbackLocation.lng, fallbackLocation.name);
-        return;
-      }
+      classItem.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
 
-      const payload = await response.json();
-      const classData = payload.class;
+        event.preventDefault();
+        selectClass(eventId);
+      });
+    }
 
-      if (!classData) {
-        setMarker(
-          fallbackLocation.lat,
-          fallbackLocation.lng,
-          "No current or upcoming classes found."
-        );
-        return;
-      }
-
-      const lat = Number(classData.latitude);
-      const lng = Number(classData.longitude);
-
-      if (Number.isFinite(lat) && Number.isFinite(lng)) {
-        setMarker(lat, lng, popupHtml(classData));
-        return;
-      }
-
-      setMarker(
-        fallbackLocation.lat,
-        fallbackLocation.lng,
-        "Current/next class found, but map coordinates were unavailable."
-      );
-    } catch (_error) {
-      setMarker(fallbackLocation.lat, fallbackLocation.lng, fallbackLocation.name);
+    if (stopSelectingButton) {
+      stopSelectingButton.addEventListener("click", stopSelecting);
+      L.DomEvent.disableClickPropagation(stopSelectingButton);
+      L.DomEvent.disableScrollPropagation(stopSelectingButton);
     }
   }
 
@@ -255,10 +426,13 @@
   updateFullscreenButton();
   updateToggleLabel();
   updateClassesToggleState();
+  updateStopSelectingButton();
 
   if (classesToggleButton) {
     classesToggleButton.addEventListener("click", toggleClassesPanel);
   }
 
-  loadCurrentClassMarker();
+  parseClassesData();
+  wireClassSelection();
+  renderDefaultClassMarker();
 })();

@@ -194,10 +194,12 @@ def index():
     if g.current_user is None:
         session.pop('user_id', None)
         return redirect('/signin')
-    
+
+    user_id = session['user_id']
+
     db = Session()
     try:
-        all_events = db.query(Event).filter(Event.user_id == session['user_id']).order_by(Event.date, Event.start_time).all()
+        all_events = db.query(Event).filter(Event.user_id == user_id).order_by(Event.date, Event.start_time).all()
 
         today_events = []
         tomorrow_events = []
@@ -221,6 +223,93 @@ def index():
             elif event_date > tomorrow:
                 future_events.append(e)
 
+        friend_ids = get_friend_ids(db, user_id)
+
+        relevant_dates = sorted({e.date for e in all_events if e.date})
+        other_events_by_date = {}
+        attendee_user_lookup = {}
+
+        if relevant_dates:
+            same_day_events = db.query(Event).filter(
+                Event.date.in_(relevant_dates),
+                Event.user_id != user_id,
+            ).all()
+
+            for event in same_day_events:
+                other_events_by_date.setdefault(event.date, []).append(event)
+
+            potential_friend_ids = {
+                event.user_id for event in same_day_events if event.user_id in friend_ids
+            }
+            if potential_friend_ids:
+                attendee_users = db.query(User).filter(User.user_id.in_(potential_friend_ids)).all()
+                for attendee_user in attendee_users:
+                    attendee_user_lookup[attendee_user.user_id] = attendee_user.nickname or attendee_user.username
+
+        def serialize_class_event(event):
+            poi_id = get_primary_poi_id(event.location or "")
+            poi = POIS.get(poi_id) if poi_id else None
+
+            building_id = None
+            if poi_id and "." in poi_id:
+                building_id = poi_id.split(".", 1)[0]
+            if poi and poi.get("parent_building"):
+                building_id = poi.get("parent_building")
+
+            building = BUILDINGS.get(building_id, {}) if building_id else {}
+            building_name = (
+                building.get("name")
+                or (poi.get("building_name") if poi else None)
+                or "Unknown building"
+            )
+
+            latitude = None
+            longitude = None
+            if poi:
+                latitude = poi.get("latitude")
+                longitude = poi.get("longitude")
+            if latitude is None or longitude is None:
+                latitude = building.get("latitude")
+                longitude = building.get("longitude")
+
+            attendees = set()
+            if event.date and poi_id:
+                for same_day_event in other_events_by_date.get(event.date, []):
+                    if get_primary_poi_id(same_day_event.location or "") != poi_id:
+                        continue
+                    if not events_overlap(event, same_day_event):
+                        continue
+                    attendees.add(same_day_event.user_id)
+
+            friend_attendee_ids = attendees.intersection(friend_ids)
+            friend_nicknames = [
+                attendee_user_lookup[friend_id]
+                for friend_id in friend_attendee_ids
+                if friend_id in attendee_user_lookup
+            ]
+            friend_nicknames.sort(key=str.lower)
+
+            return {
+                "event_id": event.event_id,
+                "event_name": event.event_name or "Untitled",
+                "date": event.date or "",
+                "start_time": event.start_time or "",
+                "end_time": event.end_time or "",
+                "time_display": f"{event.start_time or ''} - {event.end_time or ''}".strip(" -"),
+                "building_name": building_name,
+                "floor": (poi.get("floor") if poi else None),
+                "location_display": poi_id or (event.location or "Unknown location"),
+                "latitude": latitude,
+                "longitude": longitude,
+                "other_attendees_count": len(friend_attendee_ids),
+                "friend_nicknames": friend_nicknames,
+            }
+
+        classes_map_data = [
+            serialize_class_event(event)
+            for event in (today_events + tomorrow_events + future_events)
+        ]
+
     finally:
         db.close()
 
@@ -229,6 +318,7 @@ def index():
         today_events=today_events,
         tomorrow_events=tomorrow_events,
         future_events=future_events,
+        classes_map_data=classes_map_data,
         username=g.current_user["nickname"] or g.current_user["username"],
     )
 

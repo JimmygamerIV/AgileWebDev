@@ -44,6 +44,7 @@
           <div id="map" style="width:100%; height:100%;"></div>
           <button id="styleToggle"></button>
           <button id="fullscreenToggle" title="Enter fullscreen">⛶</button>
+          <button id="stopSelectingBtn" title="Stop selecting">Stop selecting</button>
 
           <div class="upcoming">
             <div class="upcoming-header">
@@ -56,7 +57,7 @@
                 <div class="group-title">Today's classes</div>
                 {% if today_events %}
                 {% for event in today_events %}
-                <div class="event-item">
+                <div class="event-item" data-event-id="{{ event.event_id }}" role="button" tabindex="0" aria-label="Select class {{ event.event_name }}">
                   <span class="event-name">{{ event.event_name }}</span>
                   <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
                 </div>
@@ -70,7 +71,7 @@
                 <div class="group-title">Tomorrow's classes</div>
                 {% if tomorrow_events %}
                 {% for event in tomorrow_events %}
-                <div class="event-item">
+                <div class="event-item" data-event-id="{{ event.event_id }}" role="button" tabindex="0" aria-label="Select class {{ event.event_name }}">
                   <span class="event-name">{{ event.event_name }}</span>
                   <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
                 </div>
@@ -84,7 +85,7 @@
                 <div class="group-title">Future classes</div>
                 {% if future_events %}
                 {% for event in future_events %}
-                <div class="event-item">
+                <div class="event-item" data-event-id="{{ event.event_id }}" role="button" tabindex="0" aria-label="Select class {{ event.event_name }}">
                   <span class="event-name">{{ event.event_name }}</span>
                   <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
                 </div>
@@ -98,6 +99,7 @@
         </div>
       </div>
     </div>
+    <script id="classesMapData" type="application/json">{{ classes_map_data|tojson }}</script>
     <script src="{{ url_for('static', filename='js/map.js') }}"></script>
   </body>
 </html>
