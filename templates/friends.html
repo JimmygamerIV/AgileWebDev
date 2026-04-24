@@ -47,6 +47,7 @@
                 <span>{{ friend.username }}</span>
 
                 <form method="POST" action="/remove_friend">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                   <input
                     type="hidden"
                     name="friend_id"
@@ -73,6 +74,7 @@
 
                 <div class="actions">
                   <form method="POST" action="/accept_request">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <input
                       type="hidden"
                       name="request_id"
@@ -87,6 +89,7 @@
                   </form>
 
                   <form method="POST" action="/reject_request">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <input
                       type="hidden"
                       name="request_id"

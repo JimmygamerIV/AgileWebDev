@@ -17,7 +17,8 @@ from flask_wtf.csrf import CSRFProtect
 
 load_dotenv()
 app = Flask(__name__)
-app.config.from_object("config.Config")
+app.config.from_object(Config)
+
 
 
 init_db()
