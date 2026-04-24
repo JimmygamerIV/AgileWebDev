@@ -40,42 +40,37 @@
         <p class="form-success">{{ success }}</p>
         {% endif %}
 
-        <form method="post" enctype="multipart/form-data" class="upload-form" action="{{ url_for('add_event') }}">
-          {{ form.hidden_tag() }}
-
-          <label for="{{ form.ics_file.id }}">{{ form.ics_file.label }}</label>
-          {{ form.ics_file(id="icsFile", accept=".ics,text/calendar") }}
-          {% for error in form.ics_file.errors %}
-              <p class="form-error">{{ error }}</p>
-          {% endfor %}
+        <form method="post" enctype="multipart/form-data" class="upload-form">
+          <label for="icsFile">ICS File</label>
+          <input id="icsFile" type="file" name="ics_file" accept=".ics,text/calendar" />
 
           <p class="input-divider">or</p>
 
-          <label for="{{ form.ics_url.id }}">{{ form.ics_url.label }}</label>
-          {{ form.ics_url(id="icsUrl", placeholder="https://example.com/your-timetable.ics") }}
-          {% for error in form.ics_url.errors %}
-              <p class="form-error">{{ error }}</p>
-          {% endfor %}
+          <label for="icsUrl">ICS URL</label>
+          <input
+            id="icsUrl"
+            type="url"
+            name="ics_url"
+            placeholder="https://example.com/your-timetable.ics"
+          />
 
           <p class="input-hint">Provide either a file upload or a URL.</p>
-
           <div class="upload-actions">
-              {{ form.submit() }}
-
-              {% if has_saved_timetable %}
-              <button
-                  type="submit"
-                  class="restore-btn"
-                  formaction="{{ url_for('restore_timetable') }}"
-                  formmethod="post"
-              >
-                  Restore saved ICS
-              </button>
-              {% else %}
-              <button type="button" class="restore-btn restore-btn-disabled" disabled>
-                  Restore saved ICS
-              </button>
-              {% endif %}
+            <button type="submit">Upload and Replace</button>
+            {% if has_saved_timetable %}
+            <button
+              type="submit"
+              class="restore-btn"
+              formaction="{{ url_for('restore_timetable') }}"
+              formmethod="post"
+            >
+              Restore saved ICS
+            </button>
+            {% else %}
+            <button type="button" class="restore-btn restore-btn-disabled" disabled>
+              Restore saved ICS
+            </button>
+            {% endif %}
           </div>
         </form>
 
