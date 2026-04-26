@@ -16,15 +16,18 @@ from forms import ImportTimetableForm,AddFriendForm,FriendActionForm
 from flask_wtf.csrf import CSRFProtect
 from generate_env import generate_env
 
-generate_env()
-load_dotenv()
-app = Flask(__name__)
-app.config.from_object(Config)
 
+def create_app():
 
+    generate_env()
+    load_dotenv()
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    app.register_blueprint(auth_bp)
+    return app
 
+app = create_app()
 init_db()
-app.register_blueprint(auth_bp)
 csrf = CSRFProtect(app)
 
 
@@ -618,4 +621,5 @@ def friends():
         db.close()
 
 if __name__ == "__main__":
+    
     app.run(debug=True)
