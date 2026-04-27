@@ -24,7 +24,7 @@ body {
   background-color: #1d2a6b; /* darker blue */
 }
 
-/* Font's inside navbar */
+/* Font's inside navbar  */
 .nav-left,
 .nav-center,
 .nav-right {
@@ -49,6 +49,9 @@ body {
 /* Push logout to far right */
 .nav-right {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* Main layout */

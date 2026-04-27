@@ -1,105 +1,91 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Main Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  </head>
+{% extends "base.html" %} {% block title %}Main Page{% endblock %} {% block
+styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+{% endblock %} {% block leaflet %}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endblock %} {% block content %}
+<div class="main-container">
+  <div class="sidebar">
+    <div class="card welcome">
+      <h3>Welcome, {{ username }}</h3>
+    </div>
 
-  <body>
-    <nav class="navbar">
-      <div class="nav-group">
-        <div class="nav-left">UWA Social Timetable</div>
+    <div class="card friends">
+      <h3>Friends On Campus:</h3>
+      <p>(Friends list here)</p>
+    </div>
+  </div>
 
-        <div class="nav-center">
-          <a href="/">Home</a>
-          <a href="/friends">Friends</a>
-          <a href="/add-event">Add Event</a>
+  <div class="map-section">
+    <div class="map-box">
+      <div id="map" style="width: 100%; height: 100%"></div>
+      <button id="styleToggle"></button>
+      <button id="fullscreenToggle">⛶</button>
+      <button id="stopSelectingBtn">Stop selecting</button>
+
+      <div class="upcoming">
+        <div class="upcoming-header">
+          <span>Classes</span>
+          <button class="toggle-btn">▼</button>
         </div>
-      </div>
 
-      <div class="nav-right">
-        <form class="logout-form" method="post" action="/logout">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/><button class="logout-btn" type="submit">Logout</button>
-        </form>
-      </div>
-    </nav>
-
-    <div class="main-container">
-      <div class="sidebar">
-        <div class="card welcome">
-          <h3>Welcome, {{ username }}</h3>
-        </div>
-
-        <div class="card friends">
-          <h3>Friends On Campus:</h3>
-          <p>(Friends list here)</p>
-        </div>
-      </div>
-
-      <div class="map-section">
-        <div class="map-box">
-          <div id="map" style="width:100%; height:100%;"></div>
-          <button id="styleToggle"></button>
-          <button id="fullscreenToggle" title="Enter fullscreen">⛶</button>
-          <button id="stopSelectingBtn" title="Stop selecting">Stop selecting</button>
-
-          <div class="upcoming">
-            <div class="upcoming-header">
-              <span>Classes</span>
-              <button class="toggle-btn" aria-expanded="true" title="Collapse classes">▼</button>
+        <div class="upcoming-content">
+          <!-- TODAY -->
+          <div class="classes-group today-group">
+            <div class="group-title">Today's classes</div>
+            {% if today_events %} {% for event in today_events %}
+            <div class="event-item" data-event-id="{{ event.event_id }}">
+              <span class="event-name">{{ event.event_name }}</span>
+              <span class="event-details">
+                {{ event.date }} | {{ event.start_time }} - {{ event.end_time }}
+              </span>
             </div>
+            {% endfor %} {% else %}
+            <div class="empty-group">No classes today</div>
+            {% endif %}
+          </div>
 
-            <div class="upcoming-content">
-              <div class="classes-group today-group">
-                <div class="group-title">Today's classes</div>
-                {% if today_events %}
-                {% for event in today_events %}
-                <div class="event-item" data-event-id="{{ event.event_id }}" role="button" tabindex="0" aria-label="Select class {{ event.event_name }}">
-                  <span class="event-name">{{ event.event_name }}</span>
-                  <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
-                </div>
-                {% endfor %}
-                {% else %}
-                <div class="empty-group">No classes today</div>
-                {% endif %}
-              </div>
-
-              <div class="classes-group tomorrow-group">
-                <div class="group-title">Tomorrow's classes</div>
-                {% if tomorrow_events %}
-                {% for event in tomorrow_events %}
-                <div class="event-item" data-event-id="{{ event.event_id }}" role="button" tabindex="0" aria-label="Select class {{ event.event_name }}">
-                  <span class="event-name">{{ event.event_name }}</span>
-                  <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
-                </div>
-                {% endfor %}
-                {% else %}
-                <div class="empty-group">No classes tomorrow</div>
-                {% endif %}
-              </div>
-
-              <div class="classes-group future-group">
-                <div class="group-title">Future classes</div>
-                {% if future_events %}
-                {% for event in future_events %}
-                <div class="event-item" data-event-id="{{ event.event_id }}" role="button" tabindex="0" aria-label="Select class {{ event.event_name }}">
-                  <span class="event-name">{{ event.event_name }}</span>
-                  <span class="event-details">{{ event.date }} | {{ event.start_time }} - {{ event.end_time }}</span>
-                </div>
-                {% endfor %}
-                {% else %}
-                <div class="empty-group">No future classes</div>
-                {% endif %}
-              </div>
+          <!-- TOMORROW -->
+          <div class="classes-group tomorrow-group">
+            <div class="group-title">Tomorrow's classes</div>
+            {% if tomorrow_events %} {% for event in tomorrow_events %}
+            <div class="event-item" data-event-id="{{ event.event_id }}">
+              <span class="event-name">{{ event.event_name }}</span>
+              <span class="event-details">
+                {{ event.date }} | {{ event.start_time }} - {{ event.end_time }}
+              </span>
             </div>
+            {% endfor %} {% else %}
+            <div class="empty-group">No classes tomorrow</div>
+            {% endif %}
+          </div>
+
+          <!-- FUTURE -->
+          <div class="classes-group future-group">
+            <div class="group-title">Future classes</div>
+            {% if future_events %} {% for event in future_events %}
+            <div class="event-item" data-event-id="{{ event.event_id }}">
+              <span class="event-name">{{ event.event_name }}</span>
+              <span class="event-details">
+                {{ event.date }} | {{ event.start_time }} - {{ event.end_time }}
+              </span>
+            </div>
+            {% endfor %} {% else %}
+            <div class="empty-group">No future classes</div>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
-    <script id="classesMapData" type="application/json">{{ classes_map_data|tojson }}</script>
-    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
-  </body>
-</html>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script id="classesMapData" type="application/json">
+  {{ classes_map_data|tojson }}
+</script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}

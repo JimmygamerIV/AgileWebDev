@@ -8,7 +8,7 @@ body {
     url("/static/assets/images/UWA.png");
 
   /* 
-  background-image: url("assets/images/UWA.png");
+  background-image: url("assets/images/UWA.png") ;
   */
   background-size: cover;
   background-position: center;
