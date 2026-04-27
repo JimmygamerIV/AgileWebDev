@@ -1,8 +1,8 @@
-from flask import Blueprint, g, request, render_template, redirect, session
+from flask import Blueprint, g, request, render_template, redirect, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import Session
 from models import User
-from forms import SignupForm,SigninForm
+from forms import SignupForm, SigninForm
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -17,96 +17,114 @@ def load_current_user():
     db = Session()
     try:
         user = db.get(User, user_id)
-        if user is None:
+        if user:
+            g.current_user = {
+                "user_id": user.user_id,
+                "username": user.username,
+                "nickname": user.nickname,
+                "email": user.email,
+            }
+        else:
             session.pop("user_id", None)
-            return
-
-        g.current_user = {
-            "user_id": user.user_id,
-            "username": user.username,
-            "nickname": user.nickname,
-            "email": user.email,
-        }
     finally:
         db.close()
 
-@auth_bp.route('/signup', methods=['GET', 'POST'])
 
+# =========================
+# SIGNUP
+# =========================
+@auth_bp.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignupForm()
 
     if request.method == 'GET':
-        return render_template("signup.html",form=form)
-    
-    if form.validate_on_submit():
-        username = form.username.data
-        nickname = form.nickname.data
-        password = form.password.data
-        confirm_password = form.confirm_password.data
-        email = form.email.data.strip() or None
+        return render_template("signup.html", form=form, show_full_nav=False)
 
-    if not username or not password:
-        return render_template("signup.html", error="Please fill in all required fields.",form=form)
+    if not form.validate_on_submit():
+        return render_template("signup.html", form=form, show_full_nav=False)
+
+    username = form.username.data
+    nickname = form.nickname.data
+    password = form.password.data
+    confirm_password = form.confirm_password.data
+    email = form.email.data.strip() or None
 
     if ' ' in username:
-        return render_template("signup.html", error="Username must not contain spaces.",form=form)
+        return render_template("signup.html", error="Username must not contain spaces.", form=form, show_full_nav=False)
 
     if password != confirm_password:
-        return render_template("signup.html", error="Passwords do not match.",form=form)
-    
+        return render_template("signup.html", error="Passwords do not match.", form=form, show_full_nav=False)
+
     hashed = generate_password_hash(password, method='pbkdf2:sha256')
 
     db = Session()
-    existing_user = db.query(User).filter(User.username == username).first()
 
-    existing_email = None
-    if email:
-        existing_email = db.query(User).filter(User.email == email).first()
+    try:
+        existing_user = db.query(User).filter(User.username == username).first()
+        existing_email = db.query(User).filter(User.email == email).first() if email else None
 
-    # Check if user already exists or email is registered
-    if existing_user:
+        if existing_user:
+            return render_template("signup.html", error="User already exists", form=form, show_full_nav=False)
+
+        if existing_email:
+            return render_template("signup.html", error="Email is already registered", form=form, show_full_nav=False)
+
+        new_user = User(
+            username=username,
+            nickname=nickname,
+            email=email,
+            password_hash=hashed
+        )
+
+        db.add(new_user)
+        db.commit()
+
+    finally:
         db.close()
-        return render_template("signup.html", error="User already exists",form=form)
-    if existing_email:
-        db.close()
-        return render_template("signup.html", error="Email is already registered",form=form)
 
-    new_user = User(
-        username=username,
-        nickname=nickname,
-        email=email,
-        password_hash=hashed
-    )
-    db.add(new_user)
-    db.commit()
-    db.close()
+    return redirect(url_for('auth.signin'))
 
-    return redirect('/signin')
 
+# =========================
+# SIGNIN
+# =========================
 @auth_bp.route('/signin', methods=['GET', 'POST'])
-
 def signin():
     form = SigninForm()
+
     if request.method == 'GET':
-        return render_template("signin.html",form=form)
+        return render_template("signin.html", form=form, show_full_nav=False)
+
+    if not form.validate_on_submit():
+        return render_template("signin.html", form=form, show_full_nav=False)
 
     username = form.username.data
     password = form.password.data
 
     db = Session()
 
-    user = db.query(User).filter(User.username == username).first()
+    try:
+        user = db.query(User).filter(User.username == username).first()
 
-    if user and check_password_hash(user.password_hash, password):
-        session['user_id'] = user.user_id
+        if user and check_password_hash(user.password_hash, password):
+            session['user_id'] = user.user_id
+            return redirect(url_for('index'))
+
+    finally:
         db.close()
-        return redirect('/')
-    
-    db.close()
-    return render_template("signin.html", error="The username or password you entered was incorrect",form=form)
+
+    return render_template(
+        "signin.html",
+        error="The username or password you entered was incorrect",
+        form=form,
+        show_full_nav=False
+    )
 
 
+# =========================
+# LOGOUT
+# =========================
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
     session.clear()
-    return redirect('/signin')
+    return redirect(url_for('auth.signin'))

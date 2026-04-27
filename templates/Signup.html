@@ -1,60 +1,53 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}" />
-  </head>
+{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block styles
+%}
+<link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}" />
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="card">
+    <h1>Create your Account:</h1>
 
-  <body>
-    <nav class="navbar">
-      <div class="nav-left">UWA Social Timetable</div>
-    </nav>
+    {% if error %}
+    <p style="color: red">{{ error }}</p>
+    {% endif %}
 
-    <div class="container">
-      <div class="card">
-        <h1>Create your Account:</h1>
-        
-        {% if error %}
-        <p style="color: red;">{{ error }}</p>
-        {% endif %}
+    <form
+      class="login-form"
+      action="{{ url_for('auth.signup') }}"
+      method="POST"
+    >
+      {{ form.hidden_tag() }}
 
-        <br />
-        <form class="login-form" action="{{ url_for('auth.signup') }}" method="POST">
-          {{ form.hidden_tag() }}
-          
-          <label>Username<span style="color: red;">*</span></label>
-          {{ form.username(placeholder="eg. mike134") }}
-          {% for error in form.username.errors %}
-            <span style="color: red; font-size: 0.8em;">{{ error }}</span>
-          {% endfor %}
+      <label>Username<span style="color: red">*</span></label>
+      {{ form.username(placeholder="eg. mike134") }} {% for error in
+      form.username.errors %}
+      <span style="color: red; font-size: 0.8em">{{ error }}</span>
+      {% endfor %}
 
-          <label>Nickname</label>
-          {{ form.nickname(placeholder="eg. Mike") }}
+      <label>Nickname</label>
+      {{ form.nickname(placeholder="eg. Mike") }}
 
-          <label>New Password<span style="color: red;">*</span></label>
-          {{ form.password(placeholder="Enter your New Password") }}
+      <label>New Password<span style="color: red">*</span></label>
+      {{ form.password(placeholder="Enter your New Password") }}
 
-          <label>Confirm Password<span style="color: red;">*</span></label>
-          {{ form.confirm_password(placeholder="Confirm your New Password") }}
-          {% for error in form.confirm_password.errors %}
-            <span style="color: red; font-size: 0.8em;">{{ error }}</span>
-          {% endfor %}
+      <label>Confirm Password<span style="color: red">*</span></label>
+      {{ form.confirm_password(placeholder="Confirm your New Password") }} {%
+      for error in form.confirm_password.errors %}
+      <span style="color: red; font-size: 0.8em">{{ error }}</span>
+      {% endfor %}
 
-          <label>Email</label>
-          {{ form.email(placeholder="eg. Name@student.uwa.edu.au") }}
-          {% for error in form.email.errors %}
-            <span style="color: red; font-size: 0.8em;">{{ error }}</span>
-          {% endfor %}
+      <label>Email</label>
+      {{ form.email(placeholder="eg. Name@student.uwa.edu.au") }} {% for error
+      in form.email.errors %}
+      <span style="color: red; font-size: 0.8em">{{ error }}</span>
+      {% endfor %}
 
-          <br />
-          <button type="submit">Sign Up</button>
-          
-          <p class="signup-text">
-            Already have an account?
-            <a href="{{ url_for('auth.signin') }}">Sign in here</a>
-          </p>
-        </form>
-      </div>
-    </div>
-  </body>
-</html>
+      <button type="submit">Sign Up</button>
+
+      <p class="signup-text">
+        Already have an account?
+        <a href="{{ url_for('auth.signin') }}">Sign in here</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endblock %}

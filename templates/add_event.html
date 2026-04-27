@@ -1,123 +1,66 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Events</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='add_event.css') }}" />
-  </head>
+{% extends "base.html" %} {% block title %}Add Events{% endblock %} {% block
+styles %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='add_event.css') }}"
+/>
+{% endblock %} {% block content %}
+<main class="page-container">
+  <section class="upload-card">
+    <h1>Upload Timetable</h1>
 
-  <body>
-    <nav class="navbar">
-      <div class="nav-group">
-        <div class="nav-left">UWA Social Timetable</div>
+    {% if error %}
+    <p class="form-error">{{ error }}</p>
+    {% endif %} {% if success %}
+    <p class="form-success">{{ success }}</p>
+    {% endif %}
 
-        <div class="nav-center">
-          <a href="{{ url_for('index') }}">Home</a>
-          <a href="/friends">Friends</a>
-          <a href="{{ url_for('add_event') }}" class="active">Add Event</a>
-        </div>
-      </div>
+    <form method="post" enctype="multipart/form-data" class="upload-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-      <div class="nav-right">
-        <span class="logged-in-as">Logged in</span>
-        <form class="logout-form" method="post" action="{{ url_for('auth.logout') }}">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/><button class="logout-btn" type="submit">Logout</button>
-        </form>
-      </div>
-    </nav>
+      <label>ICS File</label>
+      <input type="file" name="ics_file" />
 
-    <main class="page-container">
-      <section class="upload-card">
-        <h1>Upload Timetable</h1>
-        <p class="subtitle">Upload a new ICS file to replace your current timetable events.</p>
+      <p class="input-divider">or</p>
 
-        {% if error %}
-        <p class="form-error">{{ error }}</p>
-        {% endif %}
+      <label>ICS URL</label>
+      <input type="url" name="ics_url" />
 
-        {% if success %}
-        <p class="form-success">{{ success }}</p>
-        {% endif %}
+      <button type="submit">Upload and Replace</button>
+    </form>
 
-        <form method="post" enctype="multipart/form-data" class="upload-form">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/><label for="icsFile">ICS File</label>
-          <input id="icsFile" type="file" name="ics_file" accept=".ics,text/calendar" />
+    <div class="delete-toolbar">
+      <button id="deleteModeToggle" type="button">Delete events</button>
+      <button id="deleteAllBtn" type="button" style="display: none">
+        Delete All
+      </button>
+    </div>
+  </section>
 
-          <p class="input-divider">or</p>
+  <section class="preview-card">
+    <h2>Timetable Preview</h2>
 
-          <label for="icsUrl">ICS URL</label>
-          <input
-            id="icsUrl"
-            type="url"
-            name="ics_url"
-            placeholder="https://example.com/your-timetable.ics"
-          />
+    <table id="eventsTable">
+      <thead>
+        <tr>
+          <th>Class</th>
+          <th>Day</th>
+          <th>Date</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Location</th>
+          <th class="delete-column">Delete</th>
+        </tr>
+      </thead>
 
-          <p class="input-hint">Provide either a file upload or a URL.</p>
-          <div class="upload-actions">
-            <button type="submit">Upload and Replace</button>
-            {% if has_saved_timetable %}
-            <button
-              type="submit"
-              class="restore-btn"
-              formaction="{{ url_for('restore_timetable') }}"
-              formmethod="post"
-            >
-              Restore saved ICS
-            </button>
-            {% else %}
-            <button type="button" class="restore-btn restore-btn-disabled" disabled>
-              Restore saved ICS
-            </button>
-            {% endif %}
-          </div>
-        </form>
-
-        <div class="delete-toolbar">
-          <button
-            id="deleteModeToggle"
-            type="button"
-            class="delete-mode-btn"
-            aria-pressed="false"
-          >
-            Delete events
-          </button>
-          <button id="deleteAllBtn" type="button" class="delete-mode-btn" style="display:none">
-            Delete All
-          </button>
-          <p class="delete-mode-hint">Toggle delete mode to remove individual timetable entries.</p>
-        </div>
-      </section>
-
-      <section class="preview-card">
-        <div class="preview-header">
-          <h2>Timetable Preview</h2>
-          <p>Showing your currently stored classes.</p>
-        </div>
-
-        <div class="table-wrapper">
-          <table id="eventsTable">
-            <thead>
-              <tr>
-                <th>Class</th>
-                <th>Day</th>
-                <th>Date</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Location</th>
-                <th class="delete-column">Delete</th>
-              </tr>
-            </thead>
-            <tbody id="eventsTableBody">
-              <tr class="empty-row" data-empty-row>
-                <td colspan="6" class="empty-state">Loading events...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-    <script src="{{ url_for('static', filename='js/add_event.js') }}"></script>
-  </body>
-</html>
+      <tbody id="eventsTableBody">
+        <tr>
+          <td colspan="6">Loading events...</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/add_event.js') }}"></script>
+{% endblock %}

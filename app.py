@@ -329,6 +329,7 @@ def index():
         future_events=future_events,
         classes_map_data=classes_map_data,
         username=g.current_user["nickname"] or g.current_user["username"],
+        show_full_nav=True
     )
 
 
@@ -378,7 +379,8 @@ def add_event():
     preview_events=preview_events,
     has_saved_timetable=user_timetable_path(session['user_id']).exists(),
     username=g.current_user["nickname"] or g.current_user["username"],
-    form=form
+    form=form,
+    show_full_nav=True
     )
 
 
@@ -395,7 +397,8 @@ def restore_timetable():
             success=None,
             preview_events=[],
             has_saved_timetable=False,
-            form=form
+            form=form,
+            show_full_nav=True
         ), 404
     
     try:
@@ -406,7 +409,8 @@ def restore_timetable():
             success="Timetable restored successfully.",
             preview_events=preview_events,
             has_saved_timetable=True,
-            form=form
+            form=form,
+            show_full_nav=True
         )
     except Exception:
         return render_template("add_event.html",
@@ -414,7 +418,8 @@ def restore_timetable():
             success=None,
             preview_events=[],
             has_saved_timetable=True,
-            form=form
+            form=form,
+            show_full_nav=True
         ), 500
 
 @app.route('/api/events/me', methods=['GET'])
@@ -611,7 +616,8 @@ def friends():
             friends=friends_list,
             requests=requests,
             add_form = add_form,
-            action_form = action_form
+            action_form = action_form,
+            show_full_nav=True
         )
                 
     finally:
