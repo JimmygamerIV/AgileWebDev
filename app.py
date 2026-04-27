@@ -602,7 +602,7 @@ def friends():
         requests = []
         for r in r_rows:
             for s in senders:
-                # Check if user found
+                # Check if user found 
                 if s.user_id == r.sender_id:
                     requests.append({
                         "request_id": r.request_id,

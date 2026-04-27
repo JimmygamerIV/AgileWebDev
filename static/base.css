@@ -56,7 +56,7 @@ body {
   gap: 0;
 }
 
-/* logout-as-link setup */
+/* logout-as-link setup  */
 .nav-right > a {
   display: flex;
   align-items: center;
