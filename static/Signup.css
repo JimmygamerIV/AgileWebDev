@@ -54,6 +54,14 @@ body {
   align-items: center;
 }
 
+/* Override Bootstrap heading sizes */
+.card h1 {
+  font-size: 30px;
+  font-weight: normal;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .signup-text {
   margin-top: 20px;
   font-size: 14px;

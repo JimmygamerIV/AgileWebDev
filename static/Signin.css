@@ -31,7 +31,7 @@ body {
 }
 
 /* Center the sign in container */
-.container {
+.signin-container {
   transform: translateY(-15px); /*Adjusts the height of the sign in container */
   display: flex;
   flex-direction: column;
@@ -41,11 +41,11 @@ body {
   min-height: calc(100vh - 60px);
 }
 
-.card {
+.signin-card {
   background-color: white;
   padding: 40px;
   border-radius: 16px;
-  width: 535px;
+  width: 600px;
 
   box-shadow: 0 0 20px rgba(0, 0, 0, 2);
 
@@ -54,8 +54,15 @@ body {
   align-items: center;
 }
 
+/* Override Bootstrap heading sizes */
+.signin-card h1 {
+  font-weight: normal;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
 .signup-text {
-  margin-top: 20px;
+  margin-top: 32px;
   font-size: 14px;
   color: #555;
   text-align: center;

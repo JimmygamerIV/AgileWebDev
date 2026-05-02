@@ -2,8 +2,8 @@
 %}
 <link rel="stylesheet" href="{{ url_for('static', filename='signin.css') }}" />
 {% endblock %} {% block content %}
-<div class="container">
-  <div class="card">
+<div class="signin-container">
+  <div class="signin-card">
     <h1>Welcome to UWA Social Timetable!</h1>
     <p class="subtitle">Sign in to your account:</p>
 
@@ -19,14 +19,14 @@
       {{ form.hidden_tag() }}
 
       <label>Username</label>
-      {{ form.username(placeholder="Enter your username") }} {% for error in
-      form.username.errors %}
+      {{ form.username(class_="", placeholder="Enter your username") }} {% for
+      error in form.username.errors %}
       <span style="color: red; font-size: 0.8em">{{ error }}</span>
       {% endfor %}
 
       <label>Password</label>
-      {{ form.password(placeholder="Enter your password") }} {% for error in
-      form.password.errors %}
+      {{ form.password(class_="", placeholder="Enter your password") }} {% for
+      error in form.password.errors %}
       <span style="color: red; font-size: 0.8em">{{ error }}</span>
       {% endfor %}
 
