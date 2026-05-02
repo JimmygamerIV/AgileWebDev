@@ -8,6 +8,9 @@ styles %}
 <main class="page-container">
   <section class="upload-card">
     <h1>Upload Timetable</h1>
+    <p class="subtitle">
+      Upload a new ICS file to replace your current timetable events.
+    </p>
 
     {% if error %}
     <p class="form-error">{{ error }}</p>
@@ -18,47 +21,98 @@ styles %}
     <form method="post" enctype="multipart/form-data" class="upload-form">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-      <label>ICS File</label>
-      <input type="file" name="ics_file" />
+      <label for="icsFile">ICS File</label>
+      <input
+        id="icsFile"
+        type="file"
+        name="ics_file"
+        accept=".ics,text/calendar"
+      />
 
       <p class="input-divider">or</p>
 
-      <label>ICS URL</label>
-      <input type="url" name="ics_url" />
+      <label for="icsUrl">ICS URL</label>
+      <input
+        id="icsUrl"
+        type="url"
+        name="ics_url"
+        placeholder="https://example.com/your-timetable.ics"
+      />
 
-      <button type="submit">Upload and Replace</button>
+      <p class="input-hint">Provide either a file upload or a URL.</p>
+
+      <div class="upload-actions">
+        <button type="submit">Upload and Replace</button>
+
+        {% if has_saved_timetable %}
+        <button
+          type="submit"
+          class="restore-btn"
+          formaction="{{ url_for('restore_timetable') }}"
+          formmethod="post"
+        >
+          Restore saved ICS
+        </button>
+        {% else %}
+        <button type="button" class="restore-btn restore-btn-disabled" disabled>
+          Restore saved ICS
+        </button>
+        {% endif %}
+      </div>
     </form>
 
     <div class="delete-toolbar">
-      <button id="deleteModeToggle" type="button">Delete events</button>
-      <button id="deleteAllBtn" type="button" style="display: none">
+      <button
+        id="deleteModeToggle"
+        type="button"
+        class="delete-mode-btn"
+        aria-pressed="false"
+      >
+        Delete events
+      </button>
+
+      <button
+        id="deleteAllBtn"
+        type="button"
+        class="delete-mode-btn"
+        style="display: none"
+      >
         Delete All
       </button>
+
+      <p class="delete-mode-hint">
+        Toggle delete mode to remove individual timetable entries.
+      </p>
     </div>
   </section>
 
   <section class="preview-card">
-    <h2>Timetable Preview</h2>
+    <div class="preview-header">
+      <h2>Timetable Preview</h2>
+      <p>Showing your currently stored classes.</p>
+    </div>
 
-    <table id="eventsTable">
-      <thead>
-        <tr>
-          <th>Class</th>
-          <th>Day</th>
-          <th>Date</th>
-          <th>Start</th>
-          <th>End</th>
-          <th>Location</th>
-          <th class="delete-column">Delete</th>
-        </tr>
-      </thead>
+    <div class="table-wrapper">
+      <table id="eventsTable">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Day</th>
+            <th>Date</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Location</th>
+            <th class="delete-column">Delete</th>
+          </tr>
+        </thead>
 
-      <tbody id="eventsTableBody">
-        <tr>
-          <td colspan="6">Loading events...</td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody id="eventsTableBody">
+          <tr class="empty-row" data-empty-row>
+            <td colspan="6" class="empty-state">Loading events...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </main>
 {% endblock %} {% block scripts %}
