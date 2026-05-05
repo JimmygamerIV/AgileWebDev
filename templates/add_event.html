@@ -1,10 +1,15 @@
-{% extends "base.html" %} {% block title %}Add Events{% endblock %} {% block
-styles %}
+{% extends "base.html" %}
+
+{% block title %}Add Events{% endblock %}
+
+{% block styles %}
 <link
   rel="stylesheet"
   href="{{ url_for('static', filename='add_event.css') }}"
 />
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <main class="page-container">
   <section class="upload-card">
     <h1>Upload Timetable</h1>
@@ -14,7 +19,9 @@ styles %}
 
     {% if error %}
     <p class="form-error">{{ error }}</p>
-    {% endif %} {% if success %}
+    {% endif %} 
+    
+    {% if success %}
     <p class="form-success">{{ success }}</p>
     {% endif %}
 
@@ -86,35 +93,80 @@ styles %}
     </div>
   </section>
 
-  <section class="preview-card">
+<section class="preview-card">
     <div class="preview-header">
       <h2>Timetable Preview</h2>
       <p>Showing your currently stored classes.</p>
+      
+      <div class="view-switcher">
+        <button type="button" id="listViewBtn" class="toggle-view-btn active">📋 List View</button>
+        <button type="button" id="gridViewBtn" class="toggle-view-btn">📅 Grid View</button>
+      </div>
     </div>
 
-    <div class="table-wrapper">
-      <table id="eventsTable">
-        <thead>
-          <tr>
-            <th>Class</th>
-            <th>Day</th>
-            <th>Date</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Location</th>
-            <th class="delete-column">Delete</th>
-          </tr>
-        </thead>
+    <div id="listViewContainer" class="view-panel">
+      <div class="table-wrapper">
+        <table id="eventsTable">
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>Day</th>
+              <th>Date</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Location</th>
+              <th class="delete-column">Delete</th>
+            </tr>
+          </thead>
+          <tbody id="eventsTableBody">
+            <tr class="empty-row" data-empty-row="true">
+              <td colspan="7" class="empty-state">Loading events...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+<div id="gridViewContainer" class="view-panel" style="display: none;">
+      
+      <div class="week-navigation">
+        <button type="button" id="prevWeekBtn" class="nav-week-btn">◀ Prev Week</button>
+        <span id="currentWeekRangeLabel" class="current-week-range">📅 Loading dates...</span>
+        <button type="button" id="nextWeekBtn" class="nav-week-btn">Next Week ▶</button>
+      </div>
 
-        <tbody id="eventsTableBody">
-          <tr class="empty-row" data-empty-row>
-            <td colspan="6" class="empty-state">Loading events...</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="preview-grid-wrapper" style="margin-top: 15px; border-top: none; padding-top: 0;">
+        <div class="grid-week-header">
+          <div class="grid-corner"></div>
+          <div>Mon</div>
+          <div>Tue</div>
+          <div>Wed</div>
+          <div>Thu</div>
+          <div>Fri</div>
+        </div>
+
+        <div class="timetable-visual-grid">
+          <div class="grid-time-axis">
+            <div style="grid-row: 1;">8:00</div>
+            <div style="grid-row: 2;">9:00</div>
+            <div style="grid-row: 3;">10:00</div>
+            <div style="grid-row: 4;">11:00</div>
+            <div style="grid-row: 5;">12:00</div>
+            <div style="grid-row: 6;">13:00</div>
+            <div style="grid-row: 7;">14:00</div>
+            <div style="grid-row: 8;">15:00</div>
+            <div style="grid-row: 9;">16:00</div>
+            <div style="grid-row: 10;">17:00</div>
+          </div>
+
+          <div id="dynamicGridEventsContainer" style="display: contents;"></div>
+
+        </div>
+      </div>
     </div>
   </section>
 </main>
-{% endblock %} {% block scripts %}
+{% endblock %}
+
+{% block scripts %}
 <script src="{{ url_for('static', filename='js/add_event.js') }}"></script>
 {% endblock %}
