@@ -1,4 +1,4 @@
-from flask import Flask, g, render_template, redirect, session, request, jsonify
+from flask import Flask, g, render_template, redirect, session, request, jsonify,flash,url_for
 from database import init_db, Session
 from models import Event, User, Friend, FriendRequest
 from auth import auth_bp
@@ -15,6 +15,9 @@ from config import Config
 from forms import ImportTimetableForm,AddFriendForm,FriendActionForm
 from flask_wtf.csrf import CSRFProtect
 from generate_env import generate_env
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
+import base64
 
 generate_env()
 load_dotenv()
@@ -328,19 +331,63 @@ def index():
         tomorrow_events=tomorrow_events,
         future_events=future_events,
         classes_map_data=classes_map_data,
-        username=g.current_user["nickname"] or g.current_user["username"],
         show_full_nav=True
     )
+
+@app.context_processor
+def inject_global_vars():
+
+    default_vars = {
+        "global_username": None,
+        "global_nickname": None,
+        "global_email": None,
+        "global_avatar": "default.jpg" 
+    }
+
+    if g.get('current_user'):
+        default_vars.update({
+            "global_username": g.current_user.get("username"),
+            "global_nickname": g.current_user.get("nickname"),
+            "global_email": g.current_user.get("email"),
+            "global_avatar": g.current_user.get("avatar") or "default.jpg"
+        })
+        
+    return default_vars
+
+@app.before_request
+def load_logged_in_user():
+
+    user_id = session.get('user_id')
+    if user_id is None:
+        g.current_user = None
+    else:
+        db = Session()
+        try:
+
+            user = db.query(User).filter(User.user_id == user_id).first()
+            if user:
+                g.current_user = {
+                    "user_id": user.user_id,
+                    "username": user.username,
+                    "nickname": user.nickname,
+                    "email": user.email,
+                    "avatar": user.avatar  
+                }
+            else:
+                g.current_user = None
+        except Exception as e:
+            print(f"🚨 before_request 查库失败: {e}")
+            g.current_user = None
+        finally:
+            db.close()
 
 
 @app.route('/add-event', methods=['GET', 'POST'])
 def add_event():
-
     form = ImportTimetableForm()
     if g.current_user is None:
         session.pop('user_id', None)
         return redirect('/signin')
-
 
     error = None
     success = None
@@ -359,7 +406,7 @@ def add_event():
                 preview_events = importICS(ics_content, session['user_id'])
                 success = "Timetable imported successfully."
             except Exception:
-                    error = "Could not parse this ICS file."
+                error = "Could not parse this ICS file."
 
         else:
             try:
@@ -374,15 +421,13 @@ def add_event():
                 error = "Could not parse the ICS content."
     
     return render_template("add_event.html",
-    error=error,
-    success=success,
-    preview_events=preview_events,
-    has_saved_timetable=user_timetable_path(session['user_id']).exists(),
-    username=g.current_user["nickname"] or g.current_user["username"],
-    form=form,
-    show_full_nav=True
+        error=error,
+        success=success,
+        preview_events=preview_events,
+        has_saved_timetable=user_timetable_path(session['user_id']).exists(),
+        form=form,
+        show_full_nav=True
     )
-
 
 @app.route('/timetable/restore', methods=['POST'])
 def restore_timetable():
@@ -566,7 +611,6 @@ def current_class_map_data():
     finally:
         db.close()
 
-
 @app.route('/friends')
 def friends():
     if 'user_id' not in session:
@@ -622,6 +666,123 @@ def friends():
                 
     finally:
         db.close()
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    if g.current_user is None:
+        session.pop('user_id', None)
+        return redirect('/signin')
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        db = Session()
+        try:
+            user_id = session['user_id']
+            user = db.query(User).filter(User.user_id == user_id).first()
+
+            if not user:
+                flash({"type": "error", "msg": "User not found."})
+                return redirect(url_for('profile'))
+            
+
+            if action == 'update_nickname':
+                new_nickname = request.form.get('nickname', '').strip()
+                if not new_nickname:
+                    flash({"type": "error", "msg": "Nickname cannot be empty."})
+                else:
+                    user.nickname = new_nickname
+                    db.commit()
+
+                    g.current_user["nickname"] = new_nickname
+                    flash({"type": "success", "msg": "Nickname updated successfully!"})
+                return redirect(url_for('profile')) 
+
+            elif action == 'update_password':
+                curr_pw = request.form.get('current_password')
+                new_pw = request.form.get('new_password')
+                conf_pw = request.form.get('confirm_password')
+
+                if not check_password_hash(user.password_hash, curr_pw):
+                    flash({"type": "error", "msg": "Current password is incorrect."})
+                elif new_pw != conf_pw:
+                    flash({"type": "error", "msg": "New passwords do not match."})
+                elif len(new_pw) < 6:
+                    flash({"type": "error", "msg": "Password too short."})
+                else:
+                    user.password_hash = generate_password_hash(new_pw)
+                    db.commit()
+                    flash({"type": "success", "msg": "Password updated successfully!"})
+                return redirect(url_for('profile'))
+
+        except Exception as e:
+            db.rollback()
+
+            print(f"❌❌❌ 调试数据库错误原因: {e}") 
+            flash({"type": "error", "msg": f"Database update failed. Reason: {e}"})
+            return redirect(url_for('profile'))
+        finally:
+            db.close()
+
+
+    user_avatar = g.current_user.get("avatar") or "default.jpg"
+    user_email = g.current_user.get("email") or "student@uwa.edu.au"
+    username_to_display = g.current_user.get("nickname") or g.current_user.get("username")
+
+    return render_template(
+        "profile.html",
+        username=username_to_display,
+        current_user_email=user_email,
+        avatar=user_avatar,
+        show_full_nav=True
+    )
+
+
+@app.route('/profile/avatar/upload_base64', methods=['POST'])
+def upload_avatar_base64():
+    if g.current_user is None:
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
+    data = request.get_json()
+    if not data or 'image' not in data:
+        return jsonify({"status": "error", "message": "Missing image data"}), 400
+
+    try:
+
+        image_data_str = data['image']
+
+        header, encoded = image_data_str.split(",", 1)
+        decoded_image = base64.b64decode(encoded)
+
+        filename = f"avatar_{session['user_id']}.png"
+        upload_dir = os.path.join('static', 'uploads')
+        os.makedirs(upload_dir, exist_ok=True)
+        
+        file_path = os.path.join(upload_dir, filename)
+
+
+        with open(file_path, "wb") as f:
+            f.write(decoded_image)
+
+
+        db = Session()
+        user = db.query(User).filter(User.user_id == session['user_id']).first()
+        if user:
+            user.avatar = filename
+            db.commit()
+            session['user_avatar'] = filename
+            if g.get('current_user'):
+                g.current_user['avatar'] = filename
+        db.close()
+
+        return jsonify({
+            "status": "success",
+            "avatar_url": f"/static/uploads/{filename}"
+        })
+
+    except Exception as e:
+        print(f"Cropper save error: {e}")
+        return jsonify({"status": "error", "message": "Server internal error saves failed."}), 500
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
