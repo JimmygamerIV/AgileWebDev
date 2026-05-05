@@ -38,24 +38,34 @@
       </div>
 
       <div class="nav-right">
-        <a
-          href="#"
-          onclick="
-            logout();
-            return false;
-          "
-          >Logout</a
-        >
+        <div class="user-profile">
+          <button id="avatar-btn" class="avatar-button">
+            <img 
+              src="{{ url_for('static', filename='uploads/' + (global_avatar if global_avatar else 'default.jpg')) }}?t={{ range(1, 1000000000) | random }}" 
+              alt="user_avatar" 
+            />
+          </button>
 
-        <form
-          id="logout-form"
-          method="post"
-          action="{{ url_for('auth.logout') }}"
-          style="display: none"
-        >
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div id="dropdown-menu" class="dropdown-menu">
+          <div class="menu-user-info">
+            <div class="username">{{ global_username }}</div>
+            <div class="user-handle">{{ global_email }}</div>
+        </div>
+        
+        <hr class="menu-divider" />
+        
+        <a href="/profile" class="menu-item">Profile</a>
+        <a href="/settings" class="menu-item">Setting</a>
+        
+        <hr class="menu-divider" />
+        
+        <form action="/logout" method="POST" class="logout-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <button type="submit" class="menu-item text-danger">Logout</button>
         </form>
-      </div>
+    </div>
+</div>
+        </div>
     </nav>
     {% else %}
     <nav class="navbar">
@@ -67,10 +77,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     {% block scripts %}{% endblock %}
-    <script>
-      function logout() {
-        document.getElementById("logout-form").submit();
-      }
-    </script>
+    <script src="{{url_for('static',filename='js/user_icon.js')}}"></script>
   </body>
 </html>
