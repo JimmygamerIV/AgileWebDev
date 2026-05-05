@@ -1,0 +1,88 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 30px;
+  box-sizing: border-box;
+  background-color: #2f3c8f;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  padding: 15px 15px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.navbar a:hover,
+.navbar a.active {
+  background-color: #1d2a6b;
+}
+
+.nav-left,
+.nav-center,
+.nav-right {
+  color: white;
+  font-size: 20px;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.nav-center {
+  display: flex;
+  align-items: stretch;
+}
+
+.nav-left {
+  font-weight: bold;
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* logout-as-link setup  */
+.nav-right > a {
+  display: flex;
+  align-items: center;
+  padding: 15px 15px;
+  height: auto;
+}
+
+/* hidden logout form */
+#logout-form {
+  display: none;
+}
+
+/* optional element used on add_event */
+.logged-in-as {
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+}
+
+/* Bootstrap cleanup */
+a {
+  text-decoration: none;
+}
+
+button {
+  font-family: Arial, sans-serif;
+}
