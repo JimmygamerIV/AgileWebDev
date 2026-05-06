@@ -6,3 +6,4 @@ static/uploads/
 *.db
 .env
 *.ics
+venv/
