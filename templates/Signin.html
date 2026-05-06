@@ -1,42 +1,42 @@
 {% extends "base.html" %} {% block title %}Sign In{% endblock %} {% block styles
 %}
-<link rel="stylesheet" href="{{ url_for('static', filename='signin.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='signin.css') }}" />
 {% endblock %} {% block content %}
 <div class="signin-container">
   <div class="signin-card">
-    <h1>Welcome to UWA Social Timetable!</h1>
-    <p class="subtitle">Sign in to your account:</p>
-
-    {% if error %}
+        <h1>Welcome to UWA Social Timetable!</h1>
+        <p class="subtitle">Sign in to your account:</p>
+        
+        {% if error %}
     <p style="color: red">{{ error }}</p>
-    {% endif %}
+        {% endif %}
 
     <form
       class="login-form"
       action="{{ url_for('auth.signin') }}"
       method="POST"
     >
-      {{ form.hidden_tag() }}
+          {{ form.hidden_tag() }}
 
-      <label>Username</label>
+          <label>Username</label>
       {{ form.username(class_="", placeholder="Enter your username") }} {% for
       error in form.username.errors %}
       <span style="color: red; font-size: 0.8em">{{ error }}</span>
-      {% endfor %}
+          {% endfor %}
 
-      <label>Password</label>
+          <label>Password</label>
       {{ form.password(class_="", placeholder="Enter your password") }} {% for
       error in form.password.errors %}
       <span style="color: red; font-size: 0.8em">{{ error }}</span>
-      {% endfor %}
+          {% endfor %}
 
-      <button type="submit">Sign In</button>
+          <button type="submit">Sign In</button>
 
-      <p class="signup-text">
-        Don't have an account?
-        <a href="{{ url_for('auth.signup') }}">Sign up here</a>
-      </p>
-    </form>
-  </div>
-</div>
+          <p class="signup-text">
+            Don't have an account?
+            <a href="{{ url_for('auth.signup') }}">Sign up here</a>
+          </p>
+        </form>
+      </div>
+    </div>
 {% endblock %}
