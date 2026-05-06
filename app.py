@@ -256,7 +256,7 @@ def index():
             if potential_friend_ids:
                 attendee_users = db.query(User).filter(User.user_id.in_(potential_friend_ids)).all()
                 for attendee_user in attendee_users:
-                    attendee_user_lookup[attendee_user.user_id] = attendee_user.nickname or attendee_user.username
+                    attendee_user_lookup[attendee_user.user_id] =attendee_user.username
 
         def serialize_class_event(event):
             poi_id = get_primary_poi_id(event.location or "")
@@ -376,7 +376,6 @@ def load_logged_in_user():
             else:
                 g.current_user = None
         except Exception as e:
-            print(f"🚨 before_request 查库失败: {e}")
             g.current_user = None
         finally:
             db.close()
@@ -587,7 +586,7 @@ def current_class_map_data():
         if friend_attendee_ids:
             attendee_users = db.query(User).filter(User.user_id.in_(friend_attendee_ids)).all()
             for attendee in attendee_users:
-                friend_nicknames.append(attendee.nickname or attendee.username)
+                friend_nicknames.append(attendee.nickname)
 
         friend_nicknames.sort(key=str.lower)
 
@@ -713,11 +712,34 @@ def profile():
                     db.commit()
                     flash({"type": "success", "msg": "Password updated successfully!"})
                 return redirect(url_for('profile'))
+            
+            elif action == 'update_email':
+                new_email = request.form.get('email', '').strip().lower()
+                
+                if not new_email:
+                    flash({"type": "error", "msg": "Email address cannot be empty."})
+                    return redirect(url_for('profile'))
+                
+                uwa_email_regex = r'^[a-zA-Z0-9._%+-]+@(student\.)?uwa\.edu\.au$'
+                import re
+                if not re.match(uwa_email_regex, new_email):
+                    flash({"type": "error", "msg": "Invalid domain. Please use a valid UWA email (@student.uwa.edu.au)."})
+                    return redirect(url_for('profile'))
+                
+                existing_user = db.query(User).filter(User.email == new_email, User.user_id != user_id).first()
+                if existing_user:
+                    flash({"type": "error", "msg": "This email address is already registered by another user."})
+                    return redirect(url_for('profile'))
+                
+                user.email = new_email
+                db.commit()
+                
+                g.current_user["email"] = new_email
+                flash({"type": "success", "msg": "Institutional email updated successfully!"})
+                return redirect(url_for('profile'))
 
         except Exception as e:
             db.rollback()
-
-            print(f"❌❌❌ 调试数据库错误原因: {e}") 
             flash({"type": "error", "msg": f"Database update failed. Reason: {e}"})
             return redirect(url_for('profile'))
         finally:
@@ -726,11 +748,12 @@ def profile():
 
     user_avatar = g.current_user.get("avatar") or "default.jpg"
     user_email = g.current_user.get("email") or "student@uwa.edu.au"
-    username_to_display = g.current_user.get("nickname") or g.current_user.get("username")
+    nickname = g.current_user.get("nickname")
+    username_to_display =g.current_user.get("username")
 
     return render_template(
         "profile.html",
-        username=username_to_display,
+        nickname=nickname,
         current_user_email=user_email,
         avatar=user_avatar,
         show_full_nav=True

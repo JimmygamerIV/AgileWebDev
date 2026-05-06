@@ -5,26 +5,6 @@
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
-<style>
-  .avatar-modal {
-      display: none; 
-      position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-      background-color: rgba(36, 41, 46, 0.5); 
-      align-items: center; justify-content: center;
-  }
-  .modal-content {
-      background: #ffffff; border: 1px solid #d0d7de; border-radius: 8px;
-      padding: 24px; width: 500px; box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
-  }
-  .cropper-container-box {
-      width: 100%; height: 300px; background-color: #f6f8fa;
-      border: 1px dashed #d0d7de; border-radius: 6px; overflow: hidden; margin-bottom: 16px;
-  }
-  .cropper-container-box img { max-width: 100%; max-height: 100%; display: block; }
-  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
-  .btn-secondary { background: #f6f8fa; color: #24292e; border: 1px solid #d0d7de; }
-  .btn-secondary:hover { background: #f3f4f6; }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -48,37 +28,47 @@
     <h2>Personal Information</h2>
     <hr class="section-divider" />
     
-    <form method="post" action="{{ url_for('profile') }}" class="profile-form">
+    <form method="post" action="{{ url_for('profile') }}" class="profile-form" style="margin-bottom: 28px;">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <input type="hidden" name="action" value="update_nickname" />
 
       <div class="form-group">
-        <label for="usernameInput">Username / Nickname</label>
+        <label for="usernameInput">Nickname</label>
         <input
           id="usernameInput"
           type="text"
           name="nickname"
-          value="{{ username }}"
+          value="{{ nickname }}"
           placeholder="Enter your nickname"
           required
         />
         <p class="input-hint">This name will be displayed across your timetable headers.</p>
       </div>
 
+      <div class="profile-actions">
+        <button type="submit" class="save-profile-btn">Save Nickname</button>
+      </div>
+    </form>
+
+    <form method="post" action="{{ url_for('profile') }}" class="profile-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <input type="hidden" name="action" value="update_email" />
+
       <div class="form-group">
-        <label for="emailInput">Email Address</label>
+        <label for="emailInput">Institutional Email Address</label>
         <input
           id="emailInput"
           type="email"
-          value="{{ current_user_email or 'student@uwa.edu.au' }}"
-          disabled
-          class="input-disabled"
+          name="email"
+          value="{{ current_user_email if current_user_email else '' }}"
+          placeholder="your_name@student.uwa.edu.au"
+          required
         />
-        <p class="input-hint">Registered institutional email cannot be changed.</p>
+        <p class="input-hint">Must be a valid UWA institutional email address.</p>
       </div>
 
       <div class="profile-actions">
-        <button type="submit" class="save-profile-btn">Save Changes</button>
+        <button type="submit" class="save-profile-btn btn-blue">Update Email</button>
       </div>
     </form>
   </section>
@@ -101,7 +91,11 @@
             placeholder="••••••••"
             required
           />
-          <button type="button" class="toggle-password-btn">Show</button>
+          <span class="custom-toggle-password" onclick="togglePasswordVisibility('currentPassword', this)">
+            <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.822 7.822L21 21m-2.228-2.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+          </span>
         </div>
       </div>
 
@@ -115,7 +109,11 @@
             placeholder="••••••••"
             required
           />
-          <button type="button" class="toggle-password-btn">Show</button>
+          <span class="custom-toggle-password" onclick="togglePasswordVisibility('newPassword', this)">
+            <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.822 7.822L21 21m-2.228-2.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+          </span>
         </div>
       </div>
 
@@ -129,7 +127,11 @@
             placeholder="••••••••"
             required
           />
-          <button type="button" class="toggle-password-btn">Show</button>
+          <span class="custom-toggle-password" onclick="togglePasswordVisibility('confirmPassword', this)">
+            <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.822 7.822L21 21m-2.228-2.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+          </span>
         </div>
       </div>
 
@@ -177,4 +179,24 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+<script>
+function togglePasswordVisibility(inputId, element) {
+    const passwordInput = document.getElementById(inputId);
+    if (!passwordInput) return;
+
+
+    const eyeOpenSvg = `<svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>`;
+    
+    const eyeCloseSvg = `<svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.822 7.822L21 21m-2.228-2.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>`;
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        element.innerHTML = eyeOpenSvg;
+    } else {
+        passwordInput.type = 'password';
+        element.innerHTML = eyeCloseSvg;
+    }
+}
+</script>
 {% endblock %}

@@ -33,7 +33,7 @@
     margin: 0;
 }
 
-/* 通用卡片容器 */
+
 .profile-card {
     background: #ffffff;
     border: 1px solid #d0d7de;
@@ -56,7 +56,6 @@
     margin: 12px 0 20px 0;
 }
 
-/* 表单与输入框 */
 .profile-form {
     display: flex;
     flex-direction: column;
@@ -103,7 +102,6 @@
     margin: 0;
 }
 
-/* 按钮控制 */
 .save-profile-btn {
     background-color: #2da44e;
     color: #ffffff;
@@ -126,4 +124,97 @@
 
 .btn-blue:hover {
     background-color: #0860ca;
+}
+
+.avatar-modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%;
+    background-color: rgba(36, 41, 46, 0.5); 
+    align-items: center; 
+    justify-content: center;
+}
+
+.modal-content {
+    background: #ffffff; 
+    border: 1px solid #d0d7de; 
+    border-radius: 8px;
+    padding: 24px; 
+    width: 500px; 
+    box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+}
+
+.cropper-container-box {
+    width: 100%; 
+    height: 300px; 
+    background-color: #f6f8fa;
+    border: 1px dashed #d0d7de; 
+    border-radius: 6px; 
+    overflow: hidden; 
+    margin-bottom: 16px;
+}
+
+.cropper-container-box img { 
+    max-width: 100%; 
+    max-height: 100%; 
+    display: block; 
+}
+
+.modal-actions { 
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 8px; 
+}
+
+.btn-secondary { 
+    background: #f6f8fa; 
+    color: #24292e; 
+    border: 1px solid #d0d7de; 
+}
+
+.btn-secondary:hover { 
+    background: #f3f4f6; 
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none !important;
+}
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 42px !important; 
+}
+
+.custom-toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8c95a3; 
+    transition: color 0.15s ease;
+    user-select: none; 
+}
+
+.custom-toggle-password:hover {
+    color: #24292e; 
+}
+
+.custom-toggle-password svg {
+    display: block;
 }
