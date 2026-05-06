@@ -47,21 +47,42 @@ def signup():
     nickname = form.nickname.data
     password = form.password.data
     confirm_password = form.confirm_password.data
-    email = form.email.data.strip() or None
+    email = form.email.data.strip().lower() if form.email.data else None
 
     if ' ' in username:
         return render_template("signup.html", error="Username must not contain spaces.", form=form, show_full_nav=False)
 
+
     if password != confirm_password:
         return render_template("signup.html", error="Passwords do not match.", form=form, show_full_nav=False)
+    
+    if len(password) < 6:
+        return render_template("signup.html", error="Password must be at least 6 characters long.", form=form, show_full_nav=False)
+    
+    if not re.search(r"[A-Z]", password):
+        return render_template("signup.html", error="Password must contain at least one uppercase letter (A-Z).", form=form, show_full_nav=False)
+    
+    if not re.search(r"[a-z]", password):
+        return render_template("signup.html", error="Password must contain at least one lowercase letter (a-z).", form=form, show_full_nav=False)
+    
+    if not re.search(r"\d", password):
+        return render_template("signup.html", error="Password must contain at least one number (0-9).", form=form, show_full_nav=False)
 
-    hashed = generate_password_hash(password, method='pbkdf2:sha256')
+
+    if not email:
+        return render_template("signup.html", error="Email address cannot be empty.", form=form, show_full_nav=False)
+    
+    uwa_email_regex = r'^[a-zA-Z0-9._%+-]+@(student\.)?uwa\.edu\.au$'
+    if not re.match(uwa_email_regex, email):
+        return render_template("signup.html", error="Invalid domain. Please use a valid UWA email (@student.uwa.edu.au).", form=form, show_full_nav=False)
+
+
+    hashed = generate_password_hash(password,method='pbkdf2:sha256')
 
     db = Session()
-
     try:
         existing_user = db.query(User).filter(User.username == username).first()
-        existing_email = db.query(User).filter(User.email == email).first() if email else None
+        existing_email = db.query(User).filter(User.email == email).first()
 
         if existing_user:
             return render_template("signup.html", error="User already exists", form=form, show_full_nav=False)
@@ -79,11 +100,14 @@ def signup():
         db.add(new_user)
         db.commit()
 
+    except Exception as e:
+        db.rollback()
+        return render_template("signup.html", error=f"Registration failed: {e}", form=form, show_full_nav=False)
+        
     finally:
         db.close()
 
     return redirect(url_for('auth.signin'))
-
 
 # =========================
 # SIGNIN
