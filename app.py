@@ -15,6 +15,7 @@ from config import Config
 from forms import ImportTimetableForm,AddFriendForm,FriendActionForm
 from flask_wtf.csrf import CSRFProtect
 from generate_env import generate_env
+from friends import friends_bp, get_friend_ids
 
 generate_env()
 load_dotenv()
@@ -25,6 +26,7 @@ app.config.from_object(Config)
 
 init_db()
 app.register_blueprint(auth_bp)
+app.register_blueprint(friends_bp)
 csrf = CSRFProtect(app)
 
 
@@ -181,21 +183,6 @@ def get_primary_poi_id(location_value):
             return poi_id
 
     return None
-
-
-def get_friend_ids(db, user_id):
-    rows = db.query(Friend).filter(
-        (Friend.user_id == user_id) | (Friend.friend_id == user_id)
-    ).all()
-
-    friend_ids = set()
-    for row in rows:
-        if row.user_id == user_id:
-            friend_ids.add(row.friend_id)
-        if row.friend_id == user_id:
-            friend_ids.add(row.user_id)
-
-    return friend_ids
 
 
 @app.route('/')
@@ -566,62 +553,6 @@ def current_class_map_data():
     finally:
         db.close()
 
-
-@app.route('/friends')
-def friends():
-    if 'user_id' not in session:
-        return redirect('/signin')
-
-    add_form = AddFriendForm()
-    action_form = FriendActionForm()
-    db = Session()
-    try:
-        user_id = session['user_id']
-
-        friend_ids = []
-        # Get all friends for the user
-        f_rows = db.query(Friend).filter(Friend.user_id == user_id).all()
-
-        for i in f_rows:
-            friend_ids.append(i.friend_id)
-
-        friends_list = db.query(User).filter(User.user_id.in_(friend_ids)).all()
-
-        # Friend Requests
-        r_rows = db.query(FriendRequest).filter(
-            FriendRequest.receiver_id == user_id,
-            FriendRequest.status == 'pending'
-        ).all()
-
-        sender_ids = []
-        for i in r_rows:
-            sender_ids.append(i.sender_id)
-        
-        senders = db.query(User).filter(User.user_id.in_(sender_ids)).all()
-
-        requests = []
-        for r in r_rows:
-            for s in senders:
-                # Check if user found 
-                if s.user_id == r.sender_id:
-                    requests.append({
-                        "request_id": r.request_id,
-                        "user_id": s.user_id,
-                        "username": s.username
-                    })
-                    break
-        
-        return render_template(
-            "friends.html",
-            friends=friends_list,
-            requests=requests,
-            add_form = add_form,
-            action_form = action_form,
-            show_full_nav=True
-        )
-                
-    finally:
-        db.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
