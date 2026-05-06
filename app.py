@@ -21,6 +21,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import base64
 
+from friends import friends_bp, get_friend_ids
 
 generate_env()
 load_dotenv()
@@ -598,6 +599,7 @@ def current_class_map_data():
 
     finally:
         db.close()
+
 
 
 @app.route('/profile', methods=['GET', 'POST'])
