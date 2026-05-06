@@ -1,3 +1,4 @@
+import re
 from flask import Flask, g, render_template, redirect, session, request, jsonify,flash,url_for
 from database import init_db, Session
 from models import Event, User, Friend, FriendRequest
@@ -18,6 +19,7 @@ from generate_env import generate_env
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import base64
+
 
 generate_env()
 load_dotenv()
@@ -700,19 +702,26 @@ def profile():
                 curr_pw = request.form.get('current_password')
                 new_pw = request.form.get('new_password')
                 conf_pw = request.form.get('confirm_password')
-
+                
                 if not check_password_hash(user.password_hash, curr_pw):
                     flash({"type": "error", "msg": "Current password is incorrect."})
                 elif new_pw != conf_pw:
                     flash({"type": "error", "msg": "New passwords do not match."})
                 elif len(new_pw) < 6:
-                    flash({"type": "error", "msg": "Password too short."})
+                    flash({"type": "error", "msg": "Password must be at least 6 characters long."})
+
+                elif not re.search(r"[A-Z]", new_pw):
+                    flash({"type": "error", "msg": "Password must contain at least one uppercase letter (A-Z)."})
+                elif not re.search(r"[a-z]", new_pw):
+                    flash({"type": "error", "msg": "Password must contain at least one lowercase letter (a-z)."})
+                elif not re.search(r"\d", new_pw):
+                    flash({"type": "error", "msg": "Password must contain at least one number (0-9)."})
                 else:
-                    user.password_hash = generate_password_hash(new_pw)
+                    user.password_hash = generate_password_hash(new_pw, method='pbkdf2:sha256')
                     db.commit()
                     flash({"type": "success", "msg": "Password updated successfully!"})
                 return redirect(url_for('profile'))
-            
+                        
             elif action == 'update_email':
                 new_email = request.form.get('email', '').strip().lower()
                 
@@ -721,7 +730,6 @@ def profile():
                     return redirect(url_for('profile'))
                 
                 uwa_email_regex = r'^[a-zA-Z0-9._%+-]+@(student\.)?uwa\.edu\.au$'
-                import re
                 if not re.match(uwa_email_regex, new_email):
                     flash({"type": "error", "msg": "Invalid domain. Please use a valid UWA email (@student.uwa.edu.au)."})
                     return redirect(url_for('profile'))
