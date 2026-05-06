@@ -25,7 +25,18 @@ styles %}
       <div id="map" style="width: 100%; height: 100%"></div>
       <button id="styleToggle"></button>
       <button id="fullscreenToggle">⛶</button>
-      <button id="stopSelectingBtn">Stop selecting</button>
+      <button id="stopSelectingBtn" type="button" aria-label="Clear selection" title="Clear selection">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10l9-7 9 7M5 10v10h14V10M9 20v-6h6v6"
+          />
+        </svg>
+      </button>
 
       <div class="upcoming">
         <div class="upcoming-header">
