@@ -272,17 +272,19 @@ body {
 
 #stopSelectingBtn {
   position: absolute;
-  top: 50%;
-  right: 20px;
-  transform: translateY(-50%) scale(0.98);
+  top: 45px;
+  right: 50px;
+  transform: scale(0.96);
   z-index: 1000;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(33, 33, 33, 0.88);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
@@ -291,8 +293,13 @@ body {
     transform 0.22s ease;
 }
 
+#stopSelectingBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
 #stopSelectingBtn.visible {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(-50%) scale(1);
+  transform: scale(1);
 }
