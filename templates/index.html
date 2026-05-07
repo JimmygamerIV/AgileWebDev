@@ -16,7 +16,18 @@ styles %}
 
     <div class="card friends">
       <h2>Friends On Campus:</h2>
-      <p>(Friends list here)</p>
+      <div class="friends-list">
+        {% if friends %} {% for friend in friends %}
+        <div class="friend-on-campus">
+          {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
+          <span class="friend-name">{{ friend.nickname or friend.username }}</span>
+        </div>
+        {% endfor %} {% else %}
+        <p style="font-style: italic; color: #888; margin: 0">
+          No friends on campus yet.
+        </p>
+        {% endif %}
+      </div>
     </div>
   </div>
 

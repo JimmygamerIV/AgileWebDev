@@ -303,3 +303,30 @@ body {
   pointer-events: auto;
   transform: scale(1);
 }
+
+/* Friends on campus list */
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.friend-on-campus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: white;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.friend-on-campus .star-icon {
+  color: #f6c343;
+  font-size: 14px;
+}
+
+.friend-name {
+  color: #333;
+  font-weight: 600;
+}
