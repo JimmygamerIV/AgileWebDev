@@ -13,3 +13,16 @@ a description of the purpose of the application, explaining its design and use.
 a table with with each row containing the i) UWA ID ii) name and iii) Github user name of the group members.
 instructions for how to launch the application.
 instructions for how to run the tests for the application.
+
+
+## Database
+
+The app uses Alembic for database migrations. Migrations apply automatically on startup — just run:
+
+    python app.py
+
+If you change `models.py`, generate a migration:
+
+    alembic revision --autogenerate -m "describe the change"
+
+Commit both `models.py` and the new file in `alembic/versions/`.
