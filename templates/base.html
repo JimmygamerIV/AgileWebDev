@@ -54,14 +54,14 @@
         
         <hr class="menu-divider" />
         
-        <a href="/profile" class="menu-item">Profile</a>
-        <a href="/settings" class="menu-item">Settings</a>
+        <a href="/profile" class="user_menu-item">Profile</a>
+        <a href="/settings" class="user_menu-item">Settings</a>
         
         <hr class="menu-divider" />
         
         <form action="/logout" method="POST" class="logout-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <button type="submit" class="menu-item text-danger">Logout</button>
+            <button type="submit" class="user_menu-item text-danger">Logout</button>
         </form>
     </div>
 </div>

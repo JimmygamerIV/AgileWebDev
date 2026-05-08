@@ -163,7 +163,7 @@ button {
 }
 
 
-.menu-item {
+.user_menu-item {
     display: block;
     width: 100%;
     padding: 8px 16px;   
@@ -179,16 +179,16 @@ button {
 }
 
 
-.menu-item:hover {
+.user_menu-item:hover {
     background-color: #161b22; 
     color: #58a6ff !important; 
 }
 
 
-.menu-item.text-danger {
+.user_menu-item.text-danger {
     color: #f85149 !important; 
 }
-.menu-item.text-danger:hover {
+.user_menu-item.text-danger:hover {
     background-color: #f85149;
     color: #ffffff !important; 
 }
