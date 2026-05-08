@@ -129,3 +129,27 @@ h1 {
 .login-form button:hover {
   background-color: #1d4ed8;
 }
+
+@media (max-width: 700px) {
+  .signin-container {
+    min-height: calc(100vh - 56px);
+    padding: 20px 12px;
+    transform: none;
+  }
+
+  .signin-card {
+    width: 100%;
+    max-width: 535px;
+    padding: 28px 20px;
+    box-sizing: border-box;
+  }
+
+  .signin-card h1 {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .login-form {
+    width: 100%;
+  }
+}
