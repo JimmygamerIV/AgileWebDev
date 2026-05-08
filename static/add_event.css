@@ -244,7 +244,8 @@ body {
   width: 14px;
   height: 14px;
   background: currentColor;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3.75A2.75 2.75 0 0 0 6.25 6.5V7H4.5a.75.75 0 0 0 0 1.5h.95l.74 10.14A2.75 2.75 0 0 0 8.94 21h6.12a2.75 2.75 0 0 0 2.75-2.36l.74-10.14h.95a.75.75 0 0 0 0-1.5h-1.75v-.5A2.75 2.75 0 0 0 15 3.75H9Zm5.5 3.25h-5V6.5c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25V7Zm-7.25 1.5h9.5l-.72 9.86a1.25 1.25 0 0 1-1.24 1.14H8.71a1.25 1.25 0 0 1-1.24-1.14L7.25 8.5Zm3.25 2a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 1.5 0v-5.25a.75.75 0 0 0-.75-.75Zm3 0a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 1.5 0v-5.25a.75.75 0 0 0-.75-.75Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3.75A2.75 2.75 0 0 0 6.25 6.5V7H4.5a.75.75 0 0 0 0 1.5h.95l.74 10.14A2.75 2.75 0 0 0 8.94 21h6.12a2.75 2.75 0 0 0 2.75-2.36l.74-10.14h.95a.75.75 0 0 0 0-1.5h-1.75v-.5A2.75 2.75 0 0 0 15 3.75H9Zm5.5 3.25h-5V6.5c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25V7Zm-7.25 1.5h9.5l-.72 9.86a1.25 1.25 0 0 1-1.24 1.14H8.71a1.25 1.25 0 0 1-1.24-1.14L7.25 8.5Zm3.25 2a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 1.5 0v-5.25a.75.75 0 0 0-.75-.75Zm3 0a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 1.5 0v-5.25a.75.75 0 0 0-.75-.75Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 
 .delete-mode-btn.active::before {
@@ -303,7 +304,8 @@ body.delete-mode-enabled .delete-column {
   width: 16px;
   height: 16px;
   background: #b91c1c;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3.75A2.75 2.75 0 0 0 6.25 6.5V7H4.5a.75.75 0 0 0 0 1.5h.95l.74 10.14A2.75 2.75 0 0 0 8.94 21h6.12a2.75 2.75 0 0 0 2.75-2.36l.74-10.14h.95a.75.75 0 0 0 0-1.5h-1.75v-.5A2.75 2.75 0 0 0 15 3.75H9Zm5.5 3.25h-5V6.5c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25V7Zm-7.25 1.5h9.5l-.72 9.86a1.25 1.25 0 0 1-1.24 1.14H8.71a1.25 1.25 0 0 1-1.24-1.14L7.25 8.5Zm3.25 2a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 1.5 0v-5.25a.75.75 0 0 0-.75-.75Zm3 0a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 1.5 0v-5.25a.75.75 0 0 0-.75-.75Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3.75A2.75 2.75 0 0 0 6.25 6.5V7H4.5a.75.75 0 0 0 0 1.5h.95l.74 10.14A2.75 2.75 0 0 0 8.94 21h6.12a2.75 2.75 0 0 0 2.75-2.36l.74-10.14h.95a.75.75 0 0 0 0-1.5h-1.75v-.5A2.75 2.75 0 0 0 15 3.75H9Zm5.5 3.25h-5V6.5c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25V7Zm-7.25 1.5h9.5l-.72 9.86a1.25 1.25 0 0 1-1.24 1.14H8.71a1.25 1.25 0 0 1-1.24-1.14L7.25 8.5Zm3.25 2a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 1.5 0v-5.25a.75.75 0 0 0-.75-.75Zm3 0a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 1.5 0v-5.25a.75.75 0 0 0-.75-.75Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 
 .form-error,
@@ -366,5 +368,115 @@ th {
 
   .nav-right {
     display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
+    padding: 0 8px;
+    box-sizing: border-box;
+    grid-template-columns: minmax(0, 1fr);
+    overflow-x: hidden;
+  }
+
+  .upload-card,
+  .preview-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 14px;
+    overflow: hidden;
+  }
+
+  .upload-form,
+  .upload-actions {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .upload-form input[type="file"],
+  .upload-form input[type="url"],
+  .upload-form button,
+  .restore-btn {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .upload-actions {
+    flex-direction: column;
+  }
+
+  .upload-card h1,
+  .preview-card h2 {
+    font-size: 20px;
+    word-break: break-word;
+  }
+
+  .subtitle,
+  .input-hint,
+  .delete-mode-hint {
+    font-size: 12px;
+    overflow-wrap: break-word;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 520px;
+  }
+
+  /* Navbar mobile cleanup only */
+  .navbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto;
+    padding: 8px 10px;
+    row-gap: 8px;
+    align-items: center;
+  }
+
+  .nav-group {
+    display: contents;
+  }
+
+  .nav-left {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .nav-center {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-right {
+    grid-column: 3;
+    grid-row: 2;
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 18px;
+    padding: 6px 7px;
+    white-space: nowrap;
+    line-height: 1;
   }
 }
