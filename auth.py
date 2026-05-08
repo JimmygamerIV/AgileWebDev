@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from database import Session
 from models import User
 from forms import SignupForm, SigninForm
+import re
 
 auth_bp = Blueprint("auth", __name__)
 
