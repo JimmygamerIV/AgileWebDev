@@ -4,36 +4,56 @@
 {% endblock %} {% block content %}
 <div class="main-container">
   <div class="friends-card">
+    <input type="hidden" id="csrfToken" value="{{ csrf_token() }}" />
     <div class="tabs">
-      <button class="tab active" onclick="showTab('friends')">
+      <button class="tab active" data-tab="all-friends" onclick="showTab('all-friends')">
         All Friends
       </button>
-      <button class="tab" onclick="showTab('requests')">
-        Friend Requests <span class="dot"></span>
+      <button class="tab" data-tab="friend-requests" onclick="showTab('friend-requests')">
+        Friend Requests{% if incoming_requests and incoming_requests|length > 0 %} <span class="dot"></span>{% endif %}
+      </button>
+      <button class="tab" data-tab="add-friend" onclick="showTab('add-friend')">
+        Add a Friend
       </button>
     </div>
 
-    <!-- FRIENDS --->
-    <div id="friends" class="tab-content">
+    <!-- ALL FRIENDS TAB -->
+    <div id="all-friends" class="tab-content">
       <div class="search-bar">
-        <input type="text" placeholder="Search friends" />
+        <input
+          type="text"
+          id="friends-search"
+          placeholder="Search friends by username"
+          onkeyup="filterFriends()"
+        />
       </div>
 
-      <div class="list">
+      <div class="list" id="friends-list">
         {% if friends %} {% for friend in friends %}
-        <div class="friend-item">
+        <div
+          class="friend-item{% if friend.is_favourite %} is-favourite{% endif %}"
+          data-username="{{ friend.username|lower }}"
+          data-friend-id="{{ friend.user_id }}"
+        >
           <div class="avatar"></div>
-          <span>{{ friend.username }}</span>
-
-          <form method="POST" action="/remove_friend">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input
-              type="hidden"
-              name="friend_id"
-              value="{{ friend.user_id }}"
-            />
-            <button type="submit">Remove</button>
-          </form>
+          <div class="friend-info">
+            <div class="friend-nickname">
+              {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
+              {{ friend.nickname or friend.username }}
+            </div>
+            <div class="friend-username">@{{ friend.username }}</div>
+          </div>
+          <div class="friend-actions">
+            <button class="three-dots-btn" type="button" aria-label="Friend actions">⋯</button>
+            <div class="dropdown-menu">
+              <button type="button" class="menu-item" data-action="favourite">
+                Favourite friend
+              </button>
+              <button type="button" class="menu-item remove-item" data-action="remove">
+                Remove friend
+              </button>
+            </div>
+          </div>
         </div>
         {% endfor %} {% else %}
         <p style="font-style: italic; color: #888">
@@ -43,50 +63,91 @@
       </div>
     </div>
 
-    <!-- REQUESTS -->
-    <div id="requests" class="tab-content hidden">
-      <div class="list">
-        {% if requests %} {% for req in requests %}
-        <div class="friend-item">
-          <div class="avatar"></div>
-          <span>{{ req.username }}</span>
+    <!-- FRIEND REQUESTS TAB -->
+    <div id="friend-requests" class="tab-content hidden">
+      <div class="search-bar">
+        <input
+          type="text"
+          id="requests-search"
+          placeholder="Search requests by username"
+          onkeyup="filterRequests()"
+        />
+      </div>
 
-          <div class="actions">
-            <form method="POST" action="/accept_request">
-              <input
-                type="hidden"
-                name="csrf_token"
-                value="{{ csrf_token() }}"
-              />
-              <input
-                type="hidden"
-                name="request_id"
-                value="{{ req.request_id }}"
-              />
-              <input type="hidden" name="sender_id" value="{{ req.user_id }}" />
-              <button class="accept">Accept</button>
-            </form>
-
-            <form method="POST" action="/reject_request">
-              <input
-                type="hidden"
-                name="csrf_token"
-                value="{{ csrf_token() }}"
-              />
-              <input
-                type="hidden"
-                name="request_id"
-                value="{{ req.request_id }}"
-              />
-              <button class="reject">Reject</button>
-            </form>
+      <div class="requests-section">
+        <h3>Incoming Requests</h3>
+        <div class="list" id="incoming-list">
+          {% if incoming_requests %} {% for req in incoming_requests %}
+          <div
+            class="friend-item"
+            data-username="{{ req.username|lower }}"
+            data-request-id="{{ req.request_id }}"
+          >
+            <div class="avatar"></div>
+            <div class="friend-info">
+              <div class="friend-nickname">{{ req.nickname or req.username }}</div>
+              <div class="friend-username">@{{ req.username }}</div>
+            </div>
+            <div class="request-actions">
+              <button type="button" class="accept-btn" onclick="acceptRequest({{ req.request_id }}, {{ req.user_id }})">
+                Accept
+              </button>
+              <button type="button" class="decline-btn" onclick="declineRequest({{ req.request_id }})">
+                Decline
+              </button>
+            </div>
           </div>
+          {% endfor %} {% else %}
+          <p style="font-style: italic; color: #888">No incoming friend requests.</p>
+          {% endif %}
         </div>
-        {% endfor %} {% else %}
+      </div>
+
+      <div class="requests-section">
+        <h3>Outgoing Requests</h3>
+        <div class="list" id="outgoing-list">
+          {% if outgoing_requests %} {% for req in outgoing_requests %}
+          <div
+            class="friend-item"
+            data-username="{{ req.username|lower }}"
+            data-request-id="{{ req.request_id }}"
+          >
+            <div class="avatar"></div>
+            <div class="friend-info">
+              <div class="friend-nickname">{{ req.nickname or req.username }}</div>
+              <div class="friend-username">@{{ req.username }}</div>
+            </div>
+            <div class="request-actions">
+              <button type="button" class="cancel-btn" onclick="cancelRequest({{ req.request_id }})">
+                Cancel
+              </button>
+            </div>
+          </div>
+          {% endfor %} {% else %}
+          <p style="font-style: italic; color: #888">No outgoing friend requests.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD A FRIEND TAB -->
+    <div id="add-friend" class="tab-content hidden">
+      <div class="search-bar add-friend-bar">
+        <input
+          type="text"
+          id="add-friend-search"
+          placeholder="Search by username"
+          onkeyup="searchUsers()"
+        />
+        <button type="button" class="send-request-btn" onclick="sendFriendRequest()">
+          Send Request
+        </button>
+      </div>
+
+      <div class="list" id="search-results">
         <p style="font-style: italic; color: #888">
-          No incoming or outgoing friend requests.
+          Search for a user to add as a friend.
         </p>
-        {% endif %}
       </div>
     </div>
   </div>

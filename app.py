@@ -312,6 +312,33 @@ def index():
             for event in (today_events + tomorrow_events + future_events)
         ]
 
+        from models import Friend
+
+        friend_rows = db.query(Friend).filter(Friend.user_id == user_id).all()
+        friends_list = []
+        if friend_rows:
+            friend_ids = [row.friend_id for row in friend_rows]
+            friend_users = db.query(User).filter(User.user_id.in_(friend_ids)).all()
+            friend_users_by_id = {user.user_id: user for user in friend_users}
+            for row in friend_rows:
+                friend_user = friend_users_by_id.get(row.friend_id)
+                if not friend_user:
+                    continue
+                friend_user.is_favourite = bool(row.is_favourite)
+                friends_list.append(friend_user)
+        else:
+            legacy_ids = get_friend_ids(db, user_id)
+            friends_list = db.query(User).filter(User.user_id.in_(legacy_ids)).all()
+            for friend_user in friends_list:
+                friend_user.is_favourite = False
+
+        friends_list.sort(
+            key=lambda user: (
+                0 if getattr(user, "is_favourite", False) else 1,
+                (user.nickname or user.username or "").lower(),
+            )
+        )
+
     finally:
         db.close()
 
@@ -321,6 +348,8 @@ def index():
         tomorrow_events=tomorrow_events,
         future_events=future_events,
         classes_map_data=classes_map_data,
+        friends=friends_list,
+        username=g.current_user["nickname"] or g.current_user["username"],
         show_full_nav=True
     )
 

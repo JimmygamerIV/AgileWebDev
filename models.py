@@ -21,6 +21,7 @@ class Friend(Base):
     # Composite primary key
     user_id = Column(Integer, ForeignKey('users.user_id'), primary_key=True)
     friend_id = Column(Integer, ForeignKey('users.user_id'), primary_key=True)
+    is_favourite = Column(Integer, default=0)
 
 
 class FriendRequest(Base):
