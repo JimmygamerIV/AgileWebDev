@@ -14,6 +14,34 @@ a table with with each row containing the i) UWA ID ii) name and iii) Github use
 instructions for how to launch the application.
 instructions for how to run the tests for the application.
 
+### First-time setup
+
+Clone the repo, then create a virtual environment and install dependencies.
+
+**macOS / Linux:**
+
+```bash
+python3.12 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+**Windows (PowerShell):**
+
+```powershell
+py -3.12 -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+**Windows (Command Prompt):**
+
+```cmd
+py -3.12 -m venv venv
+venv\Scripts\activate.bat
+pip install -r requirements.txt
+```
+
 
 ## Database
 
