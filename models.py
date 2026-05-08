@@ -12,6 +12,7 @@ class User(Base):
     email = Column(String(100), unique=True)
     password_hash =  Column(Text, nullable=False)
     timetable_link = Column(Text)
+    avatar = Column(String(100),default="default.jpg")
 
 
 class Friend(Base):
