@@ -294,6 +294,19 @@ body {
   justify-content: center;
 }
 
+#routesToggle {
+  position: absolute;
+  top: 80px;
+  right: 10px;
+  z-index: 1000;
+  padding: 6px 10px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
 #stopSelectingBtn {
   position: absolute;
   top: 45px;
@@ -338,6 +351,28 @@ body {
   width: 24px;
   height: 24px;
   display: block;
+}
+
+.gold-class-marker {
+  background: transparent;
+  border: none;
+}
+
+.gold-class-marker svg {
+  width: 25px;
+  height: 41px;
+  display: block;
+}
+
+.leaflet-overlay-pane path.route-line {
+  stroke-dashoffset: 0;
+  animation: routeDash 1.8s linear infinite;
+}
+
+@keyframes routeDash {
+  to {
+    stroke-dashoffset: -20;
+  }
 }
 
 /* Friends on campus list */
@@ -403,6 +438,11 @@ body {
 
   #fullscreenToggle {
     top: 45px;
+    right: 10px;
+  }
+
+  #routesToggle {
+    top: 80px;
     right: 10px;
   }
 
