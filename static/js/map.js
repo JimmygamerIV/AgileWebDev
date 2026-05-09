@@ -31,43 +31,18 @@
       <path d="M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
     </svg>
   `;
-  const onlineMarkerOverlaySvg = `
+  const onlineMarkerSvg = `
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <rect x="6.2" y="7.2" width="11.6" height="6.4" rx="1" fill="none" stroke="currentColor" stroke-width="1.8" />
-      <path d="M4.8 16.6h14.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <rect x="4.5" y="6" width="15" height="9" rx="1.4" fill="none" stroke="currentColor" stroke-width="2" />
+      <path d="M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
     </svg>
   `;
-  const defaultMarker = new L.Icon.Default();
-  const defaultMarkerElement = defaultMarker.createIcon();
-  const defaultMarkerUrl =
-    defaultMarkerElement && defaultMarkerElement.tagName === "IMG" ? defaultMarkerElement.src : "";
-  const defaultMarkerSize = defaultMarker.options.iconSize || [32, 42];
-  const defaultMarkerAnchor = defaultMarker.options.iconAnchor || [16, 42];
-  const defaultPopupAnchor = defaultMarker.options.popupAnchor || [0, -36];
-  const onlineMarkerHtml = defaultMarkerUrl
-    ? `
-        <span class="online-marker-wrapper">
-          <img class="online-marker-base" src="${defaultMarkerUrl}" alt="" />
-          <span class="online-marker-laptop">${onlineMarkerOverlaySvg}</span>
-        </span>
-      `
-    : `
-        <svg viewBox="0 0 32 42" aria-hidden="true" focusable="false">
-          <path
-            d="M16 0C9.4 0 4 5.4 4 12c0 9.5 12 24 12 24s12-14.5 12-24C28 5.4 22.6 0 16 0z"
-            fill="currentColor"
-          />
-          <circle cx="16" cy="13" r="8" fill="#ffffff" />
-          <rect x="12" y="10.5" width="8" height="4.8" rx="0.6" fill="none" stroke="currentColor" stroke-width="1.4" />
-          <path d="M10 17.4h12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
-        </svg>
-      `;
   const onlineMarkerIcon = L.divIcon({
     className: "online-class-marker",
-    html: onlineMarkerHtml,
-    iconSize: defaultMarkerSize,
-    iconAnchor: defaultMarkerAnchor,
-    popupAnchor: defaultPopupAnchor,
+    html: onlineMarkerSvg,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+    popupAnchor: [0, -12],
   });
 
   // Prevent browser-level page zoom gestures when interacting with the map area.
