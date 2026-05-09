@@ -204,7 +204,7 @@ body {
 }
 
 .event-item.has-online-icon {
-  padding-right: 34px;
+  padding-bottom: 26px;
 }
 
 .event-item:hover {
@@ -331,11 +331,38 @@ body {
 .online-class-marker {
   background: transparent;
   border: none;
+  color: var(--map-marker-color, #3388ff);
 }
 
-.online-class-marker svg {
-  width: 32px;
-  height: 42px;
+.online-marker-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.online-marker-base {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.online-marker-laptop {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.online-marker-laptop svg {
+  width: 12px;
+  height: 12px;
   display: block;
 }
 
