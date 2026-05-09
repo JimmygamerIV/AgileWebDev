@@ -122,14 +122,15 @@ body {
 
 /* Top bar */
 .upcoming-header {
-  background-color: #ccc;
+  color: white;
+  background-color: #2f3c8f;
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
   font-weight: 700;
-  background: linear-gradient(to bottom, #e0e0e0, #bfbfbf);
+  background: #2f3c8f;
 }
 
 /* Arrow button */
@@ -145,7 +146,7 @@ body {
 .upcoming-content {
   background-color: white;
   padding: 10px;
-  border: 5px solid #bfbfbf; /* grey border */
+  border: 5px solid #2f3c8f; /* blue border */
   border-top: none; /* removes top border */
   overflow-y: auto;
   max-height: 250px;
