@@ -332,7 +332,7 @@ body {
   font-weight: 600;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .side-container {
     flex-direction: column;
     padding: 12px;

@@ -131,7 +131,7 @@ h1 {
   background-color: #1d4ed8;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .container {
     min-height: calc(100vh - 56px);
     padding: 20px 12px;

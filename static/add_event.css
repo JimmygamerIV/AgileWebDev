@@ -371,7 +371,7 @@ th {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .page-container {
     width: 100%;
     max-width: 100%;
