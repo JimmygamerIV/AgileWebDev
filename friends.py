@@ -2,6 +2,8 @@ from flask import Blueprint, g, redirect, render_template, session, request, jso
 from database import Session
 from models import User, Friend, FriendRequest
 from forms import AddFriendForm, FriendActionForm
+from datetime import date, datetime
+from models import Event, User
 
 friends_bp = Blueprint("friends", __name__)
 
@@ -374,5 +376,66 @@ def send_friend_request():
         db.commit()
 
         return jsonify({"success": True})
+    finally:
+        db.close()
+
+
+@friends_bp.route("/api/friends/on-campus", methods=["GET"])
+def friends_on_campus():
+    if g.current_user is None:
+        return jsonify({"error": "Not authenticated"}), 401
+    
+    db = Session()
+
+    try:
+        today = date.today().isoformat()
+        curr_time = datetime.now().strftime("%H:%M")
+
+        user_id = g.current_user["user_id"]
+
+        user_friends = get_friend_ids(db, user_id)
+
+        if not user_friends:
+            return jsonify({"on_campus": []})
+        
+        events = db.query(Event).filter(
+            Event.user_id.in_(user_friends),
+            Event.date == today,
+            Event.start_time <= curr_time,
+            Event.end_time >= curr_time
+            ).all()
+        
+        if not events:
+            return jsonify({"on_campus": []})
+        
+        friends_usernames = set()
+        for e in events:
+            friends_usernames.add(e.user_id)
+
+        users = db.query(User).filter(User.user_id.in_(friends_usernames)).all()
+
+        # Store the key value pair as user_id:username
+        user_lookup = {}
+        for u in users:
+            user_lookup[u.user_id] = u
+
+        results = []
+
+        for e in events:
+            u = user_lookup.get(e.user_id)
+
+            if not u:
+                continue
+            results.append({
+                "user_id" : u.user_id,
+                "username" : u.username,
+                "nickname" : u.nickname or u.username, # Store the username if nickname is empty
+                "event_name" : e.event_name or "Untitled",
+                "location" : e.location or "",
+                "end_time" : e.end_time or ""
+            })
+
+        return jsonify({"on_campus": results})
+
     finally:
         db.close()
