@@ -195,11 +195,16 @@ body {
   background-color: #f0f4ff;
   border-left: 4px solid #2f3c8f;
   border-radius: 4px;
+  position: relative;
   cursor: pointer;
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.event-item.has-online-icon {
+  padding-bottom: 26px;
 }
 
 .event-item:hover {
@@ -227,6 +232,24 @@ body {
   font-size: 11px;
   color: #666;
   margin-top: 2px;
+}
+
+.event-online-icon {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  color: #2f3c8f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-online-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .upcoming.collapsed .upcoming-content {
@@ -303,6 +326,18 @@ body {
   opacity: 1;
   pointer-events: auto;
   transform: scale(1);
+}
+
+.online-class-marker {
+  background: transparent;
+  border: none;
+  color: #2f3c8f;
+}
+
+.online-class-marker svg {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 /* Friends on campus list */
