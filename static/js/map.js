@@ -25,6 +25,30 @@
   let selectedEventId = null;
   let classesData = [];
   const classDataById = new Map();
+  const onlineBadgeSvg = `
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="4.5" y="6" width="15" height="9" rx="1.4" fill="none" stroke="currentColor" stroke-width="2" />
+      <path d="M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  `;
+  const onlineMarkerSvg = `
+    <svg viewBox="0 0 32 42" aria-hidden="true" focusable="false">
+      <path
+        d="M16 0C9.4 0 4 5.4 4 12c0 9.5 12 24 12 24s12-14.5 12-24C28 5.4 22.6 0 16 0z"
+        fill="#2f3c8f"
+      />
+      <rect x="9" y="11" width="14" height="8" rx="1.2" fill="#ffffff" />
+      <path d="M7.5 21h17" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+      <rect x="10.5" y="12.5" width="11" height="5" rx="0.6" fill="#2f3c8f" />
+    </svg>
+  `;
+  const onlineMarkerIcon = L.divIcon({
+    className: "online-class-marker",
+    html: onlineMarkerSvg,
+    iconSize: [32, 42],
+    iconAnchor: [16, 42],
+    popupAnchor: [0, -36],
+  });
 
   // Prevent browser-level page zoom gestures when interacting with the map area.
   mapElement.addEventListener(
@@ -236,9 +260,56 @@
     return /\bonline\b|\bvirtual\b|\bremote\b|\bzoom\b|\bteams\b|\bwebex\b|\bcollaborate\b/.test(searchableText);
   }
 
-  function addMarkerForClass(classData, openPopup = false) {
-    if (isOnlineClass(classData)) {
+  function decorateOnlineClasses() {
+    if (!classItemElements.length) {
+      return;
+    }
+
+    for (const classItem of classItemElements) {
+      const eventId = classItem.dataset.eventId;
+      if (!eventId) {
+        continue;
+      }
+
+      const classData = classDataById.get(String(eventId));
+      if (!classData || !isOnlineClass(classData)) {
+        continue;
+      }
+
+      classItem.classList.add("has-online-icon", "is-online");
+      if (classItem.querySelector(".event-online-icon")) {
+        continue;
+      }
+
+      const icon = document.createElement("span");
+      icon.className = "event-online-icon";
+      icon.setAttribute("title", "Online class");
+      icon.setAttribute("aria-label", "Online class");
+      icon.innerHTML = onlineBadgeSvg;
+      classItem.appendChild(icon);
+    }
+  }
+
+  function addMarkerForClass(classData, options = {}) {
+    const { openPopup = false, allowOnline = false } = options;
+    const isOnline = isOnlineClass(classData);
+
+    if (isOnline && !allowOnline) {
       return null;
+    }
+
+    if (isOnline) {
+      const marker = L.marker([fallbackLocation.lat, fallbackLocation.lng], { icon: onlineMarkerIcon })
+        .addTo(map)
+        .bindPopup(`${popupHtml(classData)}<div style="margin-top: 6px; font-size: 12px;">Map coordinates unavailable for this class.</div>`);
+      activeMarkers.push(marker);
+
+      if (openPopup) {
+        marker.openPopup();
+        map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+      }
+
+      return marker;
     }
 
     const lat = Number(classData.latitude);
@@ -278,12 +349,17 @@
     return { start, end };
   }
 
-  function getCurrentOrNextClassData() {
+  function getCurrentOrNextClassData(options = {}) {
+    const { includeOnline = true } = options;
     const now = new Date();
     let currentClass = null;
     let nextClass = null;
 
     for (const classData of classesData) {
+      if (!includeOnline && isOnlineClass(classData)) {
+        continue;
+      }
+
       const window = getClassWindow(classData);
       if (!window) {
         continue;
@@ -316,9 +392,9 @@
   function renderDefaultClassMarker() {
     clearMarkers();
 
-    const targetClass = getCurrentOrNextClassData();
+    const targetClass = getCurrentOrNextClassData({ includeOnline: false });
     if (targetClass) {
-      const marker = addMarkerForClass(targetClass, false);
+      const marker = addMarkerForClass(targetClass);
       if (marker) {
         map.setView(marker.getLatLng(), 17);
         return;
@@ -350,7 +426,7 @@
     updateStopSelectingButton();
 
     clearMarkers();
-    const marker = addMarkerForClass(classData, true);
+    const marker = addMarkerForClass(classData, { openPopup: true, allowOnline: true });
     if (marker) {
       return;
     }
@@ -433,6 +509,7 @@
   }
 
   parseClassesData();
+  decorateOnlineClasses();
   wireClassSelection();
   renderDefaultClassMarker();
 })();
