@@ -236,7 +236,7 @@ body {
 
 .event-online-icon {
   position: absolute;
-  top: 8px;
+  bottom: 8px;
   right: 8px;
   width: 16px;
   height: 16px;

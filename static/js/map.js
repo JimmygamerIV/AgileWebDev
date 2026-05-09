@@ -37,9 +37,9 @@
         d="M16 0C9.4 0 4 5.4 4 12c0 9.5 12 24 12 24s12-14.5 12-24C28 5.4 22.6 0 16 0z"
         fill="#2f3c8f"
       />
-      <rect x="9" y="11" width="14" height="8" rx="1.2" fill="#ffffff" />
-      <path d="M7.5 21h17" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
-      <rect x="10.5" y="12.5" width="11" height="5" rx="0.6" fill="#2f3c8f" />
+      <circle cx="16" cy="13" r="8" fill="#ffffff" />
+      <rect x="12" y="10.5" width="8" height="4.8" rx="0.6" fill="none" stroke="#2f3c8f" stroke-width="1.4" />
+      <path d="M10 17.4h12" fill="none" stroke="#2f3c8f" stroke-width="1.4" stroke-linecap="round" />
     </svg>
   `;
   const onlineMarkerIcon = L.divIcon({
