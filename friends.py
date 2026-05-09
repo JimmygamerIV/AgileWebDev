@@ -1,4 +1,4 @@
-from flask import Blueprint, g, redirect, render_template, session, request, jsonify
+from flask import Blueprint, g, redirect, render_template, session, request, jsonify, abort
 from database import Session
 from models import User, Friend, FriendRequest
 from forms import AddFriendForm, FriendActionForm
@@ -376,3 +376,63 @@ def send_friend_request():
         return jsonify({"success": True})
     finally:
         db.close()
+
+
+@friends_bp.route("/profile/<username>")
+def view_profile(username):
+    if g.current_user is None:
+        return redirect('/signin')
+
+    if username == g.current_user['username']:
+        return redirect('/profile')
+
+    db = Session()
+
+    try:
+        user = db.query(User).filter(User.username == username).first()
+
+        if user is None:
+            abort(404)
+
+        friend_ids = get_friend_ids(db, g.current_user['user_id'])
+        
+        status = "none"
+        incoming_req_id = None
+
+        if user.user_id in friend_ids:
+            status = "friend"
+
+        if status == "none":
+            req = db.query(FriendRequest).filter(
+                FriendRequest.sender_id == g.current_user['user_id'], # current user (you)
+                FriendRequest.receiver_id == user.user_id,     # target
+                FriendRequest.status == "pending" 
+            ).first()
+
+            if req:
+                status = "sent_pending"
+
+
+        # Check the friend req in the other direction
+        if status == "none":
+            eq = db.query(FriendRequest).filter(
+                FriendRequest.sender_id == user.user_id,    # target
+                FriendRequest.receiver_id == g.current_user['user_id'],    # current user (you)
+                FriendRequest.status == "pending" 
+            ).first()
+
+            if req:
+                status = "received_pending"
+                incoming_req_id = req.request_id
+
+        return render_template(
+            "user_profile.html",
+            target_user = user,
+            status = status,
+            req_id = incoming_req_id
+        )
+    
+    finally:
+        db.close()
+
+    
