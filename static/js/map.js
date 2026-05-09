@@ -162,7 +162,65 @@
     routesEnabled = !routesEnabled;
     updateRoutesToggleLabel();
     if (selectedEventId === null) {
-      renderDefaultMapView();
+      updateRouteVisualization();
+    }
+  }
+
+  function updateRouteVisualization() {
+    clearRouteLine();
+
+    if (!routesEnabled || selectedEventId !== null) {
+      return;
+    }
+
+    const renderableEntries = getRenderableClassEntries();
+
+    // Compute the target (gold) class from the single-day renderable entries
+    const now = new Date();
+    let currentEntry = null;
+    let nextEntry = null;
+    for (const entry of renderableEntries) {
+      const window = getClassWindow(entry.classData);
+      if (!window) continue;
+      if (window.start <= now && now < window.end) {
+        if (!currentEntry || window.start < currentEntry.start) {
+          currentEntry = { start: window.start, entry };
+        }
+        continue;
+      }
+      if (window.start > now) {
+        if (!nextEntry || window.start < nextEntry.start) {
+          nextEntry = { start: window.start, entry };
+        }
+      }
+    }
+
+    const targetClass = currentEntry ? currentEntry.entry.classData : nextEntry ? nextEntry.entry.classData : null;
+    const targetId = targetClass ? String(targetClass.event_id) : null;
+    const blueEntries = targetId
+      ? renderableEntries.filter((entry) => String(entry.classData.event_id) !== targetId)
+      : renderableEntries;
+
+    const routeCoords = [];
+    if (targetClass) {
+      const lat = Number(targetClass.latitude);
+      const lng = Number(targetClass.longitude);
+      routeCoords.push([Number.isFinite(lat) && Number.isFinite(lng) ? lat : fallbackLocation.lat, Number.isFinite(lat) && Number.isFinite(lng) ? lng : fallbackLocation.lng]);
+    }
+    for (const entry of blueEntries) {
+      routeCoords.push([entry.lat, entry.lng]);
+    }
+
+    if (routeCoords.length > 1) {
+      activeRouteLine = L.polyline(routeCoords, {
+        color: "#5f8dff",
+        weight: 3,
+        opacity: 0.8,
+        dashArray: "4 6",
+        lineCap: "round",
+        lineJoin: "round",
+        className: "route-line",
+      }).addTo(map);
     }
   }
 
