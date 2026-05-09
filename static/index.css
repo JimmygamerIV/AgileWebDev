@@ -122,14 +122,15 @@ body {
 
 /* Top bar */
 .upcoming-header {
-  background-color: #ccc;
+  color: white;
+  background-color: #2f3c8f;
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
   font-weight: 700;
-  background: linear-gradient(to bottom, #e0e0e0, #bfbfbf);
+  background: #2f3c8f;
 }
 
 /* Arrow button */
@@ -145,7 +146,7 @@ body {
 .upcoming-content {
   background-color: white;
   padding: 10px;
-  border: 5px solid #bfbfbf; /* grey border */
+  border: 5px solid #2f3c8f; /* blue border */
   border-top: none; /* removes top border */
   overflow-y: auto;
   max-height: 250px;
@@ -329,4 +330,96 @@ body {
 .friend-name {
   color: #333;
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .side-container {
+    flex-direction: column;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .custom-sidebar {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .map-section {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .map-box {
+    height: 70vh;
+    min-height: 420px;
+  }
+
+  .upcoming {
+    width: calc(100% - 24px);
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  #styleToggle {
+    top: 10px;
+    right: 10px;
+  }
+
+  #fullscreenToggle {
+    top: 45px;
+    right: 10px;
+  }
+
+  #stopSelectingBtn {
+    top: 45px;
+    right: 50px;
+  }
+
+  /* Navbar mobile cleanup only */
+  .navbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto;
+    padding: 8px 10px;
+    row-gap: 8px;
+    align-items: center;
+  }
+
+  .nav-group {
+    display: contents;
+  }
+
+  .nav-left {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .nav-center {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-right {
+    grid-column: 3;
+    grid-row: 2;
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 18px;
+    padding: 6px 7px;
+    white-space: nowrap;
+    line-height: 1;
+  }
 }
