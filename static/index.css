@@ -405,8 +405,8 @@ body {
 @media (max-width: 768px) {
   .side-container {
     flex-direction: column;
-    padding: 12px;
-    gap: 12px;
+    padding: 10px;
+    gap: 10px;
   }
 
   .custom-sidebar {
@@ -425,30 +425,45 @@ body {
   }
 
   .upcoming {
-    width: calc(100% - 24px);
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
+    width: calc(100% - 20px);
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    max-width: none;
+  }
+
+  .upcoming-content {
+    max-height: 200px;
   }
 
   #styleToggle {
-    top: 10px;
-    right: 10px;
+    top: 8px;
+    right: 8px;
+    padding: 5px 10px;
+    font-size: 12px;
   }
 
   #fullscreenToggle {
-    top: 45px;
-    right: 10px;
+    top: 40px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
   }
 
   #routesToggle {
-    top: 80px;
-    right: 10px;
+    top: 72px;
+    right: 8px;
+    padding: 5px 8px;
+    font-size: 11px;
   }
 
   #stopSelectingBtn {
-    top: 45px;
-    right: 50px;
+    top: 40px;
+    right: 45px;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
   }
 
   /* Navbar mobile cleanup only */
@@ -496,5 +511,205 @@ body {
     padding: 6px 7px;
     white-space: nowrap;
     line-height: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .side-container {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .map-box {
+    height: 60vh;
+    min-height: 300px;
+  }
+
+  .upcoming {
+    width: calc(100% - 12px);
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+  }
+
+  .upcoming-content {
+    max-height: 150px;
+    padding: 6px;
+  }
+
+  .upcoming-header {
+    padding: 6px;
+    font-size: 16px;
+  }
+
+  .event-item {
+    padding: 6px 8px;
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+
+  .event-item.has-online-icon {
+    padding-bottom: 20px;
+  }
+
+  .event-name {
+    font-size: 12px;
+  }
+
+  .event-details {
+    font-size: 10px;
+  }
+
+  .event-online-icon {
+    width: 14px;
+    height: 14px;
+    bottom: 6px;
+    right: 6px;
+  }
+
+  .event-online-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  #styleToggle {
+    top: 6px;
+    right: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  #fullscreenToggle {
+    top: 36px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+  }
+
+  #routesToggle {
+    top: 66px;
+    right: 6px;
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+
+  #stopSelectingBtn {
+    top: 36px;
+    right: 40px;
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+  }
+
+  .navbar {
+    padding: 6px 8px;
+    row-gap: 6px;
+  }
+
+  .nav-left {
+    font-size: 13px;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 16px;
+    padding: 5px 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .side-container {
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .map-box {
+    height: 50vh;
+    min-height: 250px;
+  }
+
+  .upcoming {
+    width: calc(100% - 8px);
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+  }
+
+  .upcoming-content {
+    max-height: 120px;
+    padding: 4px;
+  }
+
+  .upcoming-header {
+    padding: 4px;
+    font-size: 14px;
+  }
+
+  .event-item {
+    padding: 4px 6px;
+    margin-bottom: 2px;
+    font-size: 11px;
+  }
+
+  .event-name {
+    font-size: 11px;
+  }
+
+  .event-details {
+    font-size: 9px;
+    margin-top: 1px;
+  }
+
+  #styleToggle,
+  #fullscreenToggle,
+  #routesToggle,
+  #stopSelectingBtn {
+    width: auto;
+    height: auto;
+    padding: 3px 5px;
+    font-size: 9px;
+  }
+
+  #fullscreenToggle,
+  #stopSelectingBtn {
+    width: 26px;
+    height: 26px;
+    padding: 2px;
+  }
+
+  #styleToggle {
+    top: 4px;
+    right: 4px;
+  }
+
+  #fullscreenToggle {
+    top: 32px;
+    right: 4px;
+  }
+
+  #routesToggle {
+    top: 60px;
+    right: 4px;
+  }
+
+  #stopSelectingBtn {
+    top: 32px;
+    right: 36px;
+  }
+
+  .navbar {
+    padding: 4px 6px;
+    row-gap: 4px;
+  }
+
+  .nav-left {
+    font-size: 12px;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 14px;
+    padding: 4px 5px;
   }
 }
