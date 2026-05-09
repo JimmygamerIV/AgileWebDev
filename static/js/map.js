@@ -227,6 +227,37 @@
     }
   }
 
+  function computeActiveDate() {
+    const now = new Date();
+    const today = now.toISOString().slice(0, 10);
+    const timeNow = now.toTimeString().slice(0, 5);
+
+    const dates = Array.from(new Set(classesData.map((c) => c.date).filter(Boolean))).sort();
+    if (!dates.length) {
+      return today;
+    }
+
+    if (dates.includes(today)) {
+      const remainingToday = classesData.some((c) => {
+        if (c.date !== today) return false;
+        if (!c.end_time) return true;
+        return c.end_time > timeNow;
+      });
+
+      if (remainingToday) {
+        return today;
+      }
+    }
+
+    for (const d of dates) {
+      if (d >= today) {
+        return d;
+      }
+    }
+
+    return dates[0];
+  }
+
   function popupHtml(classData) {
     const friendNames = Array.isArray(classData.friend_nicknames) ? classData.friend_nicknames : [];
     const friendsDisplay = friendNames.map((name) => escapeHtml(name)).join(", ");
@@ -250,11 +281,25 @@
     const floorListItem = hasFloor
       ? `<li><span style="font-weight: 600;">Floor:</span> ${escapeHtml(rawFloor)}</li>`
       : "";
+    const dayLabel = (function () {
+      try {
+        if (!classData || !classData.date) return "Unknown";
+        const now = new Date();
+        const today = now.toISOString().slice(0, 10);
+        const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+        if (classData.date === today) return "Today";
+        if (classData.date === tomorrow) return "Tomorrow";
+        return classData.date;
+      } catch (e) {
+        return classData.date || "Unknown";
+      }
+    })();
 
     return `
       <div>
         <strong>${escapeHtml(classData.event_name || "Untitled")}</strong><br>
         <ul style="margin: 8px 0 0 18px; padding: 0;">
+          <li><span style="font-weight: 600;">Day:</span> ${escapeHtml(dayLabel)}</li>
           <li><span style="font-weight: 600;">Building:</span> ${escapeHtml(classData.building_name || "Unknown building")}</li>
           ${floorListItem}
           <li><span style="font-weight: 600;">Time:</span> ${escapeHtml(classData.time_display || "Unknown")}</li>
@@ -434,8 +479,12 @@
 
   function getRenderableClassEntries() {
     const entries = [];
+    const activeDate = computeActiveDate();
 
     for (const classData of classesData) {
+      if (!classData || classData.date !== activeDate) {
+        continue;
+      }
       if (isOnlineClass(classData)) {
         continue;
       }
@@ -451,15 +500,11 @@
         continue;
       }
 
-      entries.push({
-        classData,
-        start: window.start,
-        lat,
-        lng,
-      });
+      entries.push({ classData, start: window.start, lat, lng });
     }
 
     entries.sort((a, b) => a.start - b.start);
+    console.debug("[map activeDate]", { activeDate, entriesCount: entries.length });
     return entries;
   }
 
@@ -467,9 +512,30 @@
     clearMarkers();
     clearRouteLine();
 
-    const targetClass = getCurrentOrNextClassData({ includeOnline: false });
-    const targetId = targetClass ? String(targetClass.event_id) : null;
     const renderableEntries = getRenderableClassEntries();
+
+    // Compute the target (gold) class from the single-day renderable entries
+    const now = new Date();
+    let currentEntry = null;
+    let nextEntry = null;
+    for (const entry of renderableEntries) {
+      const window = getClassWindow(entry.classData);
+      if (!window) continue;
+      if (window.start <= now && now < window.end) {
+        if (!currentEntry || window.start < currentEntry.start) {
+          currentEntry = { start: window.start, entry };
+        }
+        continue;
+      }
+      if (window.start > now) {
+        if (!nextEntry || window.start < nextEntry.start) {
+          nextEntry = { start: window.start, entry };
+        }
+      }
+    }
+
+    const targetClass = currentEntry ? currentEntry.entry.classData : nextEntry ? nextEntry.entry.classData : null;
+    const targetId = targetClass ? String(targetClass.event_id) : null;
     const blueEntries = targetId
       ? renderableEntries.filter((entry) => String(entry.classData.event_id) !== targetId)
       : renderableEntries;
@@ -574,7 +640,28 @@
       return;
     }
 
-    const targetClass = getCurrentOrNextClassData({ includeOnline: false });
+    // Determine the day's target (gold) class from the single-day entries
+    const renderableEntries = getRenderableClassEntries();
+    const now = new Date();
+    let currentEntry = null;
+    let nextEntry = null;
+    for (const entry of renderableEntries) {
+      const window = getClassWindow(entry.classData);
+      if (!window) continue;
+      if (window.start <= now && now < window.end) {
+        if (!currentEntry || window.start < currentEntry.start) {
+          currentEntry = { start: window.start, entry };
+        }
+        continue;
+      }
+      if (window.start > now) {
+        if (!nextEntry || window.start < nextEntry.start) {
+          nextEntry = { start: window.start, entry };
+        }
+      }
+    }
+
+    const targetClass = currentEntry ? currentEntry.entry.classData : nextEntry ? nextEntry.entry.classData : null;
     const targetId = targetClass ? String(targetClass.event_id) : null;
     const isTargetClass = targetId && String(classData.event_id) === targetId && !isOnlineClass(classData);
 
