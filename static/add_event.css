@@ -361,7 +361,7 @@ th {
   text-align: center;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 768px) {
   .page-container {
     grid-template-columns: 1fr;
   }
