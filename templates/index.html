@@ -49,6 +49,18 @@ styles %}
           />
         </svg>
       </button>
+      <button id="homeBtn" type="button" aria-label="Back to today's schedule" title="Back to today's schedule">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10l9-7 9 7M5 10v10h14V10M9 20v-6h6v6"
+          />
+        </svg>
+      </button>
 
       <div class="upcoming">
         <div class="upcoming-header">
@@ -59,7 +71,7 @@ styles %}
         <div class="upcoming-content">
           <!-- TODAY -->
           <div class="classes-group today-group">
-            <div class="group-title">Today's classes</div>
+            <div class="group-title" role="button" tabindex="0" data-view-day="today">Today's classes</div>
             {% if today_events %} {% for event in today_events %}
             <div class="event-item" data-event-id="{{ event.event_id }}">
               <span class="event-name">{{ event.event_name }}</span>
@@ -74,7 +86,7 @@ styles %}
 
           <!-- TOMORROW -->
           <div class="classes-group tomorrow-group">
-            <div class="group-title">Tomorrow's classes</div>
+            <div class="group-title" role="button" tabindex="0" data-view-day="tomorrow">Tomorrow's classes</div>
             {% if tomorrow_events %} {% for event in tomorrow_events %}
             <div class="event-item" data-event-id="{{ event.event_id }}">
               <span class="event-name">{{ event.event_name }}</span>
@@ -90,14 +102,28 @@ styles %}
           <!-- FUTURE -->
           <div class="classes-group future-group">
             <div class="group-title">Future classes</div>
-            {% if future_events %} {% for event in future_events %}
-            <div class="event-item" data-event-id="{{ event.event_id }}">
-              <span class="event-name">{{ event.event_name }}</span>
-              <span class="event-details">
-                {{ event.date }} | {{ event.start_time }} - {{ event.end_time }}
-              </span>
-            </div>
-            {% endfor %} {% else %}
+            {% if future_events %}
+              {% set grouped_future = {} %}
+              {% for event in future_events %}
+                {% if event.date not in grouped_future %}
+                  {% set _ = grouped_future.update({event.date: []}) %}
+                {% endif %}
+                {% set _ = grouped_future[event.date].append(event) %}
+              {% endfor %}
+              {% for date in grouped_future | sort %}
+              <div class="future-day-group">
+                <div class="group-title" role="button" tabindex="0" data-view-day="{{ date }}">{{ date }}</div>
+                {% for event in grouped_future[date] %}
+                <div class="event-item" data-event-id="{{ event.event_id }}">
+                  <span class="event-name">{{ event.event_name }}</span>
+                  <span class="event-details">
+                    {{ event.date }} | {{ event.start_time }} - {{ event.end_time }}
+                  </span>
+                </div>
+                {% endfor %}
+              </div>
+              {% endfor %}
+            {% else %}
             <div class="empty-group">No future classes</div>
             {% endif %}
           </div>

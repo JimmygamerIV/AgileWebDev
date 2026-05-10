@@ -797,6 +797,191 @@
     renderDefaultMapView();
   }
 
+  function viewDayOnMap(targetDate) {
+    // View all classes for a specific day
+    // If day has only online classes, show the first online class
+    // Otherwise show the day's map with routes as normal
+
+    selectedEventId = null;
+    updateClassHighlights();
+    updateStopSelectingButton();
+
+    clearMarkers();
+    clearRouteLine();
+
+    // Get all classes for the target date
+    const dayClasses = classesData.filter((c) => c && c.date === targetDate);
+    if (!dayClasses.length) {
+      map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+      return;
+    }
+
+    // Separate online and non-online classes
+    const onlineClasses = dayClasses.filter((c) => isOnlineClass(c));
+    const nonOnlineClasses = dayClasses.filter((c) => !isOnlineClass(c));
+
+    // If all classes are online, show first online class and return
+    if (nonOnlineClasses.length === 0 && onlineClasses.length > 0) {
+      const firstOnline = onlineClasses[0];
+      const marker = L.marker([fallbackLocation.lat, fallbackLocation.lng], { icon: onlineMarkerIcon })
+        .addTo(map)
+        .bindPopup(`${popupHtml(firstOnline)}<div style="margin-top: 6px; font-size: 12px;">Map coordinates unavailable for this class.</div>`)
+        .openPopup();
+      activeMarkers.push(marker);
+      map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+      return;
+    }
+
+    // Otherwise, show the day's non-online classes with routes
+    const renderableEntries = [];
+    for (const classData of nonOnlineClasses) {
+      const window = getClassWindow(classData);
+      if (!window) continue;
+
+      const lat = Number(classData.latitude);
+      const lng = Number(classData.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+
+      renderableEntries.push({ classData, start: window.start, lat, lng });
+    }
+
+    renderableEntries.sort((a, b) => a.start - b.start);
+
+    // Find the target (gold) class
+    const now = new Date();
+    let currentEntry = null;
+    let nextEntry = null;
+    for (const entry of renderableEntries) {
+      const window = getClassWindow(entry.classData);
+      if (!window) continue;
+      if (window.start <= now && now < window.end) {
+        if (!currentEntry || window.start < currentEntry.start) {
+          currentEntry = { start: window.start, entry };
+        }
+        continue;
+      }
+      if (window.start > now) {
+        if (!nextEntry || window.start < nextEntry.start) {
+          nextEntry = { start: window.start, entry };
+        }
+      }
+    }
+
+    const targetClass = currentEntry ? currentEntry.entry.classData : nextEntry ? nextEntry.entry.classData : null;
+    const targetId = targetClass ? String(targetClass.event_id) : null;
+    const blueEntries = targetId
+      ? renderableEntries.filter((entry) => String(entry.classData.event_id) !== targetId)
+      : renderableEntries;
+
+    let focusLatLng = null;
+    let goldMarkerData = null;
+    const viewCoords = [];
+
+    if (targetClass) {
+      const lat = Number(targetClass.latitude);
+      const lng = Number(targetClass.longitude);
+
+      if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        goldMarkerData = { lat, lng, popup: popupHtml(targetClass) };
+      } else {
+        goldMarkerData = {
+          lat: fallbackLocation.lat,
+          lng: fallbackLocation.lng,
+          popup: `${popupHtml(targetClass)}<div style="margin-top: 6px; font-size: 12px;">Map coordinates unavailable for this class.</div>`,
+        };
+      }
+    }
+
+    for (const entry of blueEntries) {
+      const marker = L.marker([entry.lat, entry.lng])
+        .addTo(map)
+        .bindPopup(popupHtml(entry.classData));
+      activeMarkers.push(marker);
+      viewCoords.push([entry.lat, entry.lng]);
+    }
+
+    if (goldMarkerData) {
+      const marker = L.marker([goldMarkerData.lat, goldMarkerData.lng], { icon: goldMarkerIcon })
+        .addTo(map)
+        .bindPopup(goldMarkerData.popup);
+      activeMarkers.push(marker);
+      marker.setZIndexOffset(1000);
+      focusLatLng = marker.getLatLng();
+      viewCoords.unshift([goldMarkerData.lat, goldMarkerData.lng]);
+    }
+
+    if (routesEnabled) {
+      const routeCoords = [];
+      if (goldMarkerData) {
+        routeCoords.push([goldMarkerData.lat, goldMarkerData.lng]);
+      }
+      for (const entry of blueEntries) {
+        routeCoords.push([entry.lat, entry.lng]);
+      }
+
+      if (routeCoords.length > 1) {
+        activeRouteLine = L.polyline(routeCoords, {
+          color: "#5f8dff",
+          weight: 3,
+          opacity: 0.8,
+          dashArray: "4 6",
+          lineCap: "round",
+          lineJoin: "round",
+          className: "route-line",
+        }).addTo(map);
+      }
+    }
+
+    if (routesEnabled && viewCoords.length > 1) {
+      const bounds = L.latLngBounds(viewCoords);
+      map.fitBounds(bounds.pad(0.22), { maxZoom: 16 });
+      return;
+    }
+
+    if (focusLatLng) {
+      map.setView(focusLatLng, 17);
+      return;
+    }
+
+    if (blueEntries.length > 0) {
+      const bounds = L.latLngBounds(blueEntries.map((entry) => [entry.lat, entry.lng]));
+      map.fitBounds(bounds.pad(0.2));
+      return;
+    }
+
+    map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+  }
+
+  function wireDayGroupClicks() {
+    const dayGroupHeaders = document.querySelectorAll(".group-title[data-view-day]");
+    for (const header of dayGroupHeaders) {
+      const dayValue = header.dataset.viewDay;
+      if (!dayValue) continue;
+
+      let targetDate = dayValue;
+      if (dayValue === "today") {
+        const now = new Date();
+        targetDate = now.toISOString().slice(0, 10);
+      } else if (dayValue === "tomorrow") {
+        const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        targetDate = tomorrow.toISOString().slice(0, 10);
+      }
+
+      header.addEventListener("click", () => {
+        viewDayOnMap(targetDate);
+      });
+
+      header.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
+
+        event.preventDefault();
+        viewDayOnMap(targetDate);
+      });
+    }
+  }
+
   function wireClassSelection() {
     for (const classItem of classItemElements) {
       const eventId = classItem.dataset.eventId;
@@ -864,5 +1049,6 @@
   parseClassesData();
   decorateOnlineClasses();
   wireClassSelection();
+  wireDayGroupClicks();
   renderDefaultMapView();
 })();

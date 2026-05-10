@@ -178,6 +178,26 @@ body {
   padding: 6px 8px;
   border-radius: 4px;
   margin-bottom: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.group-title:hover {
+  background: #ffd966;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.group-title:focus-visible {
+  outline: 2px solid #2f3c8f;
+  outline-offset: 1px;
+}
+
+.future-day-group {
+  margin-bottom: 8px;
+}
+
+.future-day-group:last-child {
+  margin-bottom: 0;
 }
 
 .empty-group {
@@ -339,6 +359,55 @@ body {
   opacity: 1;
   pointer-events: auto;
   transform: scale(1);
+}
+
+#homeBtn {
+  position: absolute;
+  top: 45px;
+  right: 90px;
+  z-index: 1000;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #122f6f;
+  opacity: 0;
+  pointer-events: none;
+  animation: none;
+  transition: opacity 0.22s ease;
+}
+
+#homeBtn svg {
+  width: 18px;
+  height: 18px;
+  stroke: #122f6f;
+}
+
+#homeBtn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  animation: homeButtonFadeFlash 0.8s ease-out;
+}
+
+@keyframes homeButtonFadeFlash {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .online-class-marker {
