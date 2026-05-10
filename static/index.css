@@ -331,78 +331,50 @@ body {
   position: absolute;
   top: 45px;
   right: 50px;
-  transform: scale(0.96);
   z-index: 1000;
   padding: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #122f6f;
   border-radius: 4px;
-  background: #fff;
+  background: #122f6f;
   width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity 0.22s ease,
-    transform 0.22s ease;
-}
-
-#stopSelectingBtn svg {
-  width: 18px;
-  height: 18px;
-}
-
-#stopSelectingBtn.visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: scale(1);
-}
-
-#homeBtn {
-  position: absolute;
-  top: 45px;
-  right: 90px;
-  z-index: 1000;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #fff;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #122f6f;
+  color: #fff;
   opacity: 0;
   pointer-events: none;
   animation: none;
   transition: opacity 0.22s ease;
 }
 
-#homeBtn svg {
+#stopSelectingBtn svg {
   width: 18px;
   height: 18px;
-  stroke: #122f6f;
+  stroke: #fff;
 }
 
-#homeBtn.visible {
+#stopSelectingBtn.visible {
   opacity: 1;
   pointer-events: auto;
-  animation: homeButtonFadeFlash 0.8s ease-out;
+  animation: homeButtonFadeFlash 1s ease-out;
 }
 
 @keyframes homeButtonFadeFlash {
   0% {
     opacity: 0;
   }
-  40% {
+  20% {
+    opacity: 0.3;
+  }
+  35% {
     opacity: 1;
   }
-  60% {
+  50% {
+    opacity: 0.6;
+  }
+  70% {
     opacity: 1;
   }
   100% {
@@ -765,6 +737,11 @@ body {
   #stopSelectingBtn {
     top: 32px;
     right: 36px;
+  }
+
+  #homeBtn {
+    top: 32px;
+    right: 68px;
   }
 
   .navbar {

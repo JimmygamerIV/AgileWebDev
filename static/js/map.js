@@ -25,6 +25,7 @@
   let activeMarkers = [];
   let activeRouteLine = null;
   let selectedEventId = null;
+  let viewedDay = null;
   let classesData = [];
   let routesEnabled = true;
   const classDataById = new Map();
@@ -410,8 +411,19 @@
     }
 
     const isSelecting = selectedEventId !== null;
-    stopSelectingButton.classList.toggle("visible", isSelecting);
-    stopSelectingButton.setAttribute("aria-hidden", String(!isSelecting));
+    const isViewingDay = viewedDay !== null;
+    const shouldShow = isSelecting || isViewingDay;
+
+    stopSelectingButton.classList.toggle("visible", shouldShow);
+    stopSelectingButton.setAttribute("aria-hidden", String(!shouldShow));
+
+    if (isViewingDay && !isSelecting) {
+      stopSelectingButton.setAttribute("title", "Back to today's schedule");
+      stopSelectingButton.setAttribute("aria-label", "Back to today's schedule");
+    } else {
+      stopSelectingButton.setAttribute("title", "Clear selection");
+      stopSelectingButton.setAttribute("aria-label", "Clear selection");
+    }
   }
 
   function updateClassHighlights() {
@@ -587,6 +599,8 @@
   }
 
   function renderDefaultMapView() {
+    viewedDay = null;
+    updateStopSelectingButton();
     clearMarkers();
     clearRouteLine();
 
@@ -787,14 +801,19 @@
   }
 
   function stopSelecting() {
-    if (selectedEventId === null) {
+    if (selectedEventId === null && viewedDay === null) {
       return;
     }
 
     selectedEventId = null;
-    updateClassHighlights();
-    updateStopSelectingButton();
-    renderDefaultMapView();
+    if (viewedDay !== null) {
+      viewedDay = null;
+      renderDefaultMapView();
+    } else {
+      updateClassHighlights();
+      updateStopSelectingButton();
+      renderDefaultMapView();
+    }
   }
 
   function viewDayOnMap(targetDate) {
@@ -802,9 +821,11 @@
     // If day has only online classes, show the first online class
     // Otherwise show the day's map with routes as normal
 
+    viewedDay = targetDate;
+    updateStopSelectingButton();
+
     selectedEventId = null;
     updateClassHighlights();
-    updateStopSelectingButton();
 
     clearMarkers();
     clearRouteLine();
