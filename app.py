@@ -17,8 +17,11 @@ from forms import ImportTimetableForm,AddFriendForm,FriendActionForm
 from flask_wtf.csrf import CSRFProtect
 from generate_env import generate_env
 from friends import friends_bp, get_friend_ids
-from alembic.config import Config as AlembicConfig
-from alembic import command
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
+import base64
+
+from friends import friends_bp, get_friend_ids
 
 generate_env()
 load_dotenv()
@@ -26,11 +29,6 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
-def run_migrations():
-    cfg = AlembicConfig("alembic.ini")
-    command.upgrade(cfg, "head")
-
-run_migrations()
 
 init_db()
 app.register_blueprint(auth_bp)

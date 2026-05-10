@@ -122,14 +122,15 @@ body {
 
 /* Top bar */
 .upcoming-header {
-  background-color: #ccc;
+  color: white;
+  background-color: #2f3c8f;
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
   font-weight: 700;
-  background: linear-gradient(to bottom, #e0e0e0, #bfbfbf);
+  background: #2f3c8f;
 }
 
 /* Arrow button */
@@ -145,7 +146,7 @@ body {
 .upcoming-content {
   background-color: white;
   padding: 10px;
-  border: 5px solid #bfbfbf; /* grey border */
+  border: 5px solid #2f3c8f; /* blue border */
   border-top: none; /* removes top border */
   overflow-y: auto;
   max-height: 250px;
@@ -177,6 +178,26 @@ body {
   padding: 6px 8px;
   border-radius: 4px;
   margin-bottom: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.group-title:hover {
+  background: #ffd966;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.group-title:focus-visible {
+  outline: 2px solid #2f3c8f;
+  outline-offset: 1px;
+}
+
+.future-day-group {
+  margin-bottom: 8px;
+}
+
+.future-day-group:last-child {
+  margin-bottom: 0;
 }
 
 .empty-group {
@@ -194,11 +215,16 @@ body {
   background-color: #f0f4ff;
   border-left: 4px solid #2f3c8f;
   border-radius: 4px;
+  position: relative;
   cursor: pointer;
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.event-item.has-online-icon {
+  padding-bottom: 26px;
 }
 
 .event-item:hover {
@@ -226,6 +252,24 @@ body {
   font-size: 11px;
   color: #666;
   margin-top: 2px;
+}
+
+.event-online-icon {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  color: #2f3c8f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-online-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .upcoming.collapsed .upcoming-content {
@@ -270,38 +314,106 @@ body {
   justify-content: center;
 }
 
+#routesToggle {
+  position: absolute;
+  top: 80px;
+  right: 10px;
+  z-index: 1000;
+  padding: 6px 10px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
 #stopSelectingBtn {
   position: absolute;
   top: 45px;
   right: 50px;
-  transform: scale(0.96);
   z-index: 1000;
   padding: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #122f6f;
   border-radius: 4px;
-  background: #fff;
+  background: #122f6f;
   width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  color: #fff;
   opacity: 0;
   pointer-events: none;
-  transition:
-    opacity 0.22s ease,
-    transform 0.22s ease;
+  animation: none;
+  transition: opacity 0.22s ease;
 }
 
 #stopSelectingBtn svg {
   width: 18px;
   height: 18px;
+  stroke: #fff;
 }
 
 #stopSelectingBtn.visible {
   opacity: 1;
   pointer-events: auto;
-  transform: scale(1);
+  animation: homeButtonFadeFlash 1s ease-out;
+}
+
+@keyframes homeButtonFadeFlash {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.3;
+  }
+  35% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.online-class-marker {
+  background: transparent;
+  border: none;
+  color: #2f3c8f;
+}
+
+.online-class-marker svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.gold-class-marker {
+  background: transparent;
+  border: none;
+}
+
+.gold-class-marker svg {
+  width: 25px;
+  height: 41px;
+  display: block;
+}
+
+.leaflet-overlay-pane path.route-line {
+  stroke-dashoffset: 0;
+  animation: routeDash 1.8s linear infinite;
+}
+
+@keyframes routeDash {
+  to {
+    stroke-dashoffset: -20;
+  }
 }
 
 /* Friends on campus list */
@@ -329,4 +441,321 @@ body {
 .friend-name {
   color: #333;
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .side-container {
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .custom-sidebar {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .map-section {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .map-box {
+    height: 70vh;
+    min-height: 420px;
+  }
+
+  .upcoming {
+    width: calc(100% - 20px);
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    max-width: none;
+  }
+
+  .upcoming-content {
+    max-height: 200px;
+  }
+
+  #styleToggle {
+    top: 8px;
+    right: 8px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  #fullscreenToggle {
+    top: 40px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+  }
+
+  #routesToggle {
+    top: 72px;
+    right: 8px;
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  #stopSelectingBtn {
+    top: 40px;
+    right: 45px;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+  }
+
+  /* Navbar mobile cleanup only */
+  .navbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto;
+    padding: 8px 10px;
+    row-gap: 8px;
+    align-items: center;
+  }
+
+  .nav-group {
+    display: contents;
+  }
+
+  .nav-left {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .nav-center {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-right {
+    grid-column: 3;
+    grid-row: 2;
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 18px;
+    padding: 6px 7px;
+    white-space: nowrap;
+    line-height: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .side-container {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .map-box {
+    height: 60vh;
+    min-height: 300px;
+  }
+
+  .upcoming {
+    width: calc(100% - 12px);
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+  }
+
+  .upcoming-content {
+    max-height: 150px;
+    padding: 6px;
+  }
+
+  .upcoming-header {
+    padding: 6px;
+    font-size: 16px;
+  }
+
+  .event-item {
+    padding: 6px 8px;
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+
+  .event-item.has-online-icon {
+    padding-bottom: 20px;
+  }
+
+  .event-name {
+    font-size: 12px;
+  }
+
+  .event-details {
+    font-size: 10px;
+  }
+
+  .event-online-icon {
+    width: 14px;
+    height: 14px;
+    bottom: 6px;
+    right: 6px;
+  }
+
+  .event-online-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  #styleToggle {
+    top: 6px;
+    right: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  #fullscreenToggle {
+    top: 36px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+  }
+
+  #routesToggle {
+    top: 66px;
+    right: 6px;
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+
+  #stopSelectingBtn {
+    top: 36px;
+    right: 40px;
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+  }
+
+  .navbar {
+    padding: 6px 8px;
+    row-gap: 6px;
+  }
+
+  .nav-left {
+    font-size: 13px;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 16px;
+    padding: 5px 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .side-container {
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .map-box {
+    height: 50vh;
+    min-height: 250px;
+  }
+
+  .upcoming {
+    width: calc(100% - 8px);
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+  }
+
+  .upcoming-content {
+    max-height: 120px;
+    padding: 4px;
+  }
+
+  .upcoming-header {
+    padding: 4px;
+    font-size: 14px;
+  }
+
+  .event-item {
+    padding: 4px 6px;
+    margin-bottom: 2px;
+    font-size: 11px;
+  }
+
+  .event-name {
+    font-size: 11px;
+  }
+
+  .event-details {
+    font-size: 9px;
+    margin-top: 1px;
+  }
+
+  #styleToggle,
+  #fullscreenToggle,
+  #routesToggle,
+  #stopSelectingBtn {
+    width: auto;
+    height: auto;
+    padding: 3px 5px;
+    font-size: 9px;
+  }
+
+  #fullscreenToggle,
+  #stopSelectingBtn {
+    width: 26px;
+    height: 26px;
+    padding: 2px;
+  }
+
+  #styleToggle {
+    top: 4px;
+    right: 4px;
+  }
+
+  #fullscreenToggle {
+    top: 32px;
+    right: 4px;
+  }
+
+  #routesToggle {
+    top: 60px;
+    right: 4px;
+  }
+
+  #stopSelectingBtn {
+    top: 32px;
+    right: 36px;
+  }
+
+  #homeBtn {
+    top: 32px;
+    right: 68px;
+  }
+
+  .navbar {
+    padding: 4px 6px;
+    row-gap: 4px;
+  }
+
+  .nav-left {
+    font-size: 12px;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 14px;
+    padding: 4px 5px;
+  }
 }
