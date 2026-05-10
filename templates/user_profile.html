@@ -1,11 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}{{ target_user.nickname or target_user.username }}{% endblock %}
+
+{% block content %}
+<div class="user-profile-container">
+  <div class="user-profile-card">
+    <div class="user-profile-header">
+      <img src="{{ url_for('static', filename='uploads/' + (target_user.avatar or 'default.jpg')) }}"
+           alt="avatar" class="user-profile-avatar" />
+
+      <h2 class="user-profile-nickname">{{ target_user.nickname or target_user.username }}</h2>
+      <p class="user-profile-username">@{{ target_user.username }}</p>
+
+      {% if on_campus %}
+        <p class="user-profile-status on-campus">● On campus</p>
+      {% endif %}
+    </div>
+
+    <div class="user-profile-stats">
+      <div class="user-profile-stat">
+        <span class="stat-value">{{ friend_count }}</span>
+        <span class="stat-label">friends</span>
+      </div>
+      <div class="user-profile-stat">
+        <span class="stat-value">{{ mutual_count }}</span>
+        <span class="stat-label">mutual</span>
+      </div>
+    </div>
+
+    {% if current_class %}
+      <div class="user-profile-current-class">
+        <p class="current-class-label">Currently in</p>
+        <p class="current-class-name">{{ current_class.event_name }}</p>
+        <p class="current-class-where">{{ current_class.location }} &middot; until {{ current_class.end_time }}</p>
+      </div>
+    {% elif next_class %}
+      <div class="user-profile-next-class">
+        <p class="next-class-label">Next class</p>
+        <p class="next-class-name">{{ next_class.event_name }}</p>
+        <p class="next-class-where">{{ next_class.date }} {{ next_class.start_time }} &middot; {{ next_class.location }}</p>
+      </div>
+    {% endif %}
+
+    <div class="user-profile-actions">
+      {% if status == 'friend' %}
+        <form method="POST" action="/remove_friend">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="friend_id" value="{{ target_user.user_id }}"/>
+          <button type="submit" class="btn-remove">Remove Friend</button>
+        </form>
+
+      {% elif status == 'sent_pending' %}
+        <p class="pending-text">Friend request pending</p>
+        <form method="POST" action="/cancel_request">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="receiver_id" value="{{ target_user.user_id }}"/>
+          <button type="submit" class="btn-cancel">Cancel Request</button>
+        </form>
+
+      {% elif status == 'received_pending' %}
+        <form method="POST" action="/accept_request" style="display:inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="request_id" value="{{ request_id }}"/>
+          <input type="hidden" name="sender_id" value="{{ target_user.user_id }}"/>
+          <button type="submit" class="btn-accept">Accept</button>
+        </form>
+        <form method="POST" action="/reject_request" style="display:inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="request_id" value="{{ request_id }}"/>
+          <button type="submit" class="btn-reject">Reject</button>
+        </form>
+
+      {% else %}
+        <form method="POST" action="/send_friend_request">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="target_username" value="{{ target_user.username }}"/>
+          <button type="submit" class="btn-add">Add Friend</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

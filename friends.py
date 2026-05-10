@@ -1,7 +1,8 @@
 from flask import Blueprint, g, redirect, render_template, session, request, jsonify, abort
 from database import Session
-from models import User, Friend, FriendRequest
+from models import User, Friend, FriendRequest, Event
 from forms import AddFriendForm, FriendActionForm
+from datetime import date, datetime
 
 friends_bp = Blueprint("friends", __name__)
 
@@ -415,7 +416,7 @@ def view_profile(username):
 
         # Check the friend req in the other direction
         if status == "none":
-            eq = db.query(FriendRequest).filter(
+            req = db.query(FriendRequest).filter(
                 FriendRequest.sender_id == user.user_id,    # target
                 FriendRequest.receiver_id == g.current_user['user_id'],    # current user (you)
                 FriendRequest.status == "pending" 
@@ -425,11 +426,40 @@ def view_profile(username):
                 status = "received_pending"
                 incoming_req_id = req.request_id
 
+
+        target_friend_ids = get_friend_ids(db, user.user_id)
+        friend_count = len(target_friend_ids)
+        mutual_count = len(friend_ids & target_friend_ids)
+
+        today_str = date.today().isoformat()
+        now_str = datetime.now().strftime("%H:%M")
+
+        current_class = db.query(Event).filter(
+            Event.user_id == user.user_id,
+            Event.date == today_str,
+            Event.start_time <= now_str,
+            Event.end_time >= now_str,
+        ).first()
+
+        next_class = None
+        if current_class is None:
+            next_class = db.query(Event).filter(
+                Event.user_id == user.user_id,
+                ((Event.date > today_str) |
+                ((Event.date == today_str) & (Event.start_time > now_str)))
+            ).order_by(Event.date, Event.start_time).first()
+
         return render_template(
             "user_profile.html",
-            target_user = user,
-            status = status,
-            req_id = incoming_req_id
+            target_user=user,
+            status=status,
+            request_id=incoming_req_id,
+            show_full_nav=True,
+            friend_count=friend_count,
+            mutual_count=mutual_count,
+            current_class=current_class,
+            next_class=next_class,
+            on_campus=current_class is not None
         )
     
     finally:
