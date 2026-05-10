@@ -295,9 +295,20 @@
       return today;
     }
 
+    // Helper to check if a date has any non-online classes
+    const hasNonOnlineClasses = (date) => {
+      return classesData.some((c) => {
+        if (c.date !== date) return false;
+        if (isOnlineClass(c)) return false;
+        return true;
+      });
+    };
+
+    // Check if today has remaining non-online classes
     if (dates.includes(today)) {
       const remainingToday = classesData.some((c) => {
         if (c.date !== today) return false;
+        if (isOnlineClass(c)) return false;
         if (!c.end_time) return true;
         return c.end_time > timeNow;
       });
@@ -307,13 +318,22 @@
       }
     }
 
+    // Find the first future date that has non-online classes
     for (const d of dates) {
-      if (d >= today) {
+      if (d >= today && hasNonOnlineClasses(d)) {
         return d;
       }
     }
 
-    return dates[0];
+    // If no future date has non-online classes, find any date with non-online classes
+    for (const d of dates) {
+      if (hasNonOnlineClasses(d)) {
+        return d;
+      }
+    }
+
+    // Fallback: return today if no non-online classes exist anywhere
+    return today;
   }
 
   function popupHtml(classData) {
