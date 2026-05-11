@@ -363,7 +363,7 @@ function searchUsers() {
                 item.className = "friend-item search-result";
                 item.dataset.userId = user.user_id;
                 item.innerHTML = `
-                    <div class="avatar"></div>
+                    <img class="avatar" src="/static/uploads/${user.avatar}" alt="${user.username}'s avatar" />
                     <div class="friend-info">
                         <div class="friend-nickname">${user.nickname || user.username}</div>
                         <div class="friend-username">@${user.username}</div>

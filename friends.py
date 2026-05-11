@@ -86,6 +86,7 @@ def friends():
                     "user_id": sender.user_id,
                     "username": sender.username,
                     "nickname": sender.nickname,
+                    "avatar": sender.avatar or "default.jpg",
                 }
             )
 
@@ -109,6 +110,7 @@ def friends():
                     "user_id": receiver.user_id,
                     "username": receiver.username,
                     "nickname": receiver.nickname,
+                    "avatar": receiver.avatar or "default.jpg",
                 }
             )
 
@@ -320,6 +322,7 @@ def search_users():
                     "user_id": user.user_id,
                     "username": user.username,
                     "nickname": user.nickname,
+                    "avatar": user.avatar or "default.jpg",
                 }
             )
 
