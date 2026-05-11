@@ -1,10 +1,9 @@
 import re
 from flask import Flask, g, render_template, redirect, session, request, jsonify,flash,url_for
 from database import init_db, Session
-from models import Event, User, Friend, FriendRequest
+from models import Event, User, Friend
 from auth import auth_bp
 from datetime import date, timedelta, datetime
-from pathlib import Path
 import json
 from icalendar import Calendar
 from map_ics_uid_locations import resolve_location, build_alias_index, build_room_index
@@ -13,15 +12,13 @@ from urllib.request import urlopen
 from urllib.parse import urlparse
 from dotenv import load_dotenv
 from config import Config
-from forms import ImportTimetableForm,AddFriendForm,FriendActionForm
+from forms import ImportTimetableForm
 from flask_wtf.csrf import CSRFProtect
 from generate_env import generate_env
 from friends import friends_bp, get_friend_ids
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import base64
-
-from friends import friends_bp, get_friend_ids
 
 generate_env()
 load_dotenv()
@@ -311,8 +308,6 @@ def index():
             serialize_class_event(event)
             for event in (today_events + tomorrow_events + future_events)
         ]
-
-        from models import Friend
 
         friend_rows = db.query(Friend).filter(Friend.user_id == user_id).all()
         friends_list = []
