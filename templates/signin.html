@@ -1,5 +1,4 @@
-{% extends "base.html" %} {% block title %}Sign In{% endblock %} {% block styles
-%}
+{% extends "base.html" %} {% block title %}Sign In{% endblock %} {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='signin.css') }}" />
 {% endblock %} {% block content %}
 <div class="signin-container">
@@ -19,16 +18,20 @@
           {{ form.hidden_tag() }}
 
           <label>Username</label>
-      {{ form.username(class_="", placeholder="Enter your username") }} {% for
-      error in form.username.errors %}
+      {{ form.username(class_="", placeholder="Enter your username") }} 
+      {% for error in form.username.errors %}
       <span style="color: red; font-size: 0.8em">{{ error }}</span>
           {% endfor %}
 
           <label>Password</label>
-      {{ form.password(class_="", placeholder="Enter your password") }} {% for
-      error in form.password.errors %}
+      {{ form.password(class_="", placeholder="Enter your password") }} 
+      {% for error in form.password.errors %}
       <span style="color: red; font-size: 0.8em">{{ error }}</span>
           {% endfor %}
+
+          <p class="forgot-password-text">
+            <a href="{{ url_for('auth.forgot_password') }}">Forgot password?</a>
+          </p>
 
           <button type="submit">Sign In</button>
 

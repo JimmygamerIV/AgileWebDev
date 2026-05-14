@@ -130,6 +130,28 @@ h1 {
   background-color: #1d4ed8;
 }
 
+
+.forgot-password-text {
+    text-align: right;   
+    margin-top: -5px;    
+    margin-bottom: 15px;
+}
+
+.forgot-password-text a {
+    font-size: 0.85em;
+    color: #666;         
+    text-decoration: none;
+}
+
+.forgot-password-text a:hover {
+    text-decoration: underline;
+    color: #0056b3;      
+}
+
+.login-form button {
+    margin-top: 10px;
+}
+
 @media (max-width: 768px) {
   .signin-container {
     min-height: calc(100vh - 56px);
@@ -153,3 +175,4 @@ h1 {
     width: 100%;
   }
 }
+
