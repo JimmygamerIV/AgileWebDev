@@ -18,10 +18,11 @@ styles %}
       <h2>Friends On Campus:</h2>
       <div class="friends-list">
         {% if friends %} {% for friend in friends %}
-        <div class="friend-on-campus">
+        <a class="friend-on-campus" href="{{ url_for('friends.view_profile', username=friend.username) }}">
           {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
-          <a class="friend-name" href="{{ url_for('friends.view_profile', username=friend.username) }}">{{ friend.nickname or friend.username }}</a>
-        </div>
+          <img class="friend-avatar" src="{{ url_for('static', filename='uploads/' + (friend.avatar or 'default.jpg')) }}" alt="{{ friend.username }}'s avatar" />
+          <span class="friend-name">{{ friend.nickname or friend.username }}</span>
+        </a>
         {% endfor %} {% else %}
         <p style="font-style: italic; color: #888; margin: 0">
           No friends on campus yet.

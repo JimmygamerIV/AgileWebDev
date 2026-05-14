@@ -431,6 +431,16 @@ body {
   background: white;
   border-radius: 6px;
   font-size: 13px;
+  color: inherit;
+}
+
+.friend-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(47, 60, 143, 0.2);
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .friend-on-campus .star-icon {

@@ -10,7 +10,8 @@
         All Friends
       </button>
       <button class="tab" data-tab="friend-requests" onclick="showTab('friend-requests')">
-        Friend Requests{% if incoming_requests and incoming_requests|length > 0 %} <span class="dot"></span>{% endif %}
+        Friend Requests
+        <span class="dot{% if not incoming_requests or incoming_requests|length == 0 %} is-hidden{% endif %}"></span>
       </button>
       <button class="tab" data-tab="add-friend" onclick="showTab('add-friend')">
         Add a Friend
@@ -58,7 +59,7 @@
           </div>
         </div>
         {% endfor %} {% else %}
-        <p style="font-style: italic; color: #888">
+        <p class="empty-message" style="font-style: italic; color: #888">
           You have no friends added yet.
         </p>
         {% endif %}
@@ -100,7 +101,7 @@
             </div>
           </div>
           {% endfor %} {% else %}
-          <p style="font-style: italic; color: #888">No incoming friend requests.</p>
+          <p class="empty-message" style="font-style: italic; color: #888">No incoming friend requests.</p>
           {% endif %}
         </div>
       </div>
@@ -126,7 +127,7 @@
             </div>
           </div>
           {% endfor %} {% else %}
-          <p style="font-style: italic; color: #888">No outgoing friend requests.</p>
+          <p class="empty-message" style="font-style: italic; color: #888">No outgoing friend requests.</p>
           {% endif %}
         </div>
       </div>

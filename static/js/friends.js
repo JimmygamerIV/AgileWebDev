@@ -23,6 +23,54 @@ function getCsrfToken() {
     return tokenInput ? tokenInput.value : "";
 }
 
+function getRequestDot() {
+    const requestsTab = document.querySelector('.tab[data-tab="friend-requests"]');
+    if (!requestsTab) {
+        return null;
+    }
+    let dot = requestsTab.querySelector(".dot");
+    if (!dot) {
+        dot = document.createElement("span");
+        dot.className = "dot";
+        requestsTab.appendChild(dot);
+    }
+    return dot;
+}
+
+function updateRequestDot() {
+    const incomingList = document.getElementById("incoming-list");
+    const incomingCount = incomingList
+        ? incomingList.querySelectorAll(".friend-item").length
+        : 0;
+    const dot = getRequestDot();
+    if (!dot) {
+        return;
+    }
+    dot.classList.toggle("is-hidden", incomingCount === 0);
+}
+
+function ensureEmptyMessage(listEl, message) {
+    if (!listEl) {
+        return;
+    }
+    const hasItems = listEl.querySelectorAll(".friend-item").length > 0;
+    const emptyMessage = listEl.querySelector(".empty-message");
+
+    if (hasItems && emptyMessage) {
+        emptyMessage.remove();
+        return;
+    }
+
+    if (!hasItems && !emptyMessage) {
+        const messageEl = document.createElement("p");
+        messageEl.className = "empty-message";
+        messageEl.style.fontStyle = "italic";
+        messageEl.style.color = "#888";
+        messageEl.textContent = message;
+        listEl.appendChild(messageEl);
+    }
+}
+
 const FRIENDS_DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
 
 function logDebug(message, details) {
@@ -245,10 +293,84 @@ function removeFriend(friendId) {
             if (friendItem) {
                 friendItem.remove();
             }
+            const friendsList = document.getElementById("friends-list");
+            ensureEmptyMessage(friendsList, "You have no friends added yet.");
         })
         .catch(() => {
             // Ignore network errors here.
         });
+}
+
+function createFriendItem(friend) {
+    if (!friend || !friend.user_id) {
+        return null;
+    }
+
+    const item = document.createElement("div");
+    item.className = "friend-item";
+    item.dataset.username = (friend.username || "").toLowerCase();
+    item.dataset.friendId = friend.user_id;
+
+    const profileUrl = `/profile/${encodeURIComponent(friend.username || "")}`;
+    const avatar = friend.avatar || "default.jpg";
+    const nickname = friend.nickname || friend.username || "";
+
+    item.innerHTML = `
+        <img class="avatar" src="/static/uploads/${avatar}" alt="${friend.username}'s avatar" />
+        <div class="friend-info">
+            <a class="friend-profile-link" href="${profileUrl}">
+                <div class="friend-nickname">${nickname}</div>
+                <div class="friend-username">@${friend.username}</div>
+            </a>
+        </div>
+        <div class="friend-actions">
+            <button class="three-dots-btn" type="button" aria-label="Friend actions">⋯</button>
+            <div class="dropdown-menu">
+                <button type="button" class="menu-item" data-action="favourite">
+                    Favourite friend
+                </button>
+                <button type="button" class="menu-item remove-item" data-action="remove">
+                    Remove friend
+                </button>
+            </div>
+        </div>
+    `;
+
+    return item;
+}
+
+function createOutgoingRequestItem(request) {
+    if (!request || !request.request_id || !request.user) {
+        return null;
+    }
+
+    const item = document.createElement("div");
+    item.className = "friend-item";
+    item.dataset.username = (request.user.username || "").toLowerCase();
+    item.dataset.requestId = request.request_id;
+
+    const avatar = request.user.avatar || "default.jpg";
+    const nickname = request.user.nickname || request.user.username || "";
+
+    item.innerHTML = `
+        <img class="avatar" src="/static/uploads/${avatar}" alt="${request.user.username}'s avatar" />
+        <div class="friend-info">
+            <div class="friend-nickname">${nickname}</div>
+            <div class="friend-username">@${request.user.username}</div>
+        </div>
+        <div class="request-actions">
+            <button type="button" class="cancel-btn">Cancel</button>
+        </div>
+    `;
+
+    const cancelButton = item.querySelector(".cancel-btn");
+    if (cancelButton) {
+        cancelButton.addEventListener("click", () => {
+            cancelRequest(request.request_id);
+        });
+    }
+
+    return item;
 }
 
 function acceptRequest(requestId, senderId) {
@@ -271,6 +393,20 @@ function acceptRequest(requestId, senderId) {
             const requestItem = document.querySelector(`[data-request-id="${requestId}"]`);
             if (requestItem) {
                 requestItem.remove();
+            }
+
+            const incomingList = document.getElementById("incoming-list");
+            ensureEmptyMessage(incomingList, "No incoming friend requests.");
+            updateRequestDot();
+
+            if (data.friend) {
+                const friendsList = document.getElementById("friends-list");
+                const newFriendItem = createFriendItem(data.friend);
+                if (friendsList && newFriendItem) {
+                    friendsList.appendChild(newFriendItem);
+                    ensureEmptyMessage(friendsList, "You have no friends added yet.");
+                    sortFriendsList();
+                }
             }
         })
         .catch(() => {
@@ -298,6 +434,9 @@ function declineRequest(requestId) {
             if (requestItem) {
                 requestItem.remove();
             }
+            const incomingList = document.getElementById("incoming-list");
+            ensureEmptyMessage(incomingList, "No incoming friend requests.");
+            updateRequestDot();
         })
         .catch(() => {
             // Ignore network errors here.
@@ -324,6 +463,8 @@ function cancelRequest(requestId) {
             if (requestItem) {
                 requestItem.remove();
             }
+            const outgoingList = document.getElementById("outgoing-list");
+            ensureEmptyMessage(outgoingList, "No outgoing friend requests.");
         })
         .catch(() => {
             // Ignore network errors here.
@@ -331,6 +472,7 @@ function cancelRequest(requestId) {
 }
 
 let selectedUserId = null;
+let selectedUserData = null;
 
 function searchUsers() {
     const searchInput = document.getElementById("add-friend-search");
@@ -352,6 +494,7 @@ function searchUsers() {
         .then((users) => {
             results.innerHTML = "";
             selectedUserId = null;
+            selectedUserData = null;
 
             if (!Array.isArray(users) || users.length === 0) {
                 results.innerHTML = '<p style="font-style: italic; color: #888">No users found.</p>';
@@ -376,6 +519,7 @@ function searchUsers() {
                     });
                     item.classList.add("selected");
                     selectedUserId = String(user.user_id);
+                    selectedUserData = user;
                 });
 
                 results.appendChild(item);
@@ -419,7 +563,20 @@ function sendFriendRequest() {
             if (results) {
                 results.innerHTML = '<p style="font-style: italic; color: #888">Friend request sent.</p>';
             }
+
+            const outgoingList = document.getElementById("outgoing-list");
+            const requestPayload = {
+                request_id: data.request_id,
+                user: data.user || selectedUserData,
+            };
+            const newRequestItem = createOutgoingRequestItem(requestPayload);
+            if (outgoingList && newRequestItem) {
+                outgoingList.appendChild(newRequestItem);
+                ensureEmptyMessage(outgoingList, "No outgoing friend requests.");
+            }
+
             selectedUserId = null;
+            selectedUserData = null;
         })
         .catch(() => {
             // Ignore network errors here.
@@ -433,6 +590,10 @@ function initFriendsPage() {
     showTab(tab);
     wireFriendMenus();
     sortFriendsList();
+    updateRequestDot();
+    ensureEmptyMessage(document.getElementById("friends-list"), "You have no friends added yet.");
+    ensureEmptyMessage(document.getElementById("incoming-list"), "No incoming friend requests.");
+    ensureEmptyMessage(document.getElementById("outgoing-list"), "No outgoing friend requests.");
 
     logDebug("init complete", { tab });
 }
