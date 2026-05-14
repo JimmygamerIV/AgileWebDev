@@ -88,8 +88,10 @@
           >
             <img class="avatar" src="{{ url_for('static', filename='uploads/' + req.avatar) }}" alt="{{ req.username }}'s avatar" />
             <div class="friend-info">
-              <div class="friend-nickname">{{ req.nickname or req.username }}</div>
-              <div class="friend-username">@{{ req.username }}</div>
+              <a class="friend-profile-link" href="{{ url_for('friends.view_profile', username=req.username) }}">
+                <div class="friend-nickname">{{ req.nickname or req.username }}</div>
+                <div class="friend-username">@{{ req.username }}</div>
+              </a>
             </div>
             <div class="request-actions">
               <button type="button" class="accept-btn" onclick="acceptRequest({{ req.request_id }}, {{ req.user_id }})">
@@ -117,8 +119,10 @@
           >
             <img class="avatar" src="{{ url_for('static', filename='uploads/' + req.avatar) }}" alt="{{ req.username }}'s avatar" />
             <div class="friend-info">
-              <div class="friend-nickname">{{ req.nickname or req.username }}</div>
-              <div class="friend-username">@{{ req.username }}</div>
+              <a class="friend-profile-link" href="{{ url_for('friends.view_profile', username=req.username) }}">
+                <div class="friend-nickname">{{ req.nickname or req.username }}</div>
+                <div class="friend-username">@{{ req.username }}</div>
+              </a>
             </div>
             <div class="request-actions">
               <button type="button" class="cancel-btn" onclick="cancelRequest({{ req.request_id }})">

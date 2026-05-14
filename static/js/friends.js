@@ -355,8 +355,10 @@ function createOutgoingRequestItem(request) {
     item.innerHTML = `
         <img class="avatar" src="/static/uploads/${avatar}" alt="${request.user.username}'s avatar" />
         <div class="friend-info">
-            <div class="friend-nickname">${nickname}</div>
-            <div class="friend-username">@${request.user.username}</div>
+            <a class="friend-profile-link" href="/profile/${encodeURIComponent(request.user.username)}">
+                <div class="friend-nickname">${nickname}</div>
+                <div class="friend-username">@${request.user.username}</div>
+            </a>
         </div>
         <div class="request-actions">
             <button type="button" class="cancel-btn">Cancel</button>
