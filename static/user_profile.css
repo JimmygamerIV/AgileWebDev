@@ -1,4 +1,4 @@
-/* 容器居中与背景 */
+
 .user-profile-container {
     display: flex;
     justify-content: center;
@@ -7,7 +7,7 @@
     min-height: 80vh;
 }
 
-/* 个人资料卡片 */
+
 .user-profile-card {
     background: #ffffff;
     border-radius: 20px;
@@ -23,7 +23,7 @@
     transform: translateY(-5px);
 }
 
-/* 头像样式 */
+
 .user-profile-avatar {
     width: 120px;
     height: 120px;
@@ -33,7 +33,7 @@
     margin-bottom: 15px;
 }
 
-/* 名字与用户名 */
+
 .user-profile-nickname {
     font-size: 1.5rem;
     font-weight: 700;
@@ -47,7 +47,7 @@
     margin-bottom: 10px;
 }
 
-/* 在校状态标签 */
+
 .user-profile-status.on-campus {
     display: inline-block;
     background-color: #e7f3ff;
@@ -58,7 +58,7 @@
     font-weight: 600;
 }
 
-/* 统计数据栏 */
+
 .user-profile-stats {
     display: flex;
     justify-content: space-around;
@@ -85,7 +85,7 @@
     text-transform: uppercase;
 }
 
-/* 课程信息板块 */
+
 .user-profile-current-class, 
 .user-profile-next-class {
     background-color: #f8f9fa;
@@ -114,7 +114,7 @@
     color: #666;
 }
 
-/* 按钮基础样式 */
+
 .user-profile-actions button {
     width: 100%;
     padding: 10px 20px;
@@ -126,7 +126,7 @@
     transition: background 0.2s;
 }
 
-/* 各类按钮颜色 */
+
 .btn-add {
     background-color: #1877f2;
     color: white;

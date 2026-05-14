@@ -9,10 +9,10 @@ body {
     align-items: center;
     width: 100%;
     padding: 0 30px;
-    height: 60px; /* 固定高度 */
+    height: 60px; 
     box-sizing: border-box;
     background-color: #2f3c8f;
-    flex-shrink: 0; /* 防止导航栏被压缩 */
+    flex-shrink: 0; 
 }
 
 .navbar a {
