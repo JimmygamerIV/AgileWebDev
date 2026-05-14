@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Profile Unavailable{% endblock %}
+
+{% block content %}
+<div class="user-profile-container">
+  <div class="user-profile-card">
+    <div class="user-profile-header">
+      <img
+        src="{{ url_for('static', filename='uploads/' + (target_user.avatar or 'default.jpg')) }}"
+        alt="avatar"
+        class="user-profile-avatar"
+      />
+
+      <h2 class="user-profile-nickname">{{ target_user.nickname or target_user.username }}</h2>
+      <p class="user-profile-username">@{{ target_user.username }}</p>
+    </div>
+
+    <p>You are not friends with this user, so their profile cannot be viewed.</p>
+    <p><a href="/friends">Return to Friends</a></p>
+  </div>
+</div>
+{% endblock %}

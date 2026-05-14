@@ -423,12 +423,16 @@ def view_profile(username):
             abort(404)
 
         friend_ids = get_friend_ids(db, g.current_user['user_id'])
-        
-        status = "none"
-        incoming_req_id = None
 
-        if user.user_id in friend_ids:
-            status = "friend"
+        if user.user_id not in friend_ids:
+            return render_template(
+                "not_friend.html",
+                target_user=user,
+                show_full_nav=True,
+            ), 403
+        
+        status = "friend"
+        incoming_req_id = None
 
         if status == "none":
             req = db.query(FriendRequest).filter(
