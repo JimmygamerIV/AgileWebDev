@@ -522,6 +522,31 @@ body {
   font-weight: 600;
 }
 
+.friends-status-header {
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+.friends-status-header:first-child {
+  margin-top: 0;
+}
+
+.friends-status-header.status-gold {
+  color: #c99700;
+}
+
+.friends-status-header.status-green {
+  color: #1f8a4c;
+}
+
+.friends-status-header.status-red {
+  color: #c33b3b;
+}
+
 @media (max-width: 768px) {
   .side-container {
     flex-direction: column;

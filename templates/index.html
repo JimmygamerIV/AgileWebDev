@@ -17,16 +17,43 @@ styles %}
     <div class="card friends">
       <h2>Friends On Campus:</h2>
       <div class="friends-list">
-        {% if friends %} {% for friend in friends %}
-        <a class="friend-on-campus" href="{{ url_for('friends.view_profile', username=friend.username) }}">
-          {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
-          <img class="friend-avatar" src="{{ url_for('static', filename='uploads/' + (friend.avatar or 'default.jpg')) }}" alt="{{ friend.username }}'s avatar" />
-          <span class="friend-name">{{ friend.nickname or friend.username }}</span>
-        </a>
-        {% endfor %} {% else %}
-        <p style="font-style: italic; color: #888; margin: 0">
-          No friends on campus yet.
-        </p>
+        {% if friends %}
+          {% if friends_grouped.next_class %}
+            <div class="friends-status-header status-gold">In your next/current class:</div>
+            {% for friend in friends_grouped.next_class %}
+              <a class="friend-on-campus" href="{{ url_for('friends.view_profile', username=friend.username) }}">
+                {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
+                <img class="friend-avatar" src="{{ url_for('static', filename='uploads/' + (friend.avatar or 'default.jpg')) }}" alt="{{ friend.username }}'s avatar" />
+                <span class="friend-name">{{ friend.nickname or friend.username }}</span>
+              </a>
+            {% endfor %}
+          {% endif %}
+
+          {% if friends_grouped.on_campus %}
+            <div class="friends-status-header status-green">Currently on campus:</div>
+            {% for friend in friends_grouped.on_campus %}
+              <a class="friend-on-campus" href="{{ url_for('friends.view_profile', username=friend.username) }}">
+                {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
+                <img class="friend-avatar" src="{{ url_for('static', filename='uploads/' + (friend.avatar or 'default.jpg')) }}" alt="{{ friend.username }}'s avatar" />
+                <span class="friend-name">{{ friend.nickname or friend.username }}</span>
+              </a>
+            {% endfor %}
+          {% endif %}
+
+          {% if friends_grouped.off_campus %}
+            <div class="friends-status-header status-red">Not on campus:</div>
+            {% for friend in friends_grouped.off_campus %}
+              <a class="friend-on-campus" href="{{ url_for('friends.view_profile', username=friend.username) }}">
+                {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
+                <img class="friend-avatar" src="{{ url_for('static', filename='uploads/' + (friend.avatar or 'default.jpg')) }}" alt="{{ friend.username }}'s avatar" />
+                <span class="friend-name">{{ friend.nickname or friend.username }}</span>
+              </a>
+            {% endfor %}
+          {% endif %}
+        {% else %}
+          <p style="font-style: italic; color: #888; margin: 0">
+            No friends on campus yet.
+          </p>
         {% endif %}
       </div>
     </div>
