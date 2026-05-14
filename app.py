@@ -243,7 +243,12 @@ def index():
             if potential_friend_ids:
                 attendee_users = db.query(User).filter(User.user_id.in_(potential_friend_ids)).all()
                 for attendee_user in attendee_users:
-                    attendee_user_lookup[attendee_user.user_id] =attendee_user.username
+                    attendee_user_lookup[attendee_user.user_id] = {
+                        "user_id": attendee_user.user_id,
+                        "username": attendee_user.username,
+                        "nickname": attendee_user.nickname,
+                        "avatar": attendee_user.avatar or "default.jpg",
+                    }
 
         def serialize_class_event(event):
             poi_id = get_primary_poi_id(event.location or "")
@@ -281,12 +286,19 @@ def index():
                     attendees.add(same_day_event.user_id)
 
             friend_attendee_ids = attendees.intersection(friend_ids)
-            friend_nicknames = [
+            friend_attendees = [
                 attendee_user_lookup[friend_id]
                 for friend_id in friend_attendee_ids
                 if friend_id in attendee_user_lookup
             ]
-            friend_nicknames.sort(key=str.lower)
+            friend_attendees.sort(
+                key=lambda user: (user.get("nickname") or user.get("username") or "").lower()
+            )
+
+            friend_nicknames = [
+                (user.get("nickname") or user.get("username") or "")
+                for user in friend_attendees
+            ]
 
             return {
                 "event_id": event.event_id,
@@ -302,6 +314,7 @@ def index():
                 "longitude": longitude,
                 "other_attendees_count": len(friend_attendee_ids),
                 "friend_nicknames": friend_nicknames,
+                "friend_attendees": friend_attendees,
             }
 
         classes_map_data = [
@@ -322,17 +335,108 @@ def index():
                 friend_user.is_favourite = bool(row.is_favourite)
                 friends_list.append(friend_user)
         else:
-            legacy_ids = get_friend_ids(db, user_id)
-            friends_list = db.query(User).filter(User.user_id.in_(legacy_ids)).all()
+            friend_ids = get_friend_ids(db, user_id)
+            friends_list = db.query(User).filter(User.user_id.in_(friend_ids)).all()
             for friend_user in friends_list:
                 friend_user.is_favourite = False
 
+        friend_status_by_id = {}
+        today_str = date.today().isoformat()
+        tomorrow_str = (date.today() + timedelta(days=1)).isoformat()
+        now = datetime.now()
+
+        user_candidate_events = [
+            event
+            for event in all_events
+            if event.date
+            and today_str <= event.date <= tomorrow_str
+            and get_primary_poi_id(event.location or "")
+        ]
+        user_target_event = select_current_or_next_event(user_candidate_events, now)
+
+        def matches_user_target(friend_event):
+            if not user_target_event or not friend_event:
+                return False
+            if friend_event.date != user_target_event.date:
+                return False
+            if (friend_event.event_name or "") != (user_target_event.event_name or ""):
+                return False
+            if (friend_event.start_time or "") != (user_target_event.start_time or ""):
+                return False
+            if (friend_event.end_time or "") != (user_target_event.end_time or ""):
+                return False
+            return get_primary_poi_id(friend_event.location or "") == get_primary_poi_id(
+                user_target_event.location or ""
+            )
+
+        if friend_ids:
+            friend_window_events = db.query(Event).filter(
+                Event.user_id.in_(friend_ids),
+                Event.date >= today_str,
+                Event.date <= tomorrow_str,
+            ).all()
+
+            friend_events_by_user = {}
+            for event in friend_window_events:
+                if not get_primary_poi_id(event.location or ""):
+                    continue
+                friend_events_by_user.setdefault(event.user_id, []).append(event)
+
+            for friend_id in friend_ids:
+                friend_events = friend_events_by_user.get(friend_id, [])
+                if not friend_events:
+                    continue
+
+                remaining_today = []
+                for event in friend_events:
+                    if event.date != today_str:
+                        continue
+                    window = get_event_time_window(event)
+                    if window is None:
+                        continue
+                    if window[1] <= now:
+                        continue
+                    remaining_today.append(event)
+
+                status = "on_campus" if remaining_today else "off_campus"
+
+                friend_target_event = select_current_or_next_event(friend_events, now)
+                if matches_user_target(friend_target_event):
+                    status = "next_class"
+
+                friend_status_by_id[friend_id] = status
+
+        status_order = {"next_class": 0, "on_campus": 1, "off_campus": 2}
+
+        for friend_user in friends_list:
+            status = friend_status_by_id.get(friend_user.user_id, "off_campus")
+            friend_user.campus_status = status
+
         friends_list.sort(
             key=lambda user: (
+                status_order.get(getattr(user, "campus_status", "off_campus"), 2),
                 0 if getattr(user, "is_favourite", False) else 1,
                 (user.nickname or user.username or "").lower(),
             )
         )
+
+        friends_grouped = {
+            "next_class": [],
+            "on_campus": [],
+            "off_campus": [],
+        }
+        for friend_user in friends_list:
+            status = getattr(friend_user, "campus_status", "off_campus")
+            friends_grouped.get(status, friends_grouped["off_campus"]).append(friend_user)
+
+        def group_sort_key(user):
+            return (
+                0 if getattr(user, "is_favourite", False) else 1,
+                (user.nickname or user.username or "").lower(),
+            )
+
+        for status in friends_grouped:
+            friends_grouped[status].sort(key=group_sort_key)
 
     finally:
         db.close()
@@ -344,6 +448,7 @@ def index():
         future_events=future_events,
         classes_map_data=classes_map_data,
         friends=friends_list,
+        friends_grouped=friends_grouped,
         username=g.current_user["nickname"] or g.current_user["username"],
         show_full_nav=True
     )

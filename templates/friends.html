@@ -10,7 +10,8 @@
         All Friends
       </button>
       <button class="tab" data-tab="friend-requests" onclick="showTab('friend-requests')">
-        Friend Requests{% if incoming_requests and incoming_requests|length > 0 %} <span class="dot"></span>{% endif %}
+        Friend Requests
+        <span class="dot{% if not incoming_requests or incoming_requests|length == 0 %} is-hidden{% endif %}"></span>
       </button>
       <button class="tab" data-tab="add-friend" onclick="showTab('add-friend')">
         Add a Friend
@@ -35,13 +36,15 @@
           data-username="{{ friend.username|lower }}"
           data-friend-id="{{ friend.user_id }}"
         >
-          <div class="avatar"></div>
+          <img class="avatar" src="{{ url_for('static', filename='uploads/' + (friend.avatar or 'default.jpg')) }}" alt="{{ friend.username }}'s avatar" />
           <div class="friend-info">
-            <div class="friend-nickname">
-              {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
-              {{ friend.nickname or friend.username }}
-            </div>
-            <div class="friend-username">@{{ friend.username }}</div>
+            <a class="friend-profile-link" href="{{ url_for('friends.view_profile', username=friend.username) }}">
+              <div class="friend-nickname">
+                {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
+                {{ friend.nickname or friend.username }}
+              </div>
+              <div class="friend-username">@{{ friend.username }}</div>
+            </a>
           </div>
           <div class="friend-actions">
             <button class="three-dots-btn" type="button" aria-label="Friend actions">⋯</button>
@@ -56,7 +59,7 @@
           </div>
         </div>
         {% endfor %} {% else %}
-        <p style="font-style: italic; color: #888">
+        <p class="empty-message" style="font-style: italic; color: #888">
           You have no friends added yet.
         </p>
         {% endif %}
@@ -83,10 +86,12 @@
             data-username="{{ req.username|lower }}"
             data-request-id="{{ req.request_id }}"
           >
-            <div class="avatar"></div>
+            <img class="avatar" src="{{ url_for('static', filename='uploads/' + req.avatar) }}" alt="{{ req.username }}'s avatar" />
             <div class="friend-info">
-              <div class="friend-nickname">{{ req.nickname or req.username }}</div>
-              <div class="friend-username">@{{ req.username }}</div>
+              <a class="friend-profile-link" href="{{ url_for('friends.view_profile', username=req.username) }}">
+                <div class="friend-nickname">{{ req.nickname or req.username }}</div>
+                <div class="friend-username">@{{ req.username }}</div>
+              </a>
             </div>
             <div class="request-actions">
               <button type="button" class="accept-btn" onclick="acceptRequest({{ req.request_id }}, {{ req.user_id }})">
@@ -98,7 +103,7 @@
             </div>
           </div>
           {% endfor %} {% else %}
-          <p style="font-style: italic; color: #888">No incoming friend requests.</p>
+          <p class="empty-message" style="font-style: italic; color: #888">No incoming friend requests.</p>
           {% endif %}
         </div>
       </div>
@@ -112,10 +117,12 @@
             data-username="{{ req.username|lower }}"
             data-request-id="{{ req.request_id }}"
           >
-            <div class="avatar"></div>
+            <img class="avatar" src="{{ url_for('static', filename='uploads/' + req.avatar) }}" alt="{{ req.username }}'s avatar" />
             <div class="friend-info">
-              <div class="friend-nickname">{{ req.nickname or req.username }}</div>
-              <div class="friend-username">@{{ req.username }}</div>
+              <a class="friend-profile-link" href="{{ url_for('friends.view_profile', username=req.username) }}">
+                <div class="friend-nickname">{{ req.nickname or req.username }}</div>
+                <div class="friend-username">@{{ req.username }}</div>
+              </a>
             </div>
             <div class="request-actions">
               <button type="button" class="cancel-btn" onclick="cancelRequest({{ req.request_id }})">
@@ -124,7 +131,7 @@
             </div>
           </div>
           {% endfor %} {% else %}
-          <p style="font-style: italic; color: #888">No outgoing friend requests.</p>
+          <p class="empty-message" style="font-style: italic; color: #888">No outgoing friend requests.</p>
           {% endif %}
         </div>
       </div>

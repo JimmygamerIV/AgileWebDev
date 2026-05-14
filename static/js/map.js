@@ -536,6 +536,85 @@
     }
   }
 
+  function renderFriendAttendees(classItem, classData) {
+    if (!classItem || !classData) {
+      return;
+    }
+
+    const existing = classItem.querySelector(".event-attendees");
+    if (existing) {
+      existing.remove();
+    }
+
+    const attendees = Array.isArray(classData.friend_attendees) ? classData.friend_attendees : [];
+    if (attendees.length === 0) {
+      classItem.classList.remove("has-attendees");
+      return;
+    }
+
+    classItem.classList.add("has-attendees");
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "event-attendees";
+
+    const label = document.createElement("div");
+    label.className = "event-attendees-label";
+    label.textContent = `${attendees.length} friend${attendees.length === 1 ? "" : "s"} attending`;
+
+    const avatars = document.createElement("div");
+    avatars.className = "event-attendees-avatars";
+
+    const baseCount = 5;
+    const visibleCount = attendees.length > baseCount ? baseCount : attendees.length;
+
+    for (let i = 0; i < visibleCount; i += 1) {
+      const attendee = attendees[i] || {};
+      const avatar = attendee.avatar || "default.jpg";
+      const img = document.createElement("img");
+      img.className = "event-attendee-avatar";
+      img.src = `/static/uploads/${avatar}`;
+      img.alt = attendee.username ? `${attendee.username}'s avatar` : "Friend avatar";
+      avatars.appendChild(img);
+    }
+
+    if (attendees.length > baseCount) {
+      const overflowCount = attendees.length - baseCount;
+      const overflowAttendee = attendees[Math.min(baseCount, attendees.length - 1)] || {};
+      const overflowAvatar = overflowAttendee.avatar || "default.jpg";
+
+      const overflow = document.createElement("div");
+      overflow.className = "event-attendee-avatar is-overflow";
+      overflow.style.setProperty("--avatar-url", `url('/static/uploads/${overflowAvatar}')`);
+
+      const overflowText = document.createElement("span");
+      overflowText.className = "event-attendee-overflow-text";
+      overflowText.textContent = `+${overflowCount}`;
+      overflow.appendChild(overflowText);
+
+      avatars.appendChild(overflow);
+    }
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(avatars);
+    classItem.appendChild(wrapper);
+  }
+
+  function decorateFriendAttendees() {
+    if (!classItemElements.length) {
+      return;
+    }
+
+    for (const classItem of classItemElements) {
+      const eventId = classItem.dataset.eventId;
+      if (!eventId) {
+        continue;
+      }
+
+      const classData = classDataById.get(String(eventId));
+      renderFriendAttendees(classItem, classData);
+    }
+  }
+
   function addMarkerForClass(classData, options = {}) {
     const { openPopup = false, allowOnline = false } = options;
     const isOnline = isOnlineClass(classData);
@@ -1136,6 +1215,7 @@
   }
 
   parseClassesData();
+  decorateFriendAttendees();
   decorateOnlineClasses();
   wireClassSelection();
   wireDayGroupClicks();

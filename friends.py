@@ -86,6 +86,7 @@ def friends():
                     "user_id": sender.user_id,
                     "username": sender.username,
                     "nickname": sender.nickname,
+                    "avatar": sender.avatar or "default.jpg",
                 }
             )
 
@@ -109,6 +110,7 @@ def friends():
                     "user_id": receiver.user_id,
                     "username": receiver.username,
                     "nickname": receiver.nickname,
+                    "avatar": receiver.avatar or "default.jpg",
                 }
             )
 
@@ -231,8 +233,20 @@ def accept_request():
         if reverse_existing is None:
             db.add(Friend(user_id=sender_id, friend_id=user_id, is_favourite=0))
 
+        sender_user = db.query(User).filter(User.user_id == sender_id).first()
+
         db.commit()
-        return jsonify({"success": True})
+
+        payload = {"success": True}
+        if sender_user:
+            payload["friend"] = {
+                "user_id": sender_user.user_id,
+                "username": sender_user.username,
+                "nickname": sender_user.nickname,
+                "avatar": sender_user.avatar or "default.jpg",
+            }
+
+        return jsonify(payload)
     finally:
         db.close()
 
@@ -320,6 +334,7 @@ def search_users():
                     "user_id": user.user_id,
                     "username": user.username,
                     "nickname": user.nickname,
+                    "avatar": user.avatar or "default.jpg",
                 }
             )
 
@@ -342,11 +357,12 @@ def send_friend_request():
         if target_id is None and not target_username:
             return jsonify({"error": "Missing target user"}), 400
 
+        target_user = None
         if target_id is None:
-            user = db.query(User).filter(User.username == target_username).first()
-            if user is None:
+            target_user = db.query(User).filter(User.username == target_username).first()
+            if target_user is None:
                 return jsonify({"error": "User not found"}), 404
-            target_id = user.user_id
+            target_id = target_user.user_id
 
         if target_id == user_id:
             return jsonify({"error": "Cannot add yourself"}), 400
@@ -374,7 +390,18 @@ def send_friend_request():
         db.add(new_request)
         db.commit()
 
-        return jsonify({"success": True})
+        if target_user is None:
+            target_user = db.query(User).filter(User.user_id == target_id).first()
+
+        payload = {"success": True, "request_id": new_request.request_id}
+        if target_user:
+            payload["user"] = {
+                "user_id": target_user.user_id,
+                "username": target_user.username,
+                "nickname": target_user.nickname,
+                "avatar": target_user.avatar or "default.jpg",
+            }
+        return jsonify(payload)
     finally:
         db.close()
 
@@ -396,12 +423,16 @@ def view_profile(username):
             abort(404)
 
         friend_ids = get_friend_ids(db, g.current_user['user_id'])
-        
-        status = "none"
-        incoming_req_id = None
 
-        if user.user_id in friend_ids:
-            status = "friend"
+        if user.user_id not in friend_ids:
+            return render_template(
+                "not_friend.html",
+                target_user=user,
+                show_full_nav=True,
+            ), 403
+        
+        status = "friend"
+        incoming_req_id = None
 
         if status == "none":
             req = db.query(FriendRequest).filter(
