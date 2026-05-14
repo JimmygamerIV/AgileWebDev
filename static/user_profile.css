@@ -1,0 +1,165 @@
+/* 容器居中与背景 */
+.user-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 80vh;
+}
+
+/* 个人资料卡片 */
+.user-profile-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.user-profile-card:hover {
+    transform: translateY(-5px);
+}
+
+/* 头像样式 */
+.user-profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #f0f2f5;
+    margin-bottom: 15px;
+}
+
+/* 名字与用户名 */
+.user-profile-nickname {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 5px 0;
+}
+
+.user-profile-username {
+    font-size: 0.9rem;
+    color: #65676b;
+    margin-bottom: 10px;
+}
+
+/* 在校状态标签 */
+.user-profile-status.on-campus {
+    display: inline-block;
+    background-color: #e7f3ff;
+    color: #1877f2;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* 统计数据栏 */
+.user-profile-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 25px 0;
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.user-profile-stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+}
+
+/* 课程信息板块 */
+.user-profile-current-class, 
+.user-profile-next-class {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: left;
+    border-left: 4px solid #1877f2;
+}
+
+.current-class-label, .next-class-label {
+    font-size: 0.75rem;
+    color: #1877f2;
+    font-weight: bold;
+    margin: 0;
+}
+
+.current-class-name, .next-class-name {
+    font-weight: 600;
+    margin: 5px 0;
+    color: #222;
+}
+
+.current-class-where, .next-class-where {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* 按钮基础样式 */
+.user-profile-actions button {
+    width: 100%;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+/* 各类按钮颜色 */
+.btn-add {
+    background-color: #1877f2;
+    color: white;
+}
+
+.btn-add:hover { background-color: #166fe5; }
+
+.btn-remove {
+    background-color: #f0f2f5;
+    color: #4b4f56;
+}
+
+.btn-remove:hover { background-color: #e4e6eb; }
+
+.btn-accept {
+    background-color: #42b72a;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.btn-reject {
+    background-color: #fa3e3e;
+    color: white;
+}
+
+.btn-cancel {
+    background-color: #f0f2f5;
+    color: #606770;
+}
+
+.pending-text {
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 8px;
+}
