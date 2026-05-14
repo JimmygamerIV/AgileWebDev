@@ -23,6 +23,7 @@ import base64
 
 mail = Mail()
 
+
 generate_env()
 load_dotenv()
 app = Flask(__name__)

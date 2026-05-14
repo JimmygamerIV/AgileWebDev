@@ -8,7 +8,6 @@ import string
 mail = Mail()
 
 def send_async_email(app, msg):
-    # 邮件发送必须在 Flask 的 app_context 下运行
     with app.app_context():
         mail.send(msg)
 
