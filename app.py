@@ -243,7 +243,12 @@ def index():
             if potential_friend_ids:
                 attendee_users = db.query(User).filter(User.user_id.in_(potential_friend_ids)).all()
                 for attendee_user in attendee_users:
-                    attendee_user_lookup[attendee_user.user_id] =attendee_user.username
+                    attendee_user_lookup[attendee_user.user_id] = {
+                        "user_id": attendee_user.user_id,
+                        "username": attendee_user.username,
+                        "nickname": attendee_user.nickname,
+                        "avatar": attendee_user.avatar or "default.jpg",
+                    }
 
         def serialize_class_event(event):
             poi_id = get_primary_poi_id(event.location or "")
@@ -281,12 +286,19 @@ def index():
                     attendees.add(same_day_event.user_id)
 
             friend_attendee_ids = attendees.intersection(friend_ids)
-            friend_nicknames = [
+            friend_attendees = [
                 attendee_user_lookup[friend_id]
                 for friend_id in friend_attendee_ids
                 if friend_id in attendee_user_lookup
             ]
-            friend_nicknames.sort(key=str.lower)
+            friend_attendees.sort(
+                key=lambda user: (user.get("nickname") or user.get("username") or "").lower()
+            )
+
+            friend_nicknames = [
+                (user.get("nickname") or user.get("username") or "")
+                for user in friend_attendees
+            ]
 
             return {
                 "event_id": event.event_id,
@@ -302,6 +314,7 @@ def index():
                 "longitude": longitude,
                 "other_attendees_count": len(friend_attendee_ids),
                 "friend_nicknames": friend_nicknames,
+                "friend_attendees": friend_attendees,
             }
 
         classes_map_data = [
