@@ -37,11 +37,13 @@
         >
           <img class="avatar" src="{{ url_for('static', filename='uploads/' + (friend.avatar or 'default.jpg')) }}" alt="{{ friend.username }}'s avatar" />
           <div class="friend-info">
-            <div class="friend-nickname">
-              {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
-              {{ friend.nickname or friend.username }}
-            </div>
-            <div class="friend-username">@{{ friend.username }}</div>
+            <a class="friend-profile-link" href="{{ url_for('friends.view_profile', username=friend.username) }}">
+              <div class="friend-nickname">
+                {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
+                {{ friend.nickname or friend.username }}
+              </div>
+              <div class="friend-username">@{{ friend.username }}</div>
+            </a>
           </div>
           <div class="friend-actions">
             <button class="three-dots-btn" type="button" aria-label="Friend actions">⋯</button>

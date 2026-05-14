@@ -20,7 +20,7 @@ styles %}
         {% if friends %} {% for friend in friends %}
         <div class="friend-on-campus">
           {% if friend.is_favourite %}<span class="star-icon">⭐</span>{% endif %}
-          <span class="friend-name">{{ friend.nickname or friend.username }}</span>
+          <a class="friend-name" href="{{ url_for('friends.view_profile', username=friend.username) }}">{{ friend.nickname or friend.username }}</a>
         </div>
         {% endfor %} {% else %}
         <p style="font-style: italic; color: #888; margin: 0">
