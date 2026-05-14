@@ -102,10 +102,10 @@ def signup():
 
         db.add(new_user)
         db.commit()
-        try:
-            send_welcome_email(new_user.email,new_user.nickname)
-        except Exception as e:
-            print(f"Welcome email failed: {e}")
+        # try:
+        #     #send_welcome_email(new_user.email,new_user.nickname)
+        # except Exception as e:
+        #     print(f"Welcome email failed: {e}")
     except Exception as e:
         db.rollback()
         return render_template("signup.html", error=f"Registration failed: {e}", form=form, show_full_nav=False)
