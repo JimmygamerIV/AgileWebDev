@@ -522,6 +522,359 @@
     }
   }
 
+  // Friend overlays state
+  const selectedFriends = new Map();
+  const friendOverlays = {}; // friendId -> { markers: [], route: L.polyline|null, color }
+
+  function clearFriendOverlays() {
+    for (const fid of Object.keys(friendOverlays)) {
+      const layer = friendOverlays[fid];
+      if (!layer) continue;
+      if (layer.route) {
+        map.removeLayer(layer.route);
+      }
+      for (const m of layer.markers || []) {
+        map.removeLayer(m);
+      }
+    }
+    for (const k in friendOverlays) delete friendOverlays[k];
+  }
+
+  function removeFriendOverlay(friendId) {
+    const layer = friendOverlays[String(friendId)];
+    if (!layer) {
+      return;
+    }
+
+    if (layer.route) {
+      map.removeLayer(layer.route);
+    }
+    for (const marker of layer.markers || []) {
+      map.removeLayer(marker);
+    }
+
+    delete friendOverlays[String(friendId)];
+  }
+
+  // Build a set of user's class keys for collision detection
+  function buildUserClassKeySet(activeDate) {
+    const keys = new Set();
+    for (const c of classesData) {
+      if (!c || c.date !== activeDate) continue;
+      const key = `${c.event_name || ''}||${c.date || ''}||${c.start_time || ''}||${c.end_time || ''}||${c.location_display || ''}`;
+      keys.add(key);
+    }
+    return keys;
+  }
+
+  function getRandomColor() {
+    const h = Math.floor(Math.random() * 360);
+    return `hsl(${h} 80% 45%)`;
+  }
+
+  function escapeAttribute(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function normalizeAvatarUrl(avatarUrl) {
+    if (!avatarUrl) {
+      return "/static/uploads/default.jpg";
+    }
+
+    if (avatarUrl.startsWith("http://") || avatarUrl.startsWith("https://") || avatarUrl.startsWith("/")) {
+      return avatarUrl;
+    }
+
+    return `/static/uploads/${avatarUrl}`;
+  }
+
+  function createFriendAvatarIcon(avatarUrl, color) {
+    const safeAvatarUrl = normalizeAvatarUrl(avatarUrl);
+    return L.divIcon({
+      className: "friend-avatar-marker",
+      html: `
+        <div class="friend-avatar-marker-ring" style="border-color: ${color};">
+          <img class="friend-avatar-marker-image" src="${escapeAttribute(safeAvatarUrl)}" alt="Friend avatar" />
+        </div>
+      `,
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
+      popupAnchor: [0, -18],
+    });
+  }
+
+  function buildFriendPopupHtml(friendMeta, classData) {
+    const friendName = friendMeta?.friendName || "Friend";
+    return `
+      <div>
+        <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 4px;">Viewing ${escapeHtml(friendName)}'s upcoming class:</div>
+        ${popupHtml(classData)}
+      </div>
+    `;
+  }
+
+  async function fetchFriendClasses(friendId, date) {
+    const url = new URL('/api/friends/classes', window.location.origin);
+    url.searchParams.set('friend_id', String(friendId));
+    if (date) url.searchParams.set('date', date);
+    const res = await fetch(url.toString(), { credentials: 'same-origin' });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data.classes) ? data.classes : [];
+  }
+
+  function getClassWindowFromObj(classData) {
+    if (!classData || !classData.date || !classData.start_time || !classData.end_time) return null;
+    const start = new Date(`${classData.date}T${classData.start_time}:00`);
+    let end = new Date(`${classData.date}T${classData.end_time}:00`);
+    if (end <= start) end = new Date(end.getTime() + 24 * 60 * 60 * 1000);
+    return { start, end };
+  }
+
+  function computeFriendTargetClass(entries) {
+    const now = getNow();
+    let currentEntry = null;
+    let nextEntry = null;
+    for (const entry of entries) {
+      const window = getClassWindowFromObj(entry);
+      if (!window) continue;
+      if (window.start <= now && now < window.end) {
+        if (!currentEntry || window.start < currentEntry.start) {
+          currentEntry = { start: window.start, entry };
+        }
+        continue;
+      }
+      if (window.start > now) {
+        if (!nextEntry || window.start < nextEntry.start) {
+          nextEntry = { start: window.start, entry };
+        }
+      }
+    }
+    return currentEntry ? currentEntry.entry : nextEntry ? nextEntry.entry : null;
+  }
+
+  async function renderOverlayForFriend(friendId, friendMeta, color, activeDate, userKeys) {
+    const existing = friendOverlays[String(friendId)];
+    if (existing) {
+      if (existing.route) map.removeLayer(existing.route);
+      for (const m of existing.markers || []) map.removeLayer(m);
+    }
+
+    const classes = await fetchFriendClasses(friendId, activeDate);
+    if (!classes || classes.length === 0) return;
+
+    const now = getNow();
+    const renderable = [];
+    for (const c of classes) {
+      const window = getClassWindowFromObj(c);
+      if (!window) continue;
+      if (window.end <= now) continue;
+      const lat = Number(c.latitude);
+      const lng = Number(c.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+      renderable.push(Object.assign({ lat, lng }, c));
+    }
+
+    if (!renderable.length) return;
+
+    const targetClass = computeFriendTargetClass(renderable);
+    const targetId = targetClass ? String(targetClass.event_id) : null;
+    const avatarIcon = createFriendAvatarIcon(friendMeta?.avatarUrl, color);
+
+    const routeCoords = [];
+    const markers = [];
+
+    for (const entry of renderable) {
+      const key = `${entry.event_name || ''}||${entry.date || ''}||${entry.start_time || ''}||${entry.end_time || ''}||${entry.location_display || ''}`;
+      routeCoords.push([entry.lat, entry.lng]);
+
+      if (userKeys && userKeys.has(key)) {
+        continue;
+      }
+
+      const isTarget = targetId && String(entry.event_id) === targetId;
+      const marker = L.marker([entry.lat, entry.lng], {
+        icon: avatarIcon,
+        zIndexOffset: isTarget ? 1200 : 800,
+      }).addTo(map).bindPopup(buildFriendPopupHtml(friendMeta, entry));
+      markers.push(marker);
+    }
+
+    let route = null;
+    if (routeCoords.length > 1) {
+      route = L.polyline(routeCoords, { color: color, weight: 3, opacity: 0.9 }).addTo(map);
+    }
+
+    // Store the date used to render this overlay so we can detect when to refresh
+    friendOverlays[String(friendId)] = { markers, route, color, date: activeDate };
+  }
+
+  async function updateFriendOverlays() {
+    if (selectedFriends.size === 0) {
+      // No friends selected: clear any overlays
+      clearFriendOverlays();
+      return;
+    }
+    // Use the currently viewed day if set, otherwise fall back to computed active date
+    const activeDate = viewedDay || computeActiveDate();
+    const userKeys = buildUserClassKeySet(activeDate);
+
+    for (const [fid, friendMeta] of selectedFriends.entries()) {
+      const id = String(fid);
+      const existing = friendOverlays[id];
+      // Re-render if no existing overlay or it was rendered for a different date
+      if (existing && existing.date === activeDate) {
+        continue;
+      }
+
+      const color = (friendMeta && friendMeta.color) || (existing && existing.color) || getRandomColor();
+      await renderOverlayForFriend(id, friendMeta, color, activeDate, userKeys);
+    }
+
+    for (const overlayFriendId of Object.keys(friendOverlays)) {
+      if (!selectedFriends.has(overlayFriendId)) {
+        removeFriendOverlay(overlayFriendId);
+      }
+    }
+  }
+
+  function removeExistingGoldMarker() {
+    for (let i = activeMarkers.length - 1; i >= 0; i--) {
+      const m = activeMarkers[i];
+      try {
+        if (m && m.options && m.options.icon && m.options.icon.options && m.options.icon.options.className === 'gold-class-marker') {
+          map.removeLayer(m);
+          activeMarkers.splice(i, 1);
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+  }
+
+  function unselectAllFriends() {
+    // Clear selections in DOM
+    const els = document.querySelectorAll('.friend-on-campus.selected');
+    els.forEach((el) => {
+      el.classList.remove('selected');
+      el.style.removeProperty('--friend-accent');
+    });
+    // Clear selectedFriends map and overlays
+    selectedFriends.clear();
+    clearFriendOverlays();
+  }
+
+  function ensureUserGoldMarkerForDate(targetDate, openPopup = true, center = true) {
+    const date = targetDate || (viewedDay || computeActiveDate());
+    // Find non-online classes for that date
+    const dayClasses = classesData.filter((c) => c && c.date === date && !isOnlineClass(c));
+    if (!dayClasses.length) {
+      return null;
+    }
+
+    const renderableEntries = [];
+    for (const classData of dayClasses) {
+      const window = getClassWindow(classData);
+      if (!window) continue;
+      const lat = Number(classData.latitude);
+      const lng = Number(classData.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+      renderableEntries.push({ classData, start: window.start, lat, lng });
+    }
+
+    if (!renderableEntries.length) return null;
+
+    renderableEntries.sort((a, b) => a.start - b.start);
+    const now = getNow();
+    let currentEntry = null;
+    let nextEntry = null;
+    for (const entry of renderableEntries) {
+      const window = getClassWindow(entry.classData);
+      if (!window) continue;
+      if (window.start <= now && now < window.end) {
+        if (!currentEntry || window.start < currentEntry.start) {
+          currentEntry = { start: window.start, entry };
+        }
+        continue;
+      }
+      if (window.start > now) {
+        if (!nextEntry || window.start < nextEntry.start) {
+          nextEntry = { start: window.start, entry };
+        }
+      }
+    }
+
+    const targetClass = currentEntry ? currentEntry.entry.classData : nextEntry ? nextEntry.entry.classData : null;
+    if (!targetClass) return null;
+
+    // Remove any existing gold markers and add new one
+    removeExistingGoldMarker();
+
+    const lat = Number(targetClass.latitude);
+    const lng = Number(targetClass.longitude);
+    const markerLat = Number.isFinite(lat) ? lat : fallbackLocation.lat;
+    const markerLng = Number.isFinite(lng) ? lng : fallbackLocation.lng;
+
+    const marker = L.marker([markerLat, markerLng], { icon: goldMarkerIcon })
+      .addTo(map)
+      .bindPopup(popupHtml(targetClass));
+    marker.setZIndexOffset(1000);
+    marker.on('click', () => {
+      // Clicking the home/gold marker will unselect friends
+      unselectAllFriends();
+    });
+    activeMarkers.push(marker);
+    if (openPopup) marker.openPopup();
+    if (center) map.setView([markerLat, markerLng], 17);
+    return marker;
+  }
+
+  function wireFriendListSelection() {
+    const list = document.querySelectorAll('.friend-on-campus');
+    if (!list) return;
+    list.forEach((el) => {
+      const fid = el.getAttribute('data-friend-id');
+      if (!fid) return;
+      el.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const key = String(fid);
+        const selected = el.classList.toggle('selected');
+        if (selected) {
+          const avatarImg = el.querySelector("img.friend-avatar");
+          const friendNameEl = el.querySelector(".friend-name");
+          const accentColor = getRandomColor();
+          selectedFriends.set(key, {
+            friendId: key,
+            avatarUrl: avatarImg ? avatarImg.getAttribute("src") : "/static/uploads/default.jpg",
+            friendName: friendNameEl ? friendNameEl.textContent.trim() : "Friend",
+            color: accentColor,
+          });
+          el.style.setProperty("--friend-accent", accentColor);
+          // Update overlays for the currently viewed day (or computed active date)
+          updateFriendOverlays().catch(() => {});
+          const activeDate = viewedDay || computeActiveDate();
+          // Also bring up the user's gold/home marker for that day (don't open its popup or center)
+          ensureUserGoldMarkerForDate(activeDate, false, false);
+        } else {
+          selectedFriends.delete(key);
+          el.style.removeProperty("--friend-accent");
+          removeFriendOverlay(key);
+        }
+      });
+      el.addEventListener('keydown', (ev) => {
+        if (ev.key !== 'Enter' && ev.key !== ' ') return;
+        ev.preventDefault();
+        el.click();
+      });
+    });
+  }
+
   function isOnlineClass(classData) {
     const searchableText = `${classData?.event_name || ""} ${classData?.location_display || ""} ${classData?.building_name || ""}`.toLowerCase();
     return /\bonline\b|\bvirtual\b|\bremote\b|\bzoom\b|\bteams\b|\bwebex\b|\bcollaborate\b/.test(searchableText);
@@ -832,13 +1185,12 @@
     }
 
     if (goldMarkerData) {
-      const marker = L.marker([goldMarkerData.lat, goldMarkerData.lng], { icon: goldMarkerIcon })
-        .addTo(map)
-        .bindPopup(goldMarkerData.popup);
-      activeMarkers.push(marker);
-      marker.setZIndexOffset(1000);
-      focusLatLng = marker.getLatLng();
-      viewCoords.unshift([goldMarkerData.lat, goldMarkerData.lng]);
+      // Add a gold marker for the active date but do not auto-open or center it
+      const marker = ensureUserGoldMarkerForDate(null, false, false);
+      if (marker) {
+        focusLatLng = marker.getLatLng();
+        viewCoords.unshift([focusLatLng.lat, focusLatLng.lng]);
+      }
     }
 
     if (routesEnabled) {
@@ -873,17 +1225,20 @@
     if (routesEnabled && viewCoords.length > 1) {
       const bounds = L.latLngBounds(viewCoords);
       map.fitBounds(bounds.pad(0.22), { maxZoom: 16 });
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
     if (focusLatLng) {
       map.setView(focusLatLng, 17);
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
     if (blueEntries.length > 0) {
       const bounds = L.latLngBounds(blueEntries.map((entry) => [entry.lat, entry.lng]));
       map.fitBounds(bounds.pad(0.2));
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
@@ -892,6 +1247,7 @@
       .bindPopup("No current or upcoming classes found.");
     activeMarkers.push(fallbackMarker);
     map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+    updateFriendOverlays().catch(() => {});
   }
 
   function selectClass(eventId) {
@@ -940,6 +1296,7 @@
           .addTo(map)
           .bindPopup(popupHtml(classData))
           .openPopup();
+        marker.on('click', () => unselectAllFriends());
         activeMarkers.push(marker);
         map.setView([lat, lng], 17);
         return;
@@ -949,6 +1306,7 @@
         .addTo(map)
         .bindPopup(`${popupHtml(classData)}<div style="margin-top: 6px; font-size: 12px;">Map coordinates unavailable for this class.</div>`)
         .openPopup();
+      fallbackMarker.on('click', () => unselectAllFriends());
       activeMarkers.push(fallbackMarker);
       map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
       return;
@@ -1018,6 +1376,7 @@
         .openPopup();
       activeMarkers.push(marker);
       map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
@@ -1090,13 +1449,12 @@
     }
 
     if (goldMarkerData) {
-      const marker = L.marker([goldMarkerData.lat, goldMarkerData.lng], { icon: goldMarkerIcon })
-        .addTo(map)
-        .bindPopup(goldMarkerData.popup);
-      activeMarkers.push(marker);
-      marker.setZIndexOffset(1000);
-      focusLatLng = marker.getLatLng();
-      viewCoords.unshift([goldMarkerData.lat, goldMarkerData.lng]);
+      // Add a gold marker for the viewed day but do not auto-open or center it
+      const marker = ensureUserGoldMarkerForDate(viewedDay, false, false);
+      if (marker) {
+        focusLatLng = marker.getLatLng();
+        viewCoords.unshift([focusLatLng.lat, focusLatLng.lng]);
+      }
     }
 
     if (routesEnabled) {
@@ -1124,17 +1482,20 @@
     if (routesEnabled && viewCoords.length > 1) {
       const bounds = L.latLngBounds(viewCoords);
       map.fitBounds(bounds.pad(0.22), { maxZoom: 16 });
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
     if (focusLatLng) {
       map.setView(focusLatLng, 17);
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
     if (blueEntries.length > 0) {
       const bounds = L.latLngBounds(blueEntries.map((entry) => [entry.lat, entry.lng]));
       map.fitBounds(bounds.pad(0.2));
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
@@ -1242,5 +1603,6 @@
   decorateOnlineClasses();
   wireClassSelection();
   wireDayGroupClicks();
+  wireFriendListSelection();
   renderDefaultMapView();
 })();

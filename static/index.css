@@ -478,6 +478,29 @@ body {
   display: block;
 }
 
+.friend-avatar-marker {
+  background: transparent;
+  border: none;
+}
+
+.friend-avatar-marker-ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid #2f3c8f;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.friend-avatar-marker-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 .leaflet-overlay-pane path.route-line {
   stroke-dashoffset: 0;
   animation: routeDash 1.8s linear infinite;
@@ -505,6 +528,12 @@ body {
   border-radius: 6px;
   font-size: 13px;
   color: inherit;
+}
+
+.friend-on-campus.selected {
+  background: #e6f0ff;
+  border: 1px solid var(--friend-accent, #2f3c8f);
+  border-left-width: 4px;
 }
 
 .friend-avatar {
