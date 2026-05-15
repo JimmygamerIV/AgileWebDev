@@ -225,7 +225,7 @@ END:VCALENDAR"""
         ).count()
         assert count_before == 1
         
-        # 导入全新的 UWA 课表数据（包含两个事件）
+
         new_uwa_ics = """BEGIN:VCALENDAR
 PRODID:-//Allocate//iCal4j 1.0//EN
 VERSION:2.0
