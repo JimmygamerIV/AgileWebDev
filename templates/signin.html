@@ -5,6 +5,10 @@
   <div class="signin-card">
         <h1>Welcome to UWA Social Timetable!</h1>
         <p class="subtitle">Sign in to your account:</p>
+
+        {% if reset_success %}
+        <div class="alert-success">Password reset successfully!</div>
+        {% endif %}
         
         {% if error %}
     <p style="color: red">{{ error }}</p>

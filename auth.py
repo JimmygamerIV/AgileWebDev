@@ -123,7 +123,12 @@ def signin():
     form = SigninForm()
 
     if request.method == 'GET':
-        return render_template("signin.html", form=form, show_full_nav=False)
+        return render_template(
+            "signin.html",
+            form=form,
+            reset_success=request.args.get("reset") == "1",
+            show_full_nav=False
+        )
 
     if not form.validate_on_submit():
         return render_template("signin.html", form=form, show_full_nav=False)
@@ -163,23 +168,29 @@ def logout():
 @auth_bp.route('/forgot_password',methods=['GET',"POST"])
 def forgot_password():
     if request.method == 'GET':
-        return render_template('forgot_password.html')
+        return render_template('forgot_password.html', show_full_nav=False)
     
     email = request.form.get('email').strip().lower()
+    uwa_email_regex = r'^[a-zA-Z0-9._%+-]+@(student\.)?uwa\.edu\.au$'
+    if not re.match(uwa_email_regex, email):
+        return render_template(
+            "forgot_password.html",
+            error="Please use a valid UWA email (@student.uwa.edu.au or @uwa.edu.au).",
+            show_full_nav=False
+        )
 
     db =    Session()
     try:
         user = db.query(User).filter(User.email == email).first()
-        if not user:
-            return render_template("forgot_password.html",error="Email not found.")
-        code = send_verification_code(email)
-        if code:
-            session['reset_email'] = email
-            session['reset_code'] = code
+        session['reset_email'] = email
+        session.pop('reset_code', None)
 
-            return redirect(url_for("auth.reset_password"))
-        else:
-            return render_template("forgot_password.html",error="Failded to send email.")
+        if user:
+            code = send_verification_code(email)
+            if code:
+                session['reset_code'] = code
+
+        return redirect(url_for("auth.reset_password"))
         
     finally:
         db.close()
@@ -203,16 +214,16 @@ def reset_password():
         return render_template("reset_password.html", error="Passwords do not match.")
 
     if len(new_password) < 6:
-        return render_template("reset_password.html", error="Password must be at least 6 characters long.", form=form, show_full_nav=False)
+        return render_template("reset_password.html", error="Password must be at least 6 characters long.", show_full_nav=False)
     
     if not re.search(r"[A-Z]", new_password):
-        return render_template("reset_password.html", error="Password must contain at least one uppercase letter (A-Z).", form=form, show_full_nav=False)
+        return render_template("reset_password.html", error="Password must contain at least one uppercase letter (A-Z).", show_full_nav=False)
     
     if not re.search(r"[a-z]", new_password):
-        return render_template("reset_password.html", error="Password must contain at least one lowercase letter (a-z).", form=form, show_full_nav=False)
+        return render_template("reset_password.html", error="Password must contain at least one lowercase letter (a-z).", show_full_nav=False)
     
     if not re.search(r"\d", new_password):
-        return render_template("reset_password.html", error="Password must contain at least one number (0-9).", form=form, show_full_nav=False)
+        return render_template("reset_password.html", error="Password must contain at least one number (0-9).", show_full_nav=False)
 
 
     db = Session()
@@ -225,7 +236,7 @@ def reset_password():
             session.pop('reset_email', None)
             session.pop('reset_code', None)
             
-            return redirect(url_for('auth.signin'))
+            return redirect(url_for('auth.signin', reset='1'))
     except Exception as e:
         db.rollback()
         return render_template("reset_password.html", error=f"Database error: {e}")
