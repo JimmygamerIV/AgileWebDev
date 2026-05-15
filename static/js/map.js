@@ -710,21 +710,29 @@
       route = L.polyline(routeCoords, { color: color, weight: 3, opacity: 0.9 }).addTo(map);
     }
 
-    friendOverlays[String(friendId)] = { markers, route, color };
+    // Store the date used to render this overlay so we can detect when to refresh
+    friendOverlays[String(friendId)] = { markers, route, color, date: activeDate };
   }
 
   async function updateFriendOverlays() {
-    if (selectedFriends.size === 0) return;
-    const activeDate = computeActiveDate();
+    if (selectedFriends.size === 0) {
+      // No friends selected: clear any overlays
+      clearFriendOverlays();
+      return;
+    }
+    // Use the currently viewed day if set, otherwise fall back to computed active date
+    const activeDate = viewedDay || computeActiveDate();
     const userKeys = buildUserClassKeySet(activeDate);
 
     for (const [fid, friendMeta] of selectedFriends.entries()) {
       const id = String(fid);
-      if (friendOverlays[id]) {
+      const existing = friendOverlays[id];
+      // Re-render if no existing overlay or it was rendered for a different date
+      if (existing && existing.date === activeDate) {
         continue;
       }
 
-      const color = friendMeta?.color || getRandomColor();
+      const color = (friendMeta && friendMeta.color) || (existing && existing.color) || getRandomColor();
       await renderOverlayForFriend(id, friendMeta, color, activeDate, userKeys);
     }
 
@@ -733,6 +741,97 @@
         removeFriendOverlay(overlayFriendId);
       }
     }
+  }
+
+  function removeExistingGoldMarker() {
+    for (let i = activeMarkers.length - 1; i >= 0; i--) {
+      const m = activeMarkers[i];
+      try {
+        if (m && m.options && m.options.icon && m.options.icon.options && m.options.icon.options.className === 'gold-class-marker') {
+          map.removeLayer(m);
+          activeMarkers.splice(i, 1);
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+  }
+
+  function unselectAllFriends() {
+    // Clear selections in DOM
+    const els = document.querySelectorAll('.friend-on-campus.selected');
+    els.forEach((el) => {
+      el.classList.remove('selected');
+      el.style.removeProperty('--friend-accent');
+    });
+    // Clear selectedFriends map and overlays
+    selectedFriends.clear();
+    clearFriendOverlays();
+  }
+
+  function ensureUserGoldMarkerForDate(targetDate, openPopup = true, center = true) {
+    const date = targetDate || (viewedDay || computeActiveDate());
+    // Find non-online classes for that date
+    const dayClasses = classesData.filter((c) => c && c.date === date && !isOnlineClass(c));
+    if (!dayClasses.length) {
+      return null;
+    }
+
+    const renderableEntries = [];
+    for (const classData of dayClasses) {
+      const window = getClassWindow(classData);
+      if (!window) continue;
+      const lat = Number(classData.latitude);
+      const lng = Number(classData.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+      renderableEntries.push({ classData, start: window.start, lat, lng });
+    }
+
+    if (!renderableEntries.length) return null;
+
+    renderableEntries.sort((a, b) => a.start - b.start);
+    const now = getNow();
+    let currentEntry = null;
+    let nextEntry = null;
+    for (const entry of renderableEntries) {
+      const window = getClassWindow(entry.classData);
+      if (!window) continue;
+      if (window.start <= now && now < window.end) {
+        if (!currentEntry || window.start < currentEntry.start) {
+          currentEntry = { start: window.start, entry };
+        }
+        continue;
+      }
+      if (window.start > now) {
+        if (!nextEntry || window.start < nextEntry.start) {
+          nextEntry = { start: window.start, entry };
+        }
+      }
+    }
+
+    const targetClass = currentEntry ? currentEntry.entry.classData : nextEntry ? nextEntry.entry.classData : null;
+    if (!targetClass) return null;
+
+    // Remove any existing gold markers and add new one
+    removeExistingGoldMarker();
+
+    const lat = Number(targetClass.latitude);
+    const lng = Number(targetClass.longitude);
+    const markerLat = Number.isFinite(lat) ? lat : fallbackLocation.lat;
+    const markerLng = Number.isFinite(lng) ? lng : fallbackLocation.lng;
+
+    const marker = L.marker([markerLat, markerLng], { icon: goldMarkerIcon })
+      .addTo(map)
+      .bindPopup(popupHtml(targetClass));
+    marker.setZIndexOffset(1000);
+    marker.on('click', () => {
+      // Clicking the home/gold marker will unselect friends
+      unselectAllFriends();
+    });
+    activeMarkers.push(marker);
+    if (openPopup) marker.openPopup();
+    if (center) map.setView([markerLat, markerLng], 17);
+    return marker;
   }
 
   function wireFriendListSelection() {
@@ -757,7 +856,11 @@
             color: accentColor,
           });
           el.style.setProperty("--friend-accent", accentColor);
+          // Update overlays for the currently viewed day (or computed active date)
           updateFriendOverlays().catch(() => {});
+          const activeDate = viewedDay || computeActiveDate();
+          // Also bring up the user's gold/home marker for that day (don't open its popup or center)
+          ensureUserGoldMarkerForDate(activeDate, false, false);
         } else {
           selectedFriends.delete(key);
           el.style.removeProperty("--friend-accent");
@@ -1082,13 +1185,12 @@
     }
 
     if (goldMarkerData) {
-      const marker = L.marker([goldMarkerData.lat, goldMarkerData.lng], { icon: goldMarkerIcon })
-        .addTo(map)
-        .bindPopup(goldMarkerData.popup);
-      activeMarkers.push(marker);
-      marker.setZIndexOffset(1000);
-      focusLatLng = marker.getLatLng();
-      viewCoords.unshift([goldMarkerData.lat, goldMarkerData.lng]);
+      // Add a gold marker for the active date but do not auto-open or center it
+      const marker = ensureUserGoldMarkerForDate(null, false, false);
+      if (marker) {
+        focusLatLng = marker.getLatLng();
+        viewCoords.unshift([focusLatLng.lat, focusLatLng.lng]);
+      }
     }
 
     if (routesEnabled) {
@@ -1123,17 +1225,20 @@
     if (routesEnabled && viewCoords.length > 1) {
       const bounds = L.latLngBounds(viewCoords);
       map.fitBounds(bounds.pad(0.22), { maxZoom: 16 });
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
     if (focusLatLng) {
       map.setView(focusLatLng, 17);
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
     if (blueEntries.length > 0) {
       const bounds = L.latLngBounds(blueEntries.map((entry) => [entry.lat, entry.lng]));
       map.fitBounds(bounds.pad(0.2));
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
@@ -1142,6 +1247,7 @@
       .bindPopup("No current or upcoming classes found.");
     activeMarkers.push(fallbackMarker);
     map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+    updateFriendOverlays().catch(() => {});
   }
 
   function selectClass(eventId) {
@@ -1190,6 +1296,7 @@
           .addTo(map)
           .bindPopup(popupHtml(classData))
           .openPopup();
+        marker.on('click', () => unselectAllFriends());
         activeMarkers.push(marker);
         map.setView([lat, lng], 17);
         return;
@@ -1199,6 +1306,7 @@
         .addTo(map)
         .bindPopup(`${popupHtml(classData)}<div style="margin-top: 6px; font-size: 12px;">Map coordinates unavailable for this class.</div>`)
         .openPopup();
+      fallbackMarker.on('click', () => unselectAllFriends());
       activeMarkers.push(fallbackMarker);
       map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
       return;
@@ -1268,6 +1376,7 @@
         .openPopup();
       activeMarkers.push(marker);
       map.setView([fallbackLocation.lat, fallbackLocation.lng], 17);
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
@@ -1340,13 +1449,12 @@
     }
 
     if (goldMarkerData) {
-      const marker = L.marker([goldMarkerData.lat, goldMarkerData.lng], { icon: goldMarkerIcon })
-        .addTo(map)
-        .bindPopup(goldMarkerData.popup);
-      activeMarkers.push(marker);
-      marker.setZIndexOffset(1000);
-      focusLatLng = marker.getLatLng();
-      viewCoords.unshift([goldMarkerData.lat, goldMarkerData.lng]);
+      // Add a gold marker for the viewed day but do not auto-open or center it
+      const marker = ensureUserGoldMarkerForDate(viewedDay, false, false);
+      if (marker) {
+        focusLatLng = marker.getLatLng();
+        viewCoords.unshift([focusLatLng.lat, focusLatLng.lng]);
+      }
     }
 
     if (routesEnabled) {
@@ -1374,17 +1482,20 @@
     if (routesEnabled && viewCoords.length > 1) {
       const bounds = L.latLngBounds(viewCoords);
       map.fitBounds(bounds.pad(0.22), { maxZoom: 16 });
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
     if (focusLatLng) {
       map.setView(focusLatLng, 17);
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
     if (blueEntries.length > 0) {
       const bounds = L.latLngBounds(blueEntries.map((entry) => [entry.lat, entry.lng]));
       map.fitBounds(bounds.pad(0.2));
+      updateFriendOverlays().catch(() => {});
       return;
     }
 
