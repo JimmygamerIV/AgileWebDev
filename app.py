@@ -1,5 +1,5 @@
 import re
-from flask import Flask, g, render_template, redirect, session, request, jsonify,flash,url_for
+from flask import Flask, render_template, redirect, request, jsonify, flash, url_for, session
 from database import init_db, Session
 from models import Event, User, Friend
 from auth import auth_bp
@@ -22,8 +22,9 @@ from flask_mail import Mail
 import os
 import base64
 
-mail = Mail()
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
+mail = Mail()
 
 generate_env()
 load_dotenv()
@@ -37,6 +38,76 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(friends_bp)
 csrf = CSRFProtect(app)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# 配置未授权用户的处理
+login_manager.login_view = 'auth.signin'  # 登录页路由名称
+login_manager.login_message = 'Please sign in to access this page.'  # 自定义登录提示
+login_manager.login_message_category = 'warning'  # Bootstrap 提示类别
+
+# 配置 session 超时（默认 31 天）
+app.config['REMEMBER_COOKIE_DURATION'] = 30 * 24 * 60 * 60  # 30 天
+app.config['REMEMBER_COOKIE_SECURE'] = True  # HTTPS only
+app.config['REMEMBER_COOKIE_HTTPONLY'] = True  # JavaScript 不可访问
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db = Session()
+    try:
+        return db.query(User).filter(User.user_id == int(user_id)).first()
+    except (ValueError, TypeError):
+        return None
+    finally:
+        db.close()
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash(login_manager.login_message, login_manager.login_message_category)
+    return redirect(url_for('auth.signin'))
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    """Handle 404 Not Found errors."""
+    return render_template('error.html', 
+                         error_code=404, 
+                         error_message='Page not found'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    """Handle 500 Internal Server errors."""
+    return render_template('error.html', 
+                         error_code=500, 
+                         error_message='Internal server error'), 500
+
+
+@app.errorhandler(403)
+def forbidden_error(error):
+    """Handle 403 Forbidden errors."""
+    return render_template('error.html', 
+                         error_code=403, 
+                         error_message='Access forbidden'), 403
+
+
+@app.before_request
+def before_request():
+    """Before each request: Initialize user context."""
+    # If user is authenticated, update their last activity
+    if current_user.is_authenticated:
+        # Optional: Update last_seen timestamp in database
+        pass
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    """Teardown: Clean up database sessions after request."""
+    # Optional: Additional cleanup if needed
+    pass
+# =========================================================
 
 TIMETABLES_DIR = app.config["TIMETABLES_DIR"]
 TIMETABLES_DIR.mkdir(parents=True, exist_ok=True)
@@ -54,11 +125,9 @@ ROOM_INDEX = build_room_index(POIS)
 
 def importICS(ics_content, user_id):
     cal = Calendar.from_ical(ics_content)
-    
     db = Session()
     try:
         db.query(Event).filter(Event.user_id == user_id).delete()
-        
         preview_events = []
         for component in cal.walk():
             if component.name != "VEVENT":
@@ -95,11 +164,9 @@ def importICS(ics_content, user_id):
         
         db.commit()
         return preview_events
-    
     except Exception as e:
         db.rollback()
         raise e
-    
     finally:
         db.close()
 
@@ -111,28 +178,22 @@ def user_timetable_path(user_id):
 def is_event_currently_running(event, now=None):
     if not event.date or not event.start_time or not event.end_time:
         return False
-
     try:
         start_dt = datetime.strptime(f"{event.date} {event.start_time}", "%Y-%m-%d %H:%M")
         end_dt = datetime.strptime(f"{event.date} {event.end_time}", "%Y-%m-%d %H:%M")
     except ValueError:
         return False
 
-    # Handle events that cross midnight.
     if end_dt <= start_dt:
         end_dt += timedelta(days=1)
-
     if now is None:
         now = get_now()
-
     return start_dt <= now < end_dt
-
 
 
 def get_event_time_window(event):
     if not event.date or not event.start_time or not event.end_time:
         return None
-
     try:
         start_dt = datetime.strptime(f"{event.date} {event.start_time}", "%Y-%m-%d %H:%M")
         end_dt = datetime.strptime(f"{event.date} {event.end_time}", "%Y-%m-%d %H:%M")
@@ -141,7 +202,6 @@ def get_event_time_window(event):
 
     if end_dt <= start_dt:
         end_dt += timedelta(days=1)
-
     return start_dt, end_dt
 
 
@@ -150,7 +210,6 @@ def events_overlap(first_event, second_event):
     second_window = get_event_time_window(second_event)
     if first_window is None or second_window is None:
         return False
-
     first_start, first_end = first_window
     second_start, second_end = second_window
     return first_start < second_end and second_start < first_end
@@ -159,7 +218,6 @@ def events_overlap(first_event, second_event):
 def select_current_or_next_event(events, now=None):
     if now is None:
         now = get_now()
-
     current_events = []
     upcoming_events = []
 
@@ -167,7 +225,6 @@ def select_current_or_next_event(events, now=None):
         window = get_event_time_window(event)
         if window is None:
             continue
-
         start_dt, end_dt = window
         if start_dt <= now < end_dt:
             current_events.append((start_dt, event))
@@ -184,22 +241,17 @@ def select_current_or_next_event(events, now=None):
 def get_primary_poi_id(location_value):
     if not location_value:
         return None
-
     for token in str(location_value).split("|"):
         poi_id = token.strip()
         if poi_id in POIS:
             return poi_id
-
     return None
 
 
 @app.route('/')
+@login_required  
 def index():
-    if g.current_user is None:
-        session.pop('user_id', None)
-        return redirect('/signin')
-
-    user_id = session['user_id']
+    user_id = current_user.user_id 
 
     db = Session()
     try:
@@ -216,9 +268,7 @@ def index():
         for e in all_events:
             if not e.date:
                 continue
-
             event_date = date.fromisoformat(e.date)
-
             if event_date == today:
                 if not e.end_time or e.end_time > time_now:
                     today_events.append(e)
@@ -228,7 +278,6 @@ def index():
                 future_events.append(e)
 
         friend_ids = get_friend_ids(db, user_id)
-
         relevant_dates = sorted({e.date for e in all_events if e.date})
         other_events_by_date = {}
         attendee_user_lookup = {}
@@ -281,6 +330,7 @@ def index():
                 latitude = building.get("latitude")
                 longitude = building.get("longitude")
 
+            attachments = set()
             attendees = set()
             if event.date and poi_id:
                 for same_day_event in other_events_by_date.get(event.date, []):
@@ -292,17 +342,17 @@ def index():
 
             friend_attendee_ids = attendees.intersection(friend_ids)
             friend_attendees = [
-                attendee_user_lookup[friend_id]
-                for friend_id in friend_attendee_ids
-                if friend_id in attendee_user_lookup
+                attendee_user_lookup[fid]
+                for fid in friend_attendee_ids
+                if fid in attendee_user_lookup
             ]
             friend_attendees.sort(
-                key=lambda user: (user.get("nickname") or user.get("username") or "").lower()
+                key=lambda u: (u.get("nickname") or u.get("username") or "").lower()
             )
 
             friend_nicknames = [
-                (user.get("nickname") or user.get("username") or "")
-                for user in friend_attendees
+                (u.get("nickname") or u.get("username") or "")
+                for u in friend_attendees
             ]
 
             return {
@@ -332,7 +382,7 @@ def index():
         if friend_rows:
             friend_ids = [row.friend_id for row in friend_rows]
             friend_users = db.query(User).filter(User.user_id.in_(friend_ids)).all()
-            friend_users_by_id = {user.user_id: user for user in friend_users}
+            friend_users_by_id = {u.user_id: u for u in friend_users}
             for row in friend_rows:
                 friend_user = friend_users_by_id.get(row.friend_id)
                 if not friend_user:
@@ -418,10 +468,10 @@ def index():
             friend_user.campus_status = status
 
         friends_list.sort(
-            key=lambda user: (
-                status_order.get(getattr(user, "campus_status", "off_campus"), 2),
-                0 if getattr(user, "is_favourite", False) else 1,
-                (user.nickname or user.username or "").lower(),
+            key=lambda u: (
+                status_order.get(getattr(u, "campus_status", "off_campus"), 2),
+                0 if getattr(u, "is_favourite", False) else 1,
+                (u.nickname or u.username or "").lower(),
             )
         )
 
@@ -434,10 +484,10 @@ def index():
             status = getattr(friend_user, "campus_status", "off_campus")
             friends_grouped.get(status, friends_grouped["off_campus"]).append(friend_user)
 
-        def group_sort_key(user):
+        def group_sort_key(u):
             return (
-                0 if getattr(user, "is_favourite", False) else 1,
-                (user.nickname or user.username or "").lower(),
+                0 if getattr(u, "is_favourite", False) else 1,
+                (u.nickname or u.username or "").lower(),
             )
 
         for status in friends_grouped:
@@ -455,13 +505,13 @@ def index():
         friends=friends_list,
         friends_grouped=friends_grouped,
         fixed_now=get_now().isoformat(),
-        username=g.current_user["nickname"] or g.current_user["username"],
+        username=current_user.nickname or current_user.username,
         show_full_nav=True
     )
 
+
 @app.context_processor
 def inject_global_vars():
-
     default_vars = {
         "global_username": None,
         "global_nickname": None,
@@ -469,50 +519,20 @@ def inject_global_vars():
         "global_avatar": "default.jpg" 
     }
 
-    if g.get('current_user'):
+    if current_user.is_authenticated:
         default_vars.update({
-            "global_username": g.current_user.get("username"),
-            "global_nickname": g.current_user.get("nickname"),
-            "global_email": g.current_user.get("email"),
-            "global_avatar": g.current_user.get("avatar") or "default.jpg"
+            "global_username": current_user.username,
+            "global_nickname": current_user.nickname,
+            "global_email": current_user.email,
+            "global_avatar": current_user.avatar or "default.jpg"
         })
         
     return default_vars
 
-@app.before_request
-def load_logged_in_user():
-
-    user_id = session.get('user_id')
-    if user_id is None:
-        g.current_user = None
-    else:
-        db = Session()
-        try:
-
-            user = db.query(User).filter(User.user_id == user_id).first()
-            if user:
-                g.current_user = {
-                    "user_id": user.user_id,
-                    "username": user.username,
-                    "nickname": user.nickname,
-                    "email": user.email,
-                    "avatar": user.avatar  
-                }
-            else:
-                g.current_user = None
-        except Exception as e:
-            g.current_user = None
-        finally:
-            db.close()
-
-
 @app.route('/add-event', methods=['GET', 'POST'])
+@login_required
 def add_event():
     form = ImportTimetableForm()
-    if g.current_user is None:
-        session.pop('user_id', None)
-        return redirect('/signin')
-
     error = None
     success = None
     preview_events = []
@@ -526,8 +546,8 @@ def add_event():
         elif uploaded_file:
             try:
                 ics_content = uploaded_file.read()
-                user_timetable_path(session['user_id']).write_bytes(ics_content)
-                preview_events = importICS(ics_content, session['user_id'])
+                user_timetable_path(current_user.user_id).write_bytes(ics_content)
+                preview_events = importICS(ics_content, current_user.user_id)
                 success = "Timetable imported successfully."
             except Exception:
                 error = "Could not parse this ICS file."
@@ -536,8 +556,8 @@ def add_event():
             try:
                 with urlopen(ics_url, timeout=20) as response:
                     ics_content = response.read()
-                user_timetable_path(session['user_id']).write_bytes(ics_content)
-                preview_events = importICS(ics_content, session['user_id'])
+                user_timetable_path(current_user.user_id).write_bytes(ics_content)
+                preview_events = importICS(ics_content, current_user.user_id)
                 success = "Timetable imported successfully."
             except URLError:
                 error = "Could not download from that URL."
@@ -548,18 +568,17 @@ def add_event():
         error=error,
         success=success,
         preview_events=preview_events,
-        has_saved_timetable=user_timetable_path(session['user_id']).exists(),
+        has_saved_timetable=user_timetable_path(current_user.user_id).exists(),
         form=form,
         show_full_nav=True
     )
 
+
 @app.route('/timetable/restore', methods=['POST'])
+@login_required
 def restore_timetable():
     form = ImportTimetableForm()
-    if 'user_id' not in session:
-        return redirect('/signin')
-    
-    saved_path = user_timetable_path(session['user_id'])
+    saved_path = user_timetable_path(current_user.user_id)
     if not saved_path.exists():
         return render_template("add_event.html",
             error="No saved timetable found.",
@@ -572,7 +591,7 @@ def restore_timetable():
     
     try:
         ics_content = saved_path.read_bytes()
-        preview_events = importICS(ics_content, session['user_id'])
+        preview_events = importICS(ics_content, current_user.user_id)
         return render_template("add_event.html",
             error=None,
             success="Timetable restored successfully.",
@@ -591,15 +610,16 @@ def restore_timetable():
             show_full_nav=True
         ), 500
 
+
 @app.route('/api/events/me', methods=['GET'])
 def my_events():
-    if 'user_id' not in session:
+    if not current_user.is_authenticated:
         return jsonify({"error": "Not authenticated"}), 401
     
     db = Session()
     try:
         events = db.query(Event).filter(
-            Event.user_id == session['user_id']
+            Event.user_id == current_user.user_id
         ).order_by(Event.date, Event.start_time).all()
         
         result = []
@@ -612,20 +632,19 @@ def my_events():
                 "location": e.location or "",
                 "day": e.day or "",
                 "day_display": e.day or "",
-                "date":e.date or "",
+                "date": e.date or "",
                 "start_time": e.start_time or "",
                 "end_time": e.end_time or "",
             })
         
-        return jsonify({"user_id": session['user_id'], "events": result})
-    
+        return jsonify({"user_id": current_user.user_id, "events": result})
     finally:
         db.close()
 
 
 @app.route('/api/events/<int:event_id>', methods=['DELETE'])
 def delete_event(event_id):
-    if 'user_id' not in session:
+    if not current_user.is_authenticated:
         return jsonify({"error": "Not authenticated"}), 401
     
     db = Session()
@@ -633,7 +652,7 @@ def delete_event(event_id):
         event = db.get(Event, event_id)
         if event is None:
             return jsonify({"error": "Event not found"}), 404
-        if event.user_id != session['user_id']:
+        if event.user_id != current_user.user_id:
             return jsonify({"error": "Forbidden"}), 403
         if is_event_currently_running(event):
             return jsonify({"error": "This event is currently running and can only be deleted after it ends."}), 409
@@ -641,26 +660,23 @@ def delete_event(event_id):
         db.delete(event)
         db.commit()
         return jsonify({"success": True, "event_id": event_id, "deleted": True})
-    
     except Exception as e:
         db.rollback()
         return jsonify({"error": str(e)}), 500
-    
     finally:
         db.close()
 
 
 @app.route('/api/map/current-class', methods=['GET'])
 def current_class_map_data():
-    if 'user_id' not in session:
+    if not current_user.is_authenticated:
         return jsonify({"error": "Not authenticated"}), 401
 
-    user_id = session['user_id']
-
+    user_id = current_user.user_id
     db = Session()
     try:
-        my_events = db.query(Event).filter(Event.user_id == user_id).all()
-        target_event = select_current_or_next_event(my_events)
+        my_events_list = db.query(Event).filter(Event.user_id == user_id).all()
+        target_event = select_current_or_next_event(my_events_list)
 
         if target_event is None:
             return jsonify({"class": None})
@@ -731,29 +747,23 @@ def current_class_map_data():
                 "friend_nicknames": friend_nicknames,
             }
         })
-
     finally:
         db.close()
 
 
-
 @app.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
-    if g.current_user is None:
-        session.pop('user_id', None)
-        return redirect('/signin')
-
     if request.method == 'POST':
         action = request.form.get('action')
         db = Session()
         try:
-            user_id = session['user_id']
+            user_id = current_user.user_id
             user = db.query(User).filter(User.user_id == user_id).first()
 
             if not user:
                 flash({"type": "error", "msg": "User not found."})
                 return redirect(url_for('profile'))
-            
 
             if action == 'update_nickname':
                 new_nickname = request.form.get('nickname', '').strip()
@@ -762,8 +772,6 @@ def profile():
                 else:
                     user.nickname = new_nickname
                     db.commit()
-
-                    g.current_user["nickname"] = new_nickname
                     flash({"type": "success", "msg": "Nickname updated successfully!"})
                 return redirect(url_for('profile')) 
 
@@ -778,7 +786,6 @@ def profile():
                     flash({"type": "error", "msg": "New passwords do not match."})
                 elif len(new_pw) < 6:
                     flash({"type": "error", "msg": "Password must be at least 6 characters long."})
-
                 elif not re.search(r"[A-Z]", new_pw):
                     flash({"type": "error", "msg": "Password must contain at least one uppercase letter (A-Z)."})
                 elif not re.search(r"[a-z]", new_pw):
@@ -810,8 +817,6 @@ def profile():
                 
                 user.email = new_email
                 db.commit()
-                
-                g.current_user["email"] = new_email
                 flash({"type": "success", "msg": "Institutional email updated successfully!"})
                 return redirect(url_for('profile'))
 
@@ -822,11 +827,9 @@ def profile():
         finally:
             db.close()
 
-
-    user_avatar = g.current_user.get("avatar") or "default.jpg"
-    user_email = g.current_user.get("email") or "student@uwa.edu.au"
-    nickname = g.current_user.get("nickname")
-    username_to_display =g.current_user.get("username")
+    user_avatar = current_user.avatar or "default.jpg"
+    user_email = current_user.email or "student@uwa.edu.au"
+    nickname = current_user.nickname
 
     return render_template(
         "profile.html",
@@ -839,7 +842,7 @@ def profile():
 
 @app.route('/profile/avatar/upload_base64', methods=['POST'])
 def upload_avatar_base64():
-    if g.current_user is None:
+    if not current_user.is_authenticated:
         return jsonify({"status": "error", "message": "Unauthorized"}), 401
 
     data = request.get_json()
@@ -847,42 +850,33 @@ def upload_avatar_base64():
         return jsonify({"status": "error", "message": "Missing image data"}), 400
 
     try:
-
         image_data_str = data['image']
-
         header, encoded = image_data_str.split(",", 1)
         decoded_image = base64.b64decode(encoded)
 
-        filename = f"avatar_{session['user_id']}.png"
+        filename = f"avatar_{current_user.user_id}.png"
         upload_dir = os.path.join('static', 'uploads')
         os.makedirs(upload_dir, exist_ok=True)
-        
         file_path = os.path.join(upload_dir, filename)
-
 
         with open(file_path, "wb") as f:
             f.write(decoded_image)
 
-
         db = Session()
-        user = db.query(User).filter(User.user_id == session['user_id']).first()
+        user = db.query(User).filter(User.user_id == current_user.user_id).first()
         if user:
             user.avatar = filename
             db.commit()
-            session['user_avatar'] = filename
-            if g.get('current_user'):
-                g.current_user['avatar'] = filename
+
         db.close()
 
         return jsonify({
             "status": "success",
             "avatar_url": f"/static/uploads/{filename}"
         })
-
     except Exception as e:
         print(f"Cropper save error: {e}")
         return jsonify({"status": "error", "message": "Server internal error saves failed."}), 500
-    
 
 
 if __name__ == "__main__":

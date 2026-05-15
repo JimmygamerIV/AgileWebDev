@@ -1,4 +1,5 @@
-from flask import Blueprint, g, redirect, render_template, session, request, jsonify, abort
+from flask import Blueprint, redirect, render_template, request, jsonify, abort, flash
+from flask_login import login_required, current_user
 from database import Session
 from models import User, Friend, FriendRequest, Event
 from forms import AddFriendForm, FriendActionForm
@@ -55,15 +56,14 @@ def build_friends_list(db, user_id):
 
 
 @friends_bp.route("/friends")
+@login_required
 def friends():
-    if g.current_user is None:
-        return redirect("/signin")
-
+    """Display user's friends list and friend requests."""
     add_form = AddFriendForm()
     action_form = FriendActionForm()
     db = Session()
     try:
-        user_id = session["user_id"]
+        user_id = current_user.user_id
 
         friends_list = build_friends_list(db, user_id)
 
@@ -129,13 +129,11 @@ def friends():
 
 
 @friends_bp.route("/favourite_friend", methods=["POST"])
+@login_required
 def favourite_friend():
-    if g.current_user is None:
-        return jsonify({"error": "Not authenticated"}), 401
-
     db = Session()
     try:
-        user_id = session["user_id"]
+        user_id = current_user.user_id
         friend_id = request.form.get("friend_id", type=int)
 
         if not friend_id:
@@ -167,13 +165,11 @@ def favourite_friend():
 
 
 @friends_bp.route("/remove_friend", methods=["POST"])
+@login_required
 def remove_friend():
-    if g.current_user is None:
-        return jsonify({"error": "Not authenticated"}), 401
-
     db = Session()
     try:
-        user_id = session["user_id"]
+        user_id = current_user.user_id
         friend_id = request.form.get("friend_id", type=int)
 
         if not friend_id:
@@ -196,13 +192,11 @@ def remove_friend():
 
 
 @friends_bp.route("/accept_request", methods=["POST"])
+@login_required
 def accept_request():
-    if g.current_user is None:
-        return jsonify({"error": "Not authenticated"}), 401
-
     db = Session()
     try:
-        user_id = session["user_id"]
+        user_id = current_user.user_id
         request_id = request.form.get("request_id", type=int)
         sender_id = request.form.get("sender_id", type=int)
 
@@ -253,13 +247,11 @@ def accept_request():
 
 
 @friends_bp.route("/reject_request", methods=["POST"])
+@login_required
 def reject_request():
-    if g.current_user is None:
-        return jsonify({"error": "Not authenticated"}), 401
-
     db = Session()
     try:
-        user_id = session["user_id"]
+        user_id = current_user.user_id
         request_id = request.form.get("request_id", type=int)
 
         if not request_id:
@@ -282,13 +274,11 @@ def reject_request():
 
 
 @friends_bp.route("/cancel_request", methods=["POST"])
+@login_required
 def cancel_request():
-    if g.current_user is None:
-        return jsonify({"error": "Not authenticated"}), 401
-
     db = Session()
     try:
-        user_id = session["user_id"]
+        user_id = current_user.user_id
         request_id = request.form.get("request_id", type=int)
 
         if not request_id:
@@ -307,13 +297,11 @@ def cancel_request():
 
 
 @friends_bp.route("/search_users", methods=["GET"])
+@login_required
 def search_users():
-    if g.current_user is None:
-        return jsonify({"error": "Not authenticated"}), 401
-
     db = Session()
     try:
-        user_id = session["user_id"]
+        user_id = current_user.user_id
         query = (request.args.get("q") or "").strip()
 
         if len(query) < 2:
@@ -345,13 +333,12 @@ def search_users():
 
 
 @friends_bp.route("/send_friend_request", methods=["POST"])
+@login_required
 def send_friend_request():
-    if g.current_user is None:
-        return jsonify({"error": "Not authenticated"}), 401
 
     db = Session()
     try:
-        user_id = session["user_id"]
+        user_id = current_user.user_id
         target_id = request.form.get("user_id", type=int)
         target_username = (request.form.get("username") or "").strip()
 
@@ -408,11 +395,9 @@ def send_friend_request():
 
 
 @friends_bp.route("/profile/<username>")
+@login_required
 def view_profile(username):
-    if g.current_user is None:
-        return redirect('/signin')
-
-    if username == g.current_user['username']:
+    if username == current_user.username:
         return redirect('/profile')
 
     db = Session()
@@ -423,7 +408,7 @@ def view_profile(username):
         if user is None:
             abort(404)
 
-        friend_ids = get_friend_ids(db, g.current_user['user_id'])
+        friend_ids = get_friend_ids(db, current_user.user_id)
 
         if user.user_id not in friend_ids:
             return render_template(
@@ -437,8 +422,8 @@ def view_profile(username):
 
         if status == "none":
             req = db.query(FriendRequest).filter(
-                FriendRequest.sender_id == g.current_user['user_id'], # current user (you)
-                FriendRequest.receiver_id == user.user_id,     # target
+                FriendRequest.sender_id == current_user.user_id,
+                FriendRequest.receiver_id == user.user_id,
                 FriendRequest.status == "pending" 
             ).first()
 
@@ -449,8 +434,8 @@ def view_profile(username):
         # Check the friend req in the other direction
         if status == "none":
             req = db.query(FriendRequest).filter(
-                FriendRequest.sender_id == user.user_id,    # target
-                FriendRequest.receiver_id == g.current_user['user_id'],    # current user (you)
+                FriendRequest.sender_id == user.user_id,
+                FriendRequest.receiver_id == current_user.user_id,
                 FriendRequest.status == "pending" 
             ).first()
 
@@ -499,17 +484,15 @@ def view_profile(username):
 
     
 @friends_bp.route("/api/friends/on-campus", methods=["GET"])
+@login_required
 def friends_on_campus():
-    if g.current_user is None:
-        return jsonify({"error": "Not authenticated"}), 401
-    
     db = Session()
 
     try:
         today = get_today().isoformat()
         curr_time = get_now().strftime("%H:%M")
 
-        user_id = g.current_user["user_id"]
+        user_id = current_user.user_id
 
         user_friends = get_friend_ids(db, user_id)
 
