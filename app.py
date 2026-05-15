@@ -17,15 +17,19 @@ from flask_wtf.csrf import CSRFProtect
 from generate_env import generate_env
 from friends import friends_bp, get_friend_ids
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_mail import Mail
 import os
 import base64
+
+mail = Mail()
+
 
 generate_env()
 load_dotenv()
 app = Flask(__name__)
 app.config.from_object(Config)
 
-
+mail.init_app(app)
 
 init_db()
 app.register_blueprint(auth_bp)

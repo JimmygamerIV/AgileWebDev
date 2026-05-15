@@ -5,12 +5,14 @@ body {
 
 /* Navbar */
 .navbar {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 0px 30px;
-  box-sizing: border-box;
-  background-color: #2f3c8f;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 30px;
+    height: 60px; 
+    box-sizing: border-box;
+    background-color: #2f3c8f;
+    flex-shrink: 0; 
 }
 
 .navbar a {

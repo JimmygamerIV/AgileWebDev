@@ -18,3 +18,12 @@ class Config:
     WTF_CSRF_ENABLED = True
     BUILDINGS_JSON = BASE_DIR / "buildings.json"
     POIS_JSON = BASE_DIR / "pois.json"
+    
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 587
+    MAIL_USE_SSL = False
+    MAIL_USE_TLS = True
+
+    MAIL_USERNAME = "unimap2026@gmail.com"
+    MAIL_PASSWORD = "kczg bskh smwn mvli"
+    MAIL_DEFAULT_SENDER = "unimap2026@gmail.com"

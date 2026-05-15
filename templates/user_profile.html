@@ -1,7 +1,9 @@
 {% extends "base.html" %}
-
-{% block title %}{{ target_user.nickname or target_user.username }}{% endblock %}
-
+{% block title %}{{ target_user.nickname or target_user.username }}
+{% endblock %}
+{% block styles%}
+<link rel="stylesheet" href="{{ url_for('static', filename='user_profile.css') }}" />
+{% endblock %}
 {% block content %}
 <div class="user-profile-container">
   <div class="user-profile-card">
