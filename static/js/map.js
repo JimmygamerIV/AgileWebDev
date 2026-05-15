@@ -522,6 +522,256 @@
     }
   }
 
+  // Friend overlays state
+  const selectedFriends = new Map();
+  const friendOverlays = {}; // friendId -> { markers: [], route: L.polyline|null, color }
+
+  function clearFriendOverlays() {
+    for (const fid of Object.keys(friendOverlays)) {
+      const layer = friendOverlays[fid];
+      if (!layer) continue;
+      if (layer.route) {
+        map.removeLayer(layer.route);
+      }
+      for (const m of layer.markers || []) {
+        map.removeLayer(m);
+      }
+    }
+    for (const k in friendOverlays) delete friendOverlays[k];
+  }
+
+  function removeFriendOverlay(friendId) {
+    const layer = friendOverlays[String(friendId)];
+    if (!layer) {
+      return;
+    }
+
+    if (layer.route) {
+      map.removeLayer(layer.route);
+    }
+    for (const marker of layer.markers || []) {
+      map.removeLayer(marker);
+    }
+
+    delete friendOverlays[String(friendId)];
+  }
+
+  // Build a set of user's class keys for collision detection
+  function buildUserClassKeySet(activeDate) {
+    const keys = new Set();
+    for (const c of classesData) {
+      if (!c || c.date !== activeDate) continue;
+      const key = `${c.event_name || ''}||${c.date || ''}||${c.start_time || ''}||${c.end_time || ''}||${c.location_display || ''}`;
+      keys.add(key);
+    }
+    return keys;
+  }
+
+  function getRandomColor() {
+    const h = Math.floor(Math.random() * 360);
+    return `hsl(${h} 80% 45%)`;
+  }
+
+  function escapeAttribute(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function normalizeAvatarUrl(avatarUrl) {
+    if (!avatarUrl) {
+      return "/static/uploads/default.jpg";
+    }
+
+    if (avatarUrl.startsWith("http://") || avatarUrl.startsWith("https://") || avatarUrl.startsWith("/")) {
+      return avatarUrl;
+    }
+
+    return `/static/uploads/${avatarUrl}`;
+  }
+
+  function createFriendAvatarIcon(avatarUrl, color) {
+    const safeAvatarUrl = normalizeAvatarUrl(avatarUrl);
+    return L.divIcon({
+      className: "friend-avatar-marker",
+      html: `
+        <div class="friend-avatar-marker-ring" style="border-color: ${color};">
+          <img class="friend-avatar-marker-image" src="${escapeAttribute(safeAvatarUrl)}" alt="Friend avatar" />
+        </div>
+      `,
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
+      popupAnchor: [0, -18],
+    });
+  }
+
+  function buildFriendPopupHtml(friendMeta, classData) {
+    const friendName = friendMeta?.friendName || "Friend";
+    return `
+      <div>
+        <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 4px;">Viewing ${escapeHtml(friendName)}'s upcoming class:</div>
+        ${popupHtml(classData)}
+      </div>
+    `;
+  }
+
+  async function fetchFriendClasses(friendId, date) {
+    const url = new URL('/api/friends/classes', window.location.origin);
+    url.searchParams.set('friend_id', String(friendId));
+    if (date) url.searchParams.set('date', date);
+    const res = await fetch(url.toString(), { credentials: 'same-origin' });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data.classes) ? data.classes : [];
+  }
+
+  function getClassWindowFromObj(classData) {
+    if (!classData || !classData.date || !classData.start_time || !classData.end_time) return null;
+    const start = new Date(`${classData.date}T${classData.start_time}:00`);
+    let end = new Date(`${classData.date}T${classData.end_time}:00`);
+    if (end <= start) end = new Date(end.getTime() + 24 * 60 * 60 * 1000);
+    return { start, end };
+  }
+
+  function computeFriendTargetClass(entries) {
+    const now = getNow();
+    let currentEntry = null;
+    let nextEntry = null;
+    for (const entry of entries) {
+      const window = getClassWindowFromObj(entry);
+      if (!window) continue;
+      if (window.start <= now && now < window.end) {
+        if (!currentEntry || window.start < currentEntry.start) {
+          currentEntry = { start: window.start, entry };
+        }
+        continue;
+      }
+      if (window.start > now) {
+        if (!nextEntry || window.start < nextEntry.start) {
+          nextEntry = { start: window.start, entry };
+        }
+      }
+    }
+    return currentEntry ? currentEntry.entry : nextEntry ? nextEntry.entry : null;
+  }
+
+  async function renderOverlayForFriend(friendId, friendMeta, color, activeDate, userKeys) {
+    const existing = friendOverlays[String(friendId)];
+    if (existing) {
+      if (existing.route) map.removeLayer(existing.route);
+      for (const m of existing.markers || []) map.removeLayer(m);
+    }
+
+    const classes = await fetchFriendClasses(friendId, activeDate);
+    if (!classes || classes.length === 0) return;
+
+    const now = getNow();
+    const renderable = [];
+    for (const c of classes) {
+      const window = getClassWindowFromObj(c);
+      if (!window) continue;
+      if (window.end <= now) continue;
+      const lat = Number(c.latitude);
+      const lng = Number(c.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+      renderable.push(Object.assign({ lat, lng }, c));
+    }
+
+    if (!renderable.length) return;
+
+    const targetClass = computeFriendTargetClass(renderable);
+    const targetId = targetClass ? String(targetClass.event_id) : null;
+    const avatarIcon = createFriendAvatarIcon(friendMeta?.avatarUrl, color);
+
+    const routeCoords = [];
+    const markers = [];
+
+    for (const entry of renderable) {
+      const key = `${entry.event_name || ''}||${entry.date || ''}||${entry.start_time || ''}||${entry.end_time || ''}||${entry.location_display || ''}`;
+      routeCoords.push([entry.lat, entry.lng]);
+
+      if (userKeys && userKeys.has(key)) {
+        continue;
+      }
+
+      const isTarget = targetId && String(entry.event_id) === targetId;
+      const marker = L.marker([entry.lat, entry.lng], {
+        icon: avatarIcon,
+        zIndexOffset: isTarget ? 1200 : 800,
+      }).addTo(map).bindPopup(buildFriendPopupHtml(friendMeta, entry));
+      markers.push(marker);
+    }
+
+    let route = null;
+    if (routeCoords.length > 1) {
+      route = L.polyline(routeCoords, { color: color, weight: 3, opacity: 0.9 }).addTo(map);
+    }
+
+    friendOverlays[String(friendId)] = { markers, route, color };
+  }
+
+  async function updateFriendOverlays() {
+    if (selectedFriends.size === 0) return;
+    const activeDate = computeActiveDate();
+    const userKeys = buildUserClassKeySet(activeDate);
+
+    for (const [fid, friendMeta] of selectedFriends.entries()) {
+      const id = String(fid);
+      if (friendOverlays[id]) {
+        continue;
+      }
+
+      const color = friendMeta?.color || getRandomColor();
+      await renderOverlayForFriend(id, friendMeta, color, activeDate, userKeys);
+    }
+
+    for (const overlayFriendId of Object.keys(friendOverlays)) {
+      if (!selectedFriends.has(overlayFriendId)) {
+        removeFriendOverlay(overlayFriendId);
+      }
+    }
+  }
+
+  function wireFriendListSelection() {
+    const list = document.querySelectorAll('.friend-on-campus');
+    if (!list) return;
+    list.forEach((el) => {
+      const fid = el.getAttribute('data-friend-id');
+      if (!fid) return;
+      el.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const key = String(fid);
+        const selected = el.classList.toggle('selected');
+        if (selected) {
+          const avatarImg = el.querySelector("img.friend-avatar");
+          const friendNameEl = el.querySelector(".friend-name");
+          const accentColor = getRandomColor();
+          selectedFriends.set(key, {
+            friendId: key,
+            avatarUrl: avatarImg ? avatarImg.getAttribute("src") : "/static/uploads/default.jpg",
+            friendName: friendNameEl ? friendNameEl.textContent.trim() : "Friend",
+            color: accentColor,
+          });
+          el.style.setProperty("--friend-accent", accentColor);
+          updateFriendOverlays().catch(() => {});
+        } else {
+          selectedFriends.delete(key);
+          el.style.removeProperty("--friend-accent");
+          removeFriendOverlay(key);
+        }
+      });
+      el.addEventListener('keydown', (ev) => {
+        if (ev.key !== 'Enter' && ev.key !== ' ') return;
+        ev.preventDefault();
+        el.click();
+      });
+    });
+  }
+
   function isOnlineClass(classData) {
     const searchableText = `${classData?.event_name || ""} ${classData?.location_display || ""} ${classData?.building_name || ""}`.toLowerCase();
     return /\bonline\b|\bvirtual\b|\bremote\b|\bzoom\b|\bteams\b|\bwebex\b|\bcollaborate\b/.test(searchableText);
@@ -1242,5 +1492,6 @@
   decorateOnlineClasses();
   wireClassSelection();
   wireDayGroupClicks();
+  wireFriendListSelection();
   renderDefaultMapView();
 })();
