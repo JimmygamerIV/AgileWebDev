@@ -244,12 +244,12 @@ class TestTimetableRoutes:
     
     def test_add_event_route_unauthenticated(self, client):
         """Test add event route without authentication."""
-        response = client.get('/add_event')
+        response = client.get('/add-event')
         assert response.status_code == 302  # Redirect
     
     def test_add_event_route_authenticated(self, authenticated_client):
         """Test add event route when authenticated."""
-        response = authenticated_client.get('/add_event')
+        response = authenticated_client.get('/add-event')
         assert response.status_code == 200
 
 

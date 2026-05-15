@@ -247,14 +247,14 @@ class TestAddFriendRoute:
     
     def test_add_friend_unauthenticated(self, client):
         """Test add friend without authentication."""
-        response = client.post('/add_friend', data={
+        response = client.post('/friend', data={
             'target_username': 'someuser'
         })
         assert response.status_code in [302, 401]  # Redirect or unauthorized
     
     def test_add_friend_nonexistent_user(self, authenticated_client, sample_user):
         """Test adding non-existent user as friend."""
-        response = authenticated_client.post('/add_friend', data={
+        response = authenticated_client.post('/friend', data={
             'target_username': 'nonexistent_user_xyz',
             'csrf_token': 'dummy'
         }, follow_redirects=True)
