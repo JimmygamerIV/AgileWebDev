@@ -24,6 +24,24 @@ def get_friend_ids(db, user_id):
     return friend_ids
 
 
+def get_primary_poi_id(location_value):
+        if not location_value:
+                return None
+
+        blocked_terms = {"online", "virtual", "remote", "zoom", "teams", "webex", "collaborate"}
+        location_text = str(location_value).lower()
+        if any(term in location_text for term in blocked_terms):
+                return None
+
+        for token in str(location_value).split("|"):
+            poi_id = token.strip()
+            if not poi_id:
+                continue
+            return poi_id
+
+        return None
+
+
 def build_friends_list(db, user_id):
     friend_rows = db.query(Friend).filter(Friend.user_id == user_id).all()
     friends_list = []
@@ -451,20 +469,30 @@ def view_profile(username):
         today_str = get_today().isoformat()
         now_str = get_now().strftime("%H:%M")
 
-        current_class = db.query(Event).filter(
+        current_candidates = db.query(Event).filter(
             Event.user_id == user.user_id,
             Event.date == today_str,
             Event.start_time <= now_str,
             Event.end_time >= now_str,
-        ).first()
+        ).order_by(Event.start_time).all()
+
+        current_class = next(
+            (event for event in current_candidates if get_primary_poi_id(event.location or "")),
+            None,
+        )
 
         next_class = None
         if current_class is None:
-            next_class = db.query(Event).filter(
+            next_candidates = db.query(Event).filter(
                 Event.user_id == user.user_id,
                 ((Event.date > today_str) |
                 ((Event.date == today_str) & (Event.start_time > now_str)))
-            ).order_by(Event.date, Event.start_time).first()
+            ).order_by(Event.date, Event.start_time).all()
+
+            next_class = next(
+                (event for event in next_candidates if get_primary_poi_id(event.location or "")),
+                None,
+            )
 
         return render_template(
             "user_profile.html",
