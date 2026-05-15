@@ -1,41 +1,46 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
 }
 
-/* Navbar */
+/* ─── Navbar (overrides for index page) ─── */
 .navbar {
   display: flex;
   align-items: center;
   width: 100%;
   padding: 0px 30px;
   box-sizing: border-box;
-  background-color: #2f3c8f;
+  background: rgba(12, 14, 22, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
 }
 
 .navbar a {
-  color: white;
+  color: var(--text-secondary);
   text-decoration: none;
   padding: 15px 15px;
-  transition: background-color 0.2s;
+  transition: color var(--transition);
 }
 
 .navbar a:hover {
-  background-color: #1d2a6b; /* darker blue */
+  color: var(--text-primary);
+  background-color: transparent;
 }
 
-/* Font's inside navbar  */
 .nav-left,
 .nav-center,
 .nav-right {
-  color: white;
+  color: var(--text-primary);
   font-size: 20px;
 }
 
 .nav-group {
   display: flex;
   align-items: center;
-  gap: 50px; /* space between title and buttons */
+  gap: 50px;
 }
 
 .nav-center {
@@ -43,10 +48,9 @@ body {
 }
 
 .nav-left {
-  font-weight: bold;
+  font-weight: 700;
 }
 
-/* Push logout to far right */
 .nav-right {
   margin-left: auto;
   display: flex;
@@ -54,14 +58,15 @@ body {
   gap: 12px;
 }
 
-/* Main layout */
+/* ─── Main layout ─── */
 .side-container {
   display: flex;
   padding: 20px;
   gap: 20px;
+  animation: fadeIn 0.3s ease;
 }
 
-/* Sidebar (left) */
+/* ─── Sidebar ─── */
 .custom-sidebar {
   width: 270px;
   display: flex;
@@ -72,82 +77,100 @@ body {
 
 .custom-sidebar h1 {
   font-size: 20px;
-  font-weight: normal;
+  font-weight: 600;
   margin-top: 10px;
   margin-bottom: 10px;
+  color: var(--text-primary);
 }
 
 .custom-sidebar h2 {
   font-size: 24px;
-  font-weight: normal;
+  font-weight: 600;
   margin-top: 10px;
   margin-bottom: 10px;
+  color: var(--text-primary);
 }
 
-/* Cards */
+/* ─── Cards ─── */
 .card {
-  background: #f5f5f5;
+  background: var(--bg-card);
   padding: 20px;
-  border-radius: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
+  animation: fadeSlideUp 0.35s ease both;
 }
 
-/* Map section */
+.card:hover {
+  box-shadow: var(--glow);
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
+}
+
+/* ─── Map section ─── */
 .map-section {
   flex: 1;
   margin-top: 10px;
 }
 
-/* Big map box */
 .map-box {
   position: relative;
   height: 610px;
-  background: #ddd;
-
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
+  overflow: hidden;
 }
 
+/* ─── Upcoming panel ─── */
 .upcoming {
   position: absolute;
   bottom: 20px;
   right: 20px;
   width: 300px;
-  overflow: hidden; /* keeps corners clean */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
   height: auto;
   z-index: 1000;
+  border-radius: var(--radius);
 }
 
-/* Top bar */
 .upcoming-header {
-  color: white;
-  background-color: #2f3c8f;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, #1a1f2e, var(--bg-elevated));
+  border-bottom: 1px solid var(--border-accent);
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
   font-weight: 700;
-  background: #2f3c8f;
 }
 
-/* Arrow button */
 .toggle-btn {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 18px;
   line-height: 1;
+  color: var(--text-secondary);
+  transition: color var(--transition);
 }
 
-/* Content area */
+.toggle-btn:hover {
+  color: var(--text-primary);
+}
+
 .upcoming-content {
-  background-color: white;
+  background: var(--bg-card);
   padding: 10px;
-  border: 5px solid #2f3c8f; /* blue border */
-  border-top: none; /* removes top border */
+  border: 2px solid var(--border-accent);
+  border-top: none;
   overflow-y: auto;
   max-height: 250px;
   opacity: 1;
@@ -169,26 +192,27 @@ body {
 }
 
 .group-title {
-  background: #ffe8a3;
-  color: #2a2a2a;
+  background: rgba(230, 180, 40, 0.15);
+  color: #e6c028;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
   padding: 6px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   margin-bottom: 6px;
   cursor: pointer;
+  border: 1px solid rgba(230, 180, 40, 0.2);
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .group-title:hover {
-  background: #ffd966;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  background: rgba(230, 180, 40, 0.25);
+  box-shadow: 0 2px 8px rgba(230, 180, 40, 0.15);
 }
 
 .group-title:focus-visible {
-  outline: 2px solid #2f3c8f;
+  outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
 
@@ -202,7 +226,7 @@ body {
 
 .empty-group {
   font-size: 12px;
-  color: #777;
+  color: var(--text-muted);
   font-style: italic;
   padding: 4px 2px;
 }
@@ -212,15 +236,16 @@ body {
   flex-direction: column;
   padding: 8px 10px;
   margin-bottom: 6px;
-  background-color: #f0f4ff;
-  border-left: 4px solid #2f3c8f;
-  border-radius: 4px;
+  background: var(--bg-elevated);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
   position: relative;
   cursor: pointer;
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .event-item.has-online-icon {
@@ -228,18 +253,20 @@ body {
 }
 
 .event-item:hover {
-  background-color: #e7eeff;
+  background: #252d42;
+  box-shadow: 0 2px 12px rgba(108, 99, 255, 0.12);
+  transform: translateX(2px);
 }
 
 .event-item:focus-visible {
-  outline: 2px solid #2f3c8f;
+  outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
 
 .event-item.selected {
-  background-color: #d9e6ff;
-  border-left-color: #12216f;
-  box-shadow: inset 0 0 0 1px rgba(18, 33, 111, 0.25);
+  background: rgba(108, 99, 255, 0.18);
+  border-left-color: var(--accent-2);
+  box-shadow: inset 0 0 0 1px rgba(108, 99, 255, 0.2);
 }
 
 .event-item.has-attendees {
@@ -248,13 +275,13 @@ body {
 
 .event-name {
   font-size: 13px;
-  font-weight: bold;
-  color: #2f3c8f;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .event-details {
   font-size: 11px;
-  color: #666;
+  color: var(--text-muted);
   margin-top: 2px;
 }
 
@@ -264,7 +291,7 @@ body {
   right: 8px;
   width: 16px;
   height: 16px;
-  color: #2f3c8f;
+  color: var(--accent-2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -292,7 +319,7 @@ body {
 
 .event-attendees-label {
   font-size: 10px;
-  color: #2f3c8f;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
@@ -305,10 +332,10 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--bg-card);
   object-fit: cover;
-  background: #dfe6ff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  background: var(--bg-elevated);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   display: block;
 }
 
@@ -338,7 +365,7 @@ body {
   font-size: 9px;
   font-weight: 700;
   color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .upcoming.collapsed .upcoming-content {
@@ -352,17 +379,26 @@ body {
   overflow: hidden;
 }
 
+/* ─── Map controls ─── */
 #styleToggle {
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 1000;
   padding: 6px 12px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 13px;
+  color: var(--text-secondary);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+#styleToggle:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
 }
 
 #fullscreenToggle {
@@ -371,9 +407,9 @@ body {
   right: 10px;
   z-index: 1000;
   padding: 6px 8px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 16px;
   width: 32px;
@@ -381,6 +417,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--text-secondary);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+#fullscreenToggle:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
 }
 
 #routesToggle {
@@ -389,11 +433,19 @@ body {
   right: 10px;
   z-index: 1000;
   padding: 6px 10px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 12px;
+  color: var(--text-secondary);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+#routesToggle:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
 }
 
 #stopSelectingBtn {
@@ -402,16 +454,16 @@ body {
   right: 50px;
   z-index: 1000;
   padding: 6px;
-  border: 1px solid #122f6f;
-  border-radius: 4px;
-  background: #122f6f;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: rgba(108, 99, 255, 0.2);
   width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #fff;
+  color: var(--text-primary);
   opacity: 0;
   pointer-events: none;
   animation: none;
@@ -421,7 +473,7 @@ body {
 #stopSelectingBtn svg {
   width: 18px;
   height: 18px;
-  stroke: #fff;
+  stroke: var(--text-primary);
 }
 
 #stopSelectingBtn.visible {
@@ -431,30 +483,18 @@ body {
 }
 
 @keyframes homeButtonFadeFlash {
-  0% {
-    opacity: 0;
-  }
-  20% {
-    opacity: 0.3;
-  }
-  35% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  70% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
+  0%   { opacity: 0; }
+  20%  { opacity: 0.3; }
+  35%  { opacity: 1; }
+  50%  { opacity: 0.6; }
+  70%  { opacity: 1; }
+  100% { opacity: 1; }
 }
 
 .online-class-marker {
   background: transparent;
   border: none;
-  color: #2f3c8f;
+  color: var(--accent-2);
 }
 
 .online-class-marker svg {
@@ -480,12 +520,10 @@ body {
 }
 
 @keyframes routeDash {
-  to {
-    stroke-dashoffset: -20;
-  }
+  to { stroke-dashoffset: -20; }
 }
 
-/* Friends on campus list */
+/* ─── Friends on campus list ─── */
 .friends-list {
   display: flex;
   flex-direction: column;
@@ -496,18 +534,27 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 8px;
-  background: white;
-  border-radius: 6px;
+  padding: 8px 10px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   font-size: 13px;
-  color: inherit;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.friend-on-campus:hover {
+  background: #252d42;
+  border-color: var(--border-accent);
+  transform: translateX(3px);
 }
 
 .friend-avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 1px solid rgba(47, 60, 143, 0.2);
+  border: 1px solid rgba(108, 99, 255, 0.3);
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -518,15 +565,16 @@ body {
 }
 
 .friend-name {
-  color: #333;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 .friends-status-header {
-  font-size: 12px;
+  font-size: 11px;
   font-style: italic;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   margin-top: 8px;
   margin-bottom: 2px;
 }
@@ -536,15 +584,15 @@ body {
 }
 
 .friends-status-header.status-gold {
-  color: #c99700;
+  color: #d4a017;
 }
 
 .friends-status-header.status-green {
-  color: #1f8a4c;
+  color: #22c55e;
 }
 
 .friends-status-header.status-red {
-  color: #c33b3b;
+  color: #ef4444;
 }
 
 @media (max-width: 768px) {
@@ -611,7 +659,6 @@ body {
     padding: 4px;
   }
 
-  /* Navbar mobile cleanup only */
   .navbar {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
