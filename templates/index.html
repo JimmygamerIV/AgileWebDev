@@ -153,5 +153,8 @@ styles %}
 <script id="classesMapData" type="application/json">
   {{ classes_map_data|tojson }}
 </script>
+<script id="fixedNowData" type="application/json">
+  {{ {"now": fixed_now}|tojson }}
+</script>
 <script src="{{ url_for('static', filename='js/map.js') }}"></script>
 {% endblock %}

@@ -3,6 +3,7 @@ from database import Session
 from models import User, Friend, FriendRequest, Event
 from forms import AddFriendForm, FriendActionForm
 from datetime import date, datetime
+from time_utils import get_now, get_today
 
 friends_bp = Blueprint("friends", __name__)
 
@@ -462,8 +463,8 @@ def view_profile(username):
         friend_count = len(target_friend_ids)
         mutual_count = len(friend_ids & target_friend_ids)
 
-        today_str = date.today().isoformat()
-        now_str = datetime.now().strftime("%H:%M")
+        today_str = get_today().isoformat()
+        now_str = get_now().strftime("%H:%M")
 
         current_class = db.query(Event).filter(
             Event.user_id == user.user_id,
@@ -505,8 +506,8 @@ def friends_on_campus():
     db = Session()
 
     try:
-        today = date.today().isoformat()
-        curr_time = datetime.now().strftime("%H:%M")
+        today = get_today().isoformat()
+        curr_time = get_now().strftime("%H:%M")
 
         user_id = g.current_user["user_id"]
 
