@@ -140,9 +140,31 @@ def sample_event(db_session, sample_user):
 
 @pytest.fixture
 def authenticated_client(client, sample_user):
-    """Create an authenticated test client."""
-    with client:
-        # Manually set session
-        with client.session_transaction() as sess:
-            sess['user_id'] = sample_user.user_id
+    """Create an authenticated test client for user 1."""
+    with client.session_transaction() as sess:
+        sess['user_id'] = sample_user.user_id
     return client
+
+
+@pytest.fixture
+def authenticated_client_2(app, sample_user_2):
+    """Create an independent authenticated test client for user 2.
+    
+    Uses a separate app.test_client() instance to avoid session conflicts.
+    """
+    client_2 = app.test_client()
+    with client_2.session_transaction() as sess:
+        sess['user_id'] = sample_user_2.user_id
+    return client_2
+
+
+@pytest.fixture
+def authenticated_client_3(app, sample_user_3):
+    """Create an independent authenticated test client for user 3.
+    
+    Uses a separate app.test_client() instance to avoid session conflicts.
+    """
+    client_3 = app.test_client()
+    with client_3.session_transaction() as sess:
+        sess['user_id'] = sample_user_3.user_id
+    return client_3

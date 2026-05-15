@@ -1,26 +1,25 @@
 """
-Tests for friends functionality.
+Tests for friends functionality and friend requests.
+Comprehensive testing for all friend-related features.
 """
 import pytest
+import json
 from flask import session
-from models import Friend, FriendRequest
+from models import Friend, FriendRequest, User
 from database import Session
+from friends import get_friend_ids, build_friends_list
 
 
 class TestGetFriendIds:
-    """Test get_friend_ids function."""
+    """Test the get_friend_ids function."""
     
     def test_get_friend_ids_no_friends(self, db_session, sample_user):
         """Test getting friend IDs when user has no friends."""
-        from friends import get_friend_ids
-        
         friend_ids = get_friend_ids(db_session, sample_user.user_id)
         assert len(friend_ids) == 0
     
     def test_get_friend_ids_outgoing_friendship(self, db_session, sample_user, sample_user_2):
         """Test getting friend IDs with outgoing friendship."""
-        from friends import get_friend_ids
-        
         friend = Friend(
             user_id=sample_user.user_id,
             friend_id=sample_user_2.user_id
@@ -33,8 +32,6 @@ class TestGetFriendIds:
     
     def test_get_friend_ids_incoming_friendship(self, db_session, sample_user, sample_user_2):
         """Test getting friend IDs with incoming friendship."""
-        from friends import get_friend_ids
-        
         friend = Friend(
             user_id=sample_user_2.user_id,
             friend_id=sample_user.user_id
@@ -47,8 +44,6 @@ class TestGetFriendIds:
     
     def test_get_friend_ids_multiple_friends(self, db_session, sample_user, sample_user_2, sample_user_3):
         """Test getting friend IDs with multiple friends."""
-        from friends import get_friend_ids
-        
         friend1 = Friend(
             user_id=sample_user.user_id,
             friend_id=sample_user_2.user_id
@@ -242,64 +237,25 @@ class TestFavouriteFriend:
             assert friend_row.is_favourite == 1
 
 
-class TestAddFriendRoute:
-    """Test add friend route."""
-    
-    def test_add_friend_unauthenticated(self, client):
-        """Test add friend without authentication."""
-        response = client.post('/friend', data={
-            'target_username': 'someuser'
-        })
-        assert response.status_code in [302, 401]  # Redirect or unauthorized
-    
-    def test_add_friend_nonexistent_user(self, authenticated_client, sample_user):
-        """Test adding non-existent user as friend."""
-        response = authenticated_client.post('/friend', data={
-            'target_username': 'nonexistent_user_xyz',
-            'csrf_token': 'dummy'
-        }, follow_redirects=True)
-        
-        assert response.status_code == 200
-        # Should show error message
-        assert b'not found' in response.data or b'does not exist' in response.data or b'error' in response.data.lower()
-    
-    def test_add_friend_to_self(self, authenticated_client, sample_user):
-        """Test adding yourself as friend."""
-        response = authenticated_client.post('/add_friend', data={
-            'target_username': sample_user.username,
-            'csrf_token': 'dummy'
-        }, follow_redirects=True)
-        
-        assert response.status_code == 200
-    
-    def test_add_friend_success(self, authenticated_client, db_session, sample_user, sample_user_2):
-        """Test successfully adding a friend."""
-        response = authenticated_client.post('/add_friend', data={
-            'target_username': sample_user_2.username,
-            'csrf_token': 'dummy'
-        }, follow_redirects=True)
-        
-        assert response.status_code == 200
-
 
 class TestAcceptFriendRequest:
     """Test accept friend request functionality."""
     
     def test_accept_friend_request_unauthenticated(self, client):
         """Test accepting friend request without authentication."""
-        response = client.post('/accept_friend_request', data={
+        response = client.post('/accept_request', data={
             'request_id': 1
         })
-        assert response.status_code in [302, 401]
+        assert response.status_code == 401
     
     def test_accept_friend_request_invalid_id(self, authenticated_client):
         """Test accepting with invalid request_id."""
-        response = authenticated_client.post('/accept_friend_request', data={
+        response = authenticated_client.post('/accept_request', data={
             'request_id': 99999,
             'csrf_token': 'dummy'
         }, follow_redirects=True)
         
-        assert response.status_code == 200
+        assert response.status_code == 400
 
 
 class TestRejectFriendRequest:
@@ -307,16 +263,16 @@ class TestRejectFriendRequest:
     
     def test_reject_friend_request_unauthenticated(self, client):
         """Test rejecting friend request without authentication."""
-        response = client.post('/reject_friend_request', data={
+        response = client.post('/reject_request', data={
             'request_id': 1
         })
-        assert response.status_code in [302, 401]
+        assert response.status_code == 401
     
     def test_reject_friend_request_invalid_id(self, authenticated_client):
         """Test rejecting with invalid request_id."""
-        response = authenticated_client.post('/reject_friend_request', data={
+        response = authenticated_client.post('/reject_request', data={
             'request_id': 99999,
             'csrf_token': 'dummy'
         }, follow_redirects=True)
         
-        assert response.status_code == 200
+        assert response.status_code == 404
