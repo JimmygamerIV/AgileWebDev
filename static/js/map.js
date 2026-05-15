@@ -8,6 +8,7 @@
   const classesToggleButton = document.querySelector(".upcoming .toggle-btn");
   const stopSelectingButton = document.getElementById("stopSelectingBtn");
   const classesDataElement = document.getElementById("classesMapData");
+  const fixedNowElement = document.getElementById("fixedNowData");
   const classItemElements = Array.from(document.querySelectorAll(".event-item[data-event-id]"));
 
   if (!mapElement || !styleToggleButton || !fullscreenToggleButton || !mapBoxElement || typeof L === "undefined") {
@@ -29,6 +30,7 @@
   let classesData = [];
   let routesEnabled = true;
   const classDataById = new Map();
+  let fixedNow = null;
   const onlineBadgeSvg = `
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <rect x="4.5" y="6" width="15" height="9" rx="1.4" fill="none" stroke="currentColor" stroke-width="2" />
@@ -157,6 +159,10 @@
     routesToggleButton.textContent = routesEnabled ? "Routes On" : "Routes Off";
     routesToggleButton.setAttribute("aria-pressed", String(routesEnabled));
     routesToggleButton.setAttribute("title", routesEnabled ? "Hide routes" : "Show routes");
+  }
+
+  function getNow() {
+    return fixedNow ? new Date(fixedNow) : new Date();
   }
 
   function toggleRoutes() {
@@ -354,8 +360,23 @@
     }
   }
 
+  function parseFixedNow() {
+    if (!fixedNowElement) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(fixedNowElement.textContent || "{}");
+      if (parsed && parsed.now) {
+        fixedNow = parsed.now;
+      }
+    } catch (_error) {
+      fixedNow = null;
+    }
+  }
+
   function computeActiveDate() {
-    const now = new Date();
+    const now = getNow();
     const today = now.toISOString().slice(0, 10);
     const timeNow = now.toTimeString().slice(0, 5);
 
@@ -431,7 +452,7 @@
     const dayLabel = (function () {
       try {
         if (!classData || !classData.date) return "Unknown";
-        const now = new Date();
+        const now = getNow();
         const today = now.toISOString().slice(0, 10);
         const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
         if (classData.date === today) return "Today";
@@ -676,7 +697,7 @@
 
   function getCurrentOrNextClassData(options = {}) {
     const { includeOnline = true } = options;
-    const now = new Date();
+    const now = getNow();
     let currentClass = null;
     let nextClass = null;
 
@@ -754,7 +775,7 @@
     const renderableEntries = getRenderableClassEntries();
 
     // Compute the target (gold) class from the single-day renderable entries
-    const now = new Date();
+    const now = getNow();
     let currentEntry = null;
     let nextEntry = null;
     for (const entry of renderableEntries) {
@@ -881,7 +902,7 @@
 
     // Determine the day's target (gold) class from the single-day entries
     const renderableEntries = getRenderableClassEntries();
-    const now = new Date();
+    const now = getNow();
     let currentEntry = null;
     let nextEntry = null;
     for (const entry of renderableEntries) {
@@ -1016,7 +1037,7 @@
     renderableEntries.sort((a, b) => a.start - b.start);
 
     // Find the target (gold) class
-    const now = new Date();
+    const now = getNow();
     let currentEntry = null;
     let nextEntry = null;
     for (const entry of renderableEntries) {
@@ -1128,10 +1149,11 @@
 
       let targetDate = dayValue;
       if (dayValue === "today") {
-        const now = new Date();
+        const now = getNow();
         targetDate = now.toISOString().slice(0, 10);
       } else if (dayValue === "tomorrow") {
-        const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        const now = getNow();
+        const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
         targetDate = tomorrow.toISOString().slice(0, 10);
       }
 
@@ -1214,6 +1236,7 @@
     classesToggleButton.addEventListener("click", toggleClassesPanel);
   }
 
+  parseFixedNow();
   parseClassesData();
   decorateFriendAttendees();
   decorateOnlineClasses();

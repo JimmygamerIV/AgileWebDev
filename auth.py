@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from database import Session
 from models import User
 from forms import SignupForm, SigninForm
+from app_email import send_welcome_email,send_verification_code
+
 import re
 
 auth_bp = Blueprint("auth", __name__)
@@ -100,7 +102,10 @@ def signup():
 
         db.add(new_user)
         db.commit()
-
+        # try:
+        #     #send_welcome_email(new_user.email,new_user.nickname)
+        # except Exception as e:
+        #     print(f"Welcome email failed: {e}")
     except Exception as e:
         db.rollback()
         return render_template("signup.html", error=f"Registration failed: {e}", form=form, show_full_nav=False)
@@ -118,7 +123,12 @@ def signin():
     form = SigninForm()
 
     if request.method == 'GET':
-        return render_template("signin.html", form=form, show_full_nav=False)
+        return render_template(
+            "signin.html",
+            form=form,
+            reset_success=request.args.get("reset") == "1",
+            show_full_nav=False
+        )
 
     if not form.validate_on_submit():
         return render_template("signin.html", form=form, show_full_nav=False)
@@ -153,3 +163,82 @@ def signin():
 def logout():
     session.clear()
     return redirect(url_for('auth.signin'))
+
+
+@auth_bp.route('/forgot_password',methods=['GET',"POST"])
+def forgot_password():
+    if request.method == 'GET':
+        return render_template('forgot_password.html', show_full_nav=False)
+    
+    email = request.form.get('email').strip().lower()
+    uwa_email_regex = r'^[a-zA-Z0-9._%+-]+@(student\.)?uwa\.edu\.au$'
+    if not re.match(uwa_email_regex, email):
+        return render_template(
+            "forgot_password.html",
+            error="Please use a valid UWA email (@student.uwa.edu.au or @uwa.edu.au).",
+            show_full_nav=False
+        )
+
+    db =    Session()
+    try:
+        user = db.query(User).filter(User.email == email).first()
+        session['reset_email'] = email
+        session.pop('reset_code', None)
+
+        if user:
+            code = send_verification_code(email)
+            if code:
+                session['reset_code'] = code
+
+        return redirect(url_for("auth.reset_password"))
+        
+    finally:
+        db.close()
+
+@auth_bp.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    if 'reset_email' not in session:
+        return redirect(url_for('auth.forgot_password'))
+
+    if request.method == 'GET':
+        return render_template("reset_password.html", email=session['reset_email'], show_full_nav=False)
+
+    user_code = request.form.get('code')
+    new_password = request.form.get('password')
+    confirm_password = request.form.get('confirm_password')
+
+    if user_code != session.get('reset_code'):
+        return render_template("reset_password.html", error="Invalid verification code.")
+
+    if new_password != confirm_password:
+        return render_template("reset_password.html", error="Passwords do not match.")
+
+    if len(new_password) < 6:
+        return render_template("reset_password.html", error="Password must be at least 6 characters long.", show_full_nav=False)
+    
+    if not re.search(r"[A-Z]", new_password):
+        return render_template("reset_password.html", error="Password must contain at least one uppercase letter (A-Z).", show_full_nav=False)
+    
+    if not re.search(r"[a-z]", new_password):
+        return render_template("reset_password.html", error="Password must contain at least one lowercase letter (a-z).", show_full_nav=False)
+    
+    if not re.search(r"\d", new_password):
+        return render_template("reset_password.html", error="Password must contain at least one number (0-9).", show_full_nav=False)
+
+
+    db = Session()
+    try:
+        user = db.query(User).filter(User.email == session['reset_email']).first()
+        if user:
+            user.password_hash = generate_password_hash(new_password, method='pbkdf2:sha256')
+            db.commit()
+            
+            session.pop('reset_email', None)
+            session.pop('reset_code', None)
+            
+            return redirect(url_for('auth.signin', reset='1'))
+    except Exception as e:
+        db.rollback()
+        return render_template("reset_password.html", error=f"Database error: {e}")
+    finally:
+        db.close()

@@ -4,6 +4,7 @@ from database import init_db, Session
 from models import Event, User, Friend
 from auth import auth_bp
 from datetime import date, timedelta, datetime
+from time_utils import get_now, get_today
 import json
 from icalendar import Calendar
 from map_ics_uid_locations import resolve_location, build_alias_index, build_room_index
@@ -17,15 +18,19 @@ from flask_wtf.csrf import CSRFProtect
 from generate_env import generate_env
 from friends import friends_bp, get_friend_ids
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_mail import Mail
 import os
 import base64
+
+mail = Mail()
+
 
 generate_env()
 load_dotenv()
 app = Flask(__name__)
 app.config.from_object(Config)
 
-
+mail.init_app(app)
 
 init_db()
 app.register_blueprint(auth_bp)
@@ -118,7 +123,7 @@ def is_event_currently_running(event, now=None):
         end_dt += timedelta(days=1)
 
     if now is None:
-        now = datetime.now()
+        now = get_now()
 
     return start_dt <= now < end_dt
 
@@ -153,7 +158,7 @@ def events_overlap(first_event, second_event):
 
 def select_current_or_next_event(events, now=None):
     if now is None:
-        now = datetime.now()
+        now = get_now()
 
     current_events = []
     upcoming_events = []
@@ -204,9 +209,9 @@ def index():
         tomorrow_events = []
         future_events = []
 
-        today = date.today()
+        today = get_today()
         tomorrow = today + timedelta(days=1)
-        time_now = datetime.now().strftime("%H:%M")
+        time_now = get_now().strftime("%H:%M")
 
         for e in all_events:
             if not e.date:
@@ -341,9 +346,9 @@ def index():
                 friend_user.is_favourite = False
 
         friend_status_by_id = {}
-        today_str = date.today().isoformat()
-        tomorrow_str = (date.today() + timedelta(days=1)).isoformat()
-        now = datetime.now()
+        today_str = get_today().isoformat()
+        tomorrow_str = (get_today() + timedelta(days=1)).isoformat()
+        now = get_now()
 
         user_candidate_events = [
             event
@@ -449,6 +454,7 @@ def index():
         classes_map_data=classes_map_data,
         friends=friends_list,
         friends_grouped=friends_grouped,
+        fixed_now=get_now().isoformat(),
         username=g.current_user["nickname"] or g.current_user["username"],
         show_full_nav=True
     )

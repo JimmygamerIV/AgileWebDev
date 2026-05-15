@@ -90,6 +90,17 @@ h1 {
   margin-bottom: 30px;
 }
 
+.alert-success {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 350px;
+  text-align: center;
+  font-size: 14px;
+}
+
 /* Form */
 .login-form {
   width: 350px;
@@ -130,6 +141,28 @@ h1 {
   background-color: #1d4ed8;
 }
 
+
+.forgot-password-text {
+    text-align: right;   
+    margin-top: -5px;    
+    margin-bottom: 15px;
+}
+
+.forgot-password-text a {
+    font-size: 0.85em;
+    color: #666;         
+    text-decoration: none;
+}
+
+.forgot-password-text a:hover {
+    text-decoration: underline;
+    color: #0056b3;      
+}
+
+.login-form button {
+    margin-top: 10px;
+}
+
 @media (max-width: 768px) {
   .signin-container {
     min-height: calc(100vh - 56px);
@@ -153,3 +186,4 @@ h1 {
     width: 100%;
   }
 }
+
