@@ -7,6 +7,7 @@
   --bg-elevated: #1e2438;
   --bg-nav: rgba(26, 16, 62, 0.97);
   --bg-hover: #252d42;
+  --selected-bg: rgba(108, 99, 255, 0.22);
   --nav-border: rgba(255, 255, 255, 0.1);
   --nav-text: rgba(155, 163, 192, 0.88);
   --nav-text-hover: #e8eaf6;
@@ -34,6 +35,7 @@
   --bg-elevated: #e8ecf6;
   --bg-nav: rgba(0, 48, 135, 0.97);
   --bg-hover: #dde3f5;
+  --selected-bg: #e6f0ff;
   --nav-border: rgba(255, 255, 255, 0.12);
   --nav-text: rgba(255, 255, 255, 0.88);
   --nav-text-hover: rgba(255, 255, 255, 0.97);
