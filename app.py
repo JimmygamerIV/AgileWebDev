@@ -510,6 +510,118 @@ def index():
     )
 
 
+@app.route('/api/friends/classes', methods=['GET'])
+@login_required
+def api_friend_classes():
+    
+    friend_id = request.args.get('friend_id', type=int)
+    req_date = request.args.get('date')
+
+    if not friend_id:
+        return jsonify({"error": "Missing friend_id"}), 400
+
+    db = Session()
+    try:
+        user_id = current_user.user_id
+
+        my_friends = get_friend_ids(db, user_id)
+        if int(friend_id) not in my_friends:
+            return jsonify({"error": "Not a friend"}), 403
+
+        # Load all events for friend to compute active date if needed
+        friend_events = db.query(Event).filter(Event.user_id == friend_id).order_by(Event.date, Event.start_time).all()
+
+        dates = sorted({e.date for e in friend_events if e.date})
+
+        def has_non_online(d):
+            for e in friend_events:
+                if e.date != d:
+                    continue
+                if get_primary_poi_id(e.location or ""):
+                    return True
+            return False
+
+        active_date = None
+        today = get_today().isoformat()
+        time_now = get_now().strftime("%H:%M")
+
+        if req_date:
+            active_date = req_date
+        else:
+            if today in dates:
+                remaining_today = any(
+                    (e.date == today and get_primary_poi_id(e.location or "") and (not e.end_time or e.end_time > time_now))
+                    for e in friend_events
+                )
+                if remaining_today:
+                    active_date = today
+
+            if active_date is None:
+                for d in dates:
+                    if d >= today and has_non_online(d):
+                        active_date = d
+                        break
+
+            if active_date is None:
+                for d in dates:
+                    if has_non_online(d):
+                        active_date = d
+                        break
+
+            if active_date is None:
+                active_date = today
+
+        # Select events for the active date, excluding online (no POI)
+        results = []
+        for e in friend_events:
+            if not e.date or e.date != active_date:
+                continue
+            poi_id = get_primary_poi_id(e.location or "")
+            if not poi_id:
+                continue
+
+            poi = POIS.get(poi_id)
+            building_id = None
+            if poi_id and "." in poi_id:
+                building_id = poi_id.split(".", 1)[0]
+            if poi and poi.get("parent_building"):
+                building_id = poi.get("parent_building")
+
+            building = BUILDINGS.get(building_id, {}) if building_id else {}
+
+            latitude = None
+            longitude = None
+            if poi:
+                latitude = poi.get("latitude")
+                longitude = poi.get("longitude")
+            if latitude is None or longitude is None:
+                latitude = building.get("latitude")
+                longitude = building.get("longitude")
+
+            building_name = (
+                building.get("name")
+                or (poi.get("building_name") if poi else None)
+                or "Unknown building"
+            )
+
+            results.append({
+                "event_id": e.event_id,
+                "event_name": e.event_name or "Untitled",
+                "date": e.date,
+                "start_time": e.start_time or "",
+                "end_time": e.end_time or "",
+                "time_display": f"{e.start_time or ''} - {e.end_time or ''}".strip(" -"),
+                "building_name": building_name,
+                "floor": (poi.get("floor") if poi else None),
+                "location_display": poi_id or (e.location or "Unknown location"),
+                "latitude": latitude,
+                "longitude": longitude,
+            })
+
+        return jsonify({"classes": results})
+    finally:
+        db.close()
+
 @app.context_processor
 def inject_global_vars():
     default_vars = {
