@@ -35,7 +35,7 @@
       <span style="color: red; font-size: 0.8em">{{ error }}</span>
       {% endfor %}
 
-      <label>Email</label>
+      <label>Email<span style="color: red">*</span></label>
       {{ form.email(placeholder="eg. Name@student.uwa.edu.au") }} {% for error
       in form.email.errors %}
       <span style="color: red; font-size: 0.8em">{{ error }}</span>

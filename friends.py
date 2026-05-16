@@ -1,4 +1,4 @@
-from flask import Blueprint, g, redirect, render_template, session, request, jsonify, abort
+from flask import Blueprint, g, redirect, render_template, session, request, jsonify, abort, url_for
 from database import Session
 from models import User, Friend, FriendRequest, Event
 from forms import AddFriendForm, FriendActionForm
@@ -189,7 +189,9 @@ def remove_friend():
         ).delete()
 
         db.commit()
-        return jsonify({"success": True})
+        if 'application/json' in request.headers.get('Accept', ''):
+            return jsonify({"success": True})
+        return redirect(url_for('friends.friends'))
     finally:
         db.close()
 
