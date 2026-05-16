@@ -136,7 +136,7 @@
             const csrfToken = csrfTokenElement ? csrfTokenElement.value : '';
 
 
-            fetch("/profile/avatar/upload_base64", {
+            fetch("/settings/avatar/upload_base64", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

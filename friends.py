@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, jsonify, abort, flash
+from flask import Blueprint, redirect, render_template, request, jsonify, abort, flash, url_for
 from flask_login import login_required, current_user
 from database import Session
 from models import User, Friend, FriendRequest, Event
@@ -204,7 +204,9 @@ def remove_friend():
         ).delete()
 
         db.commit()
-        return jsonify({"success": True})
+        if 'application/json' in request.headers.get('Accept', ''):
+            return jsonify({"success": True})
+        return redirect(url_for('friends.friends'))
     finally:
         db.close()
 
@@ -415,9 +417,7 @@ def send_friend_request():
 @friends_bp.route("/profile/<username>")
 @login_required
 def view_profile(username):
-    if username == current_user.username:
-        return redirect('/profile')
-
+    
     db = Session()
 
     try:
@@ -426,16 +426,17 @@ def view_profile(username):
         if user is None:
             abort(404)
 
+        is_self = user.user_id == current_user.user_id
         friend_ids = get_friend_ids(db, current_user.user_id)
 
-        if user.user_id not in friend_ids:
+        if not is_self and user.user_id not in friend_ids:
             return render_template(
                 "not_friend.html",
                 target_user=user,
                 show_full_nav=True,
             ), 403
-        
-        status = "friend"
+
+        status = "self" if is_self else "friend"
         incoming_req_id = None
 
         if status == "none":
@@ -464,7 +465,7 @@ def view_profile(username):
 
         target_friend_ids = get_friend_ids(db, user.user_id)
         friend_count = len(target_friend_ids)
-        mutual_count = len(friend_ids & target_friend_ids)
+        mutual_count = 0 if is_self else len(friend_ids & target_friend_ids)
 
         today_str = get_today().isoformat()
         now_str = get_now().strftime("%H:%M")

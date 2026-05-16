@@ -863,9 +863,13 @@ def current_class_map_data():
         db.close()
 
 
-@app.route('/profile', methods=['GET', 'POST'])
-@login_required
-def profile():
+
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
+    if g.current_user is None:
+        session.pop('user_id', None)
+        return redirect('/signin')
+
     if request.method == 'POST':
         action = request.form.get('action')
         db = Session()
@@ -875,7 +879,8 @@ def profile():
 
             if not user:
                 flash({"type": "error", "msg": "User not found."})
-                return redirect(url_for('profile'))
+                return redirect(url_for('settings'))
+            
 
             if action == 'update_nickname':
                 new_nickname = request.form.get('nickname', '').strip()
@@ -885,7 +890,7 @@ def profile():
                     user.nickname = new_nickname
                     db.commit()
                     flash({"type": "success", "msg": "Nickname updated successfully!"})
-                return redirect(url_for('profile')) 
+                return redirect(url_for('settings')) 
 
             elif action == 'update_password':
                 curr_pw = request.form.get('current_password')
@@ -908,34 +913,34 @@ def profile():
                     user.password_hash = generate_password_hash(new_pw, method='pbkdf2:sha256')
                     db.commit()
                     flash({"type": "success", "msg": "Password updated successfully!"})
-                return redirect(url_for('profile'))
+                return redirect(url_for('settings'))
                         
             elif action == 'update_email':
                 new_email = request.form.get('email', '').strip().lower()
                 
                 if not new_email:
                     flash({"type": "error", "msg": "Email address cannot be empty."})
-                    return redirect(url_for('profile'))
+                    return redirect(url_for('settings'))
                 
                 uwa_email_regex = r'^[a-zA-Z0-9._%+-]+@(student\.)?uwa\.edu\.au$'
                 if not re.match(uwa_email_regex, new_email):
                     flash({"type": "error", "msg": "Invalid domain. Please use a valid UWA email (@student.uwa.edu.au)."})
-                    return redirect(url_for('profile'))
+                    return redirect(url_for('settings'))
                 
                 existing_user = db.query(User).filter(User.email == new_email, User.user_id != user_id).first()
                 if existing_user:
                     flash({"type": "error", "msg": "This email address is already registered by another user."})
-                    return redirect(url_for('profile'))
+                    return redirect(url_for('settings'))
                 
                 user.email = new_email
                 db.commit()
                 flash({"type": "success", "msg": "Institutional email updated successfully!"})
-                return redirect(url_for('profile'))
+                return redirect(url_for('settings'))
 
         except Exception as e:
             db.rollback()
             flash({"type": "error", "msg": f"Database update failed. Reason: {e}"})
-            return redirect(url_for('profile'))
+            return redirect(url_for('settings'))
         finally:
             db.close()
 
@@ -952,7 +957,7 @@ def profile():
     )
 
 
-@app.route('/profile/avatar/upload_base64', methods=['POST'])
+@app.route('/settings/avatar/upload_base64', methods=['POST'])
 def upload_avatar_base64():
     if not current_user.is_authenticated:
         return jsonify({"status": "error", "message": "Unauthorized"}), 401
