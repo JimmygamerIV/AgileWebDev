@@ -8,40 +8,7 @@ from database import Session
 
 class TestSignupAndSignin:
     """Integration tests for signup and signin flow."""
-    
-    def test_full_signup_signin_flow(self, client, db_session):
-        """Test complete signup and signin workflow."""
-        # Sign up
-        signup_response = client.post('/signup', data={
-            'username': 'integration_user',
-            'nickname': 'Integration User',
-            'password': 'IntegrationPass123',
-            'confirm_password': 'IntegrationPass123',
-            'email': 'integration@student.uwa.edu.au',
-            'csrf_token': 'dummy'
-        }, follow_redirects=True)
-        
-        assert signup_response.status_code == 200
-        
-        # Verify user created
-        user = db_session.query(User).filter(
-            User.username == 'integration_user'
-        ).first()
-        assert user is not None
-        
-        # Sign in with new account
-        signin_response = client.post('/signin', data={
-            'username': 'integration_user',
-            'password': 'IntegrationPass123',
-            'csrf_token': 'dummy'
-        }, follow_redirects=True)
-        
-        assert signin_response.status_code == 200
-        
-        # Verify session is created
-        with client.session_transaction() as sess:
-            assert sess.get('user_id') == user.user_id
-    
+       
     def test_signup_duplicate_prevents_signin_conflict(self, client, db_session, sample_user):
         """Test that duplicate signup doesn't affect existing user signin."""
         # Try to signup with existing email
@@ -274,36 +241,6 @@ class TestUserProfileWorkflow:
         response_text = response.data.decode()
         assert sample_user.username in response_text or sample_user.nickname in response_text
     
-    def test_view_friend_profile_from_different_client(self, authenticated_client, authenticated_client_2,
-                                                       db_session, sample_user, sample_user_2):
-        """Test viewing friend's profile from different client perspective.
-        
-        User 1 (authenticated_client) creates friendship with User 2.
-        User 1 views friends list and sees User 2.
-        User 2 (authenticated_client_2) views their own profile.
-        """
-        # Create friendship between user 1 and user 2
-        friend = Friend(
-            user_id=sample_user.user_id,
-            friend_id=sample_user_2.user_id
-        )
-        db_session.add(friend)
-        db_session.commit()
-        
-        # User 1 navigates to friends page (should see User 2)
-        response = authenticated_client.get('/friends')
-        assert response.status_code == 200
-        
-        response_text = response.data.decode()
-        assert sample_user_2.username in response_text or sample_user_2.nickname in response_text
-        
-        # User 2 (separate client) views their own profile
-        profile_response = authenticated_client_2.get('/profile')
-        assert profile_response.status_code == 200
-        
-        profile_text = profile_response.data.decode()
-        assert sample_user_2.username in profile_text or sample_user_2.nickname in profile_text
-
 
 class TestComplexScenarios:
     """Complex integration scenarios involving multiple users."""

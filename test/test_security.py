@@ -91,16 +91,21 @@ class TestAuthenticationBypass:
         assert b'spaces' in response.data or b'error' in response.data.lower()
     
     def test_direct_session_manipulation(self, client, db_session):
-        """Test directly manipulating session."""
+        """Test directly manipulating session.
+
+        Pretending to be a non-existent user via Flask-Login's session key
+        should not grant access -- the user_loader returns None and the
+        request is treated as unauthenticated.
+        """
         with client:
             with client.session_transaction() as sess:
-                sess['user_id'] = 99999  # Non-existent user
-            
-            response = client.get('/profile')
-            
-            # User should not be loaded from invalid session
-            with client.session_transaction() as sess:
-                assert sess.get('user_id') is None or sess.get('user_id') == 99999
+                sess['_user_id'] = '99999'  # Non-existent user
+                sess['_fresh'] = True
+
+            response = client.get('/profile', follow_redirects=False)
+
+            # Unauthenticated -> redirect to signin
+            assert response.status_code in (302, 401)
     
     def test_accessing_protected_route_without_auth(self, client):
         """Test accessing protected routes without authentication."""
@@ -334,25 +339,26 @@ class TestSessionSecurity:
             # Session should still be valid
             assert signin_response.status_code == 200
     
-    def test_concurrent_sessions(self, client, sample_user):
-        """Test handling of concurrent sessions."""
-        # Create first session
-        with client:
-            with client.session_transaction() as sess:
-                sess['user_id'] = sample_user.user_id
-                sess_id_1 = id(sess)
-            
-            response1 = client.get('/profile')
-            assert response1.status_code == 200
-        
-        # Create second session
-        with client:
-            with client.session_transaction() as sess:
-                sess['user_id'] = sample_user.user_id
-                sess_id_2 = id(sess)
-            
-            response2 = client.get('/profile')
-            assert response2.status_code == 200
+    def test_concurrent_sessions(self, app, sample_user):
+        """Test handling of concurrent sessions.
+
+        Two independent test clients can each hold their own Flask-Login
+        session for the same user without interfering with one another.
+        """
+        def login(test_client, user):
+            with test_client.session_transaction() as sess:
+                sess['_user_id'] = str(user.user_id)
+                sess['_fresh'] = True
+
+        client_a = app.test_client()
+        login(client_a, sample_user)
+        response1 = client_a.get('/profile')
+        assert response1.status_code == 200
+
+        client_b = app.test_client()
+        login(client_b, sample_user)
+        response2 = client_b.get('/profile')
+        assert response2.status_code == 200
 
 
 class TestPasswordSecurity:
