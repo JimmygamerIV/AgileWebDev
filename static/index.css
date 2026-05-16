@@ -575,8 +575,8 @@ body {
 }
 
 .friend-on-campus.selected {
-  background: #e6f0ff;
-  border: 1px solid var(--friend-accent, #2f3c8f);
+  background: var(--selected-bg);
+  border: 1px solid var(--friend-accent, var(--border-accent));
   border-left-width: 4px;
 }
 
