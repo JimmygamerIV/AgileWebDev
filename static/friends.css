@@ -12,28 +12,28 @@ body {
   width: 100%;
   padding: 0px 30px;
   box-sizing: border-box;
-  background: rgba(12, 14, 22, 0.92);
+  background: var(--bg-nav);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 .navbar a {
-  color: var(--text-secondary);
+  color: var(--nav-text);
   text-decoration: none;
   padding: 15px 15px;
   transition: color var(--transition);
 }
 
 .navbar a:hover {
-  color: var(--text-primary);
+  color: var(--nav-text-hover);
   background-color: transparent;
 }
 
 .nav-left,
 .nav-center,
 .nav-right {
-  color: var(--text-primary);
+  color: var(--nav-text-hover);
   font-size: 20px;
 }
 
@@ -216,7 +216,7 @@ body {
 }
 
 .friend-item:hover {
-  background: #252d42;
+  background: var(--bg-hover);
   border-color: var(--border-accent);
   box-shadow: var(--glow);
   transform: translateY(-2px);
@@ -509,5 +509,33 @@ body {
     padding: 6px 7px;
     white-space: nowrap;
     line-height: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .friends-card {
+    padding: 12px;
+  }
+
+  .tab {
+    font-size: 12px;
+    padding: 8px 4px;
+  }
+
+  .friend-item {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .actions {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 14px;
+    padding: 4px 5px;
   }
 }

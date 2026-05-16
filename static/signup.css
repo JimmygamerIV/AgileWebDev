@@ -12,12 +12,12 @@ body {
 /* ─── Navbar ─── */
 .navbar {
   width: 100%;
-  background: rgba(12, 14, 22, 0.85);
+  background: var(--bg-nav);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   padding: 15px 30px;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 .nav-left {
@@ -174,5 +174,26 @@ h1 {
 
   .login-form {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .card h1 {
+    font-size: 24px;
+  }
+
+  .login-form input {
+    font-size: 15px;
+    padding: 10px 12px;
+  }
+
+  .login-form button {
+    padding: 10px;
+    font-size: 15px;
   }
 }

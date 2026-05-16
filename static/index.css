@@ -12,28 +12,28 @@ body {
   width: 100%;
   padding: 0px 30px;
   box-sizing: border-box;
-  background: rgba(12, 14, 22, 0.92);
+  background: var(--bg-nav);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 .navbar a {
-  color: var(--text-secondary);
+  color: var(--nav-text);
   text-decoration: none;
   padding: 15px 15px;
   transition: color var(--transition);
 }
 
 .navbar a:hover {
-  color: var(--text-primary);
+  color: var(--nav-text-hover);
   background-color: transparent;
 }
 
 .nav-left,
 .nav-center,
 .nav-right {
-  color: var(--text-primary);
+  color: var(--nav-text-hover);
   font-size: 20px;
 }
 
@@ -253,7 +253,7 @@ body {
 }
 
 .event-item:hover {
-  background: #252d42;
+  background: var(--bg-hover);
   box-shadow: 0 2px 12px rgba(108, 99, 255, 0.12);
   transform: translateX(2px);
 }
@@ -545,7 +545,7 @@ body {
 }
 
 .friend-on-campus:hover {
-  background: #252d42;
+  background: var(--bg-hover);
   border-color: var(--border-accent);
   transform: translateX(3px);
 }
@@ -909,4 +909,23 @@ body {
     font-size: 14px;
     padding: 4px 5px;
   }
+}
+
+/* ─── Light mode overrides ─── */
+[data-theme="light"] .upcoming-header {
+  background: linear-gradient(135deg, #002060, #0041c2);
+  color: rgba(255, 255, 255, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="light"] .toggle-btn {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+[data-theme="light"] .toggle-btn:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="light"] .upcoming-content {
+  border-color: rgba(0, 48, 135, 0.3);
 }

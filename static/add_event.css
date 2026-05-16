@@ -12,14 +12,14 @@ body {
   width: 100%;
   padding: 0 30px;
   box-sizing: border-box;
-  background: rgba(12, 14, 22, 0.92);
+  background: var(--bg-nav);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 .navbar a {
-  color: var(--text-secondary);
+  color: var(--nav-text);
   text-decoration: none;
   padding: 15px 15px;
   transition: color var(--transition);
@@ -27,14 +27,14 @@ body {
 
 .navbar a:hover,
 .navbar a.active {
-  color: var(--text-primary);
+  color: var(--nav-text-hover);
   background-color: transparent;
 }
 
 .nav-left,
 .nav-center,
 .nav-right {
-  color: var(--text-primary);
+  color: var(--nav-text-hover);
   font-size: 20px;
 }
 
@@ -436,16 +436,6 @@ tr:hover td {
 
 @media (max-width: 768px) {
   .page-container {
-    grid-template-columns: 1fr;
-  }
-
-  .nav-right {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-container {
     width: 100%;
     max-width: 100%;
     margin: 10px 0;
@@ -550,5 +540,39 @@ tr:hover td {
     padding: 6px 7px;
     white-space: nowrap;
     line-height: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 0 6px;
+    margin: 8px 0;
+    gap: 10px;
+  }
+
+  .upload-card,
+  .preview-card {
+    padding: 12px;
+  }
+
+  .upload-card h1,
+  .preview-card h2 {
+    font-size: 18px;
+  }
+
+  table {
+    min-width: 420px;
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+
+  .nav-center a,
+  .nav-right > a {
+    font-size: 14px;
+    padding: 4px 5px;
   }
 }

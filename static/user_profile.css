@@ -249,7 +249,8 @@
 .btn-remove,
 .btn-cancel,
 .btn-accept,
-.btn-reject {
+.btn-reject,
+.btn-edit {
   padding: 9px 22px;
   font-size: 14px;
   font-weight: 600;
@@ -265,6 +266,22 @@
 .btn-accept {
   background: linear-gradient(135deg, var(--accent), #5a52e8);
   color: #fff;
+}
+
+.btn-edit {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1.5px solid var(--border-accent);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-edit:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px var(--accent-glow);
+  color: var(--text-primary);
 }
 
 .btn-add:hover,
@@ -311,10 +328,30 @@
 }
 
 /* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .user-profile-container {
+    padding: 20px 16px;
+    align-items: stretch;
+  }
+
+  .user-profile-card {
+    max-width: 100%;
+    box-sizing: border-box;
+    border-radius: 16px;
+  }
+}
+
 @media (max-width: 480px) {
   .user-profile-container {
-    padding: 24px 12px;
-    align-items: flex-start;
+    padding: 16px 12px;
+  }
+
+  .user-profile-card {
+    border-radius: 12px;
+  }
+
+  .user-profile-header {
+    padding: 24px 16px 16px;
   }
 
   .user-profile-avatar {
@@ -326,16 +363,23 @@
     font-size: 20px;
   }
 
+  .user-profile-stats {
+    padding: 12px 16px;
+  }
+
   .user-profile-actions {
     padding: 16px;
+    flex-direction: column;
   }
 
   .btn-add,
   .btn-remove,
   .btn-cancel,
   .btn-accept,
-  .btn-reject {
+  .btn-reject,
+  .btn-edit {
     width: 100%;
     padding: 11px;
+    text-align: center;
   }
 }

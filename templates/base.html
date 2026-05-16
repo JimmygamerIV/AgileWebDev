@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>{% block title %}UWA Social Timetable{% endblock %}</title>
+    <script>(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 
     <!-- ✅ Bootstrap CDN -->
     <link
@@ -54,9 +55,20 @@
         
         <hr class="menu-divider" />
         
-        <a href="/profile" class="user_menu-item">Profile</a>
+        <a href="{{ url_for('friends.view_profile', username=global_username) }}" class="user_menu-item">Profile</a>
         <a href="/settings" class="user_menu-item">Settings</a>
-        
+
+        <div class="user_menu-item theme-toggle-item" id="theme-toggle-item">
+          <span class="theme-toggle-label">
+            <span class="theme-icon" id="theme-icon"></span>
+            <span id="theme-label"></span>
+          </span>
+          <span class="theme-switch">
+            <input type="checkbox" id="theme-toggle-checkbox">
+            <span class="theme-switch-slider"></span>
+          </span>
+        </div>
+
         <hr class="menu-divider" />
         
         <form action="/logout" method="POST" class="logout-form">

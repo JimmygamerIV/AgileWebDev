@@ -47,7 +47,10 @@
     {% endif %}
 
     <div class="user-profile-actions">
-      {% if status == 'friend' %}
+      {% if status == 'self' %}
+        <a href="/settings" class="btn-edit">Edit Profile</a>
+
+      {% elif status == 'friend' %}
         <form method="POST" action="/remove_friend">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
           <input type="hidden" name="friend_id" value="{{ target_user.user_id }}"/>

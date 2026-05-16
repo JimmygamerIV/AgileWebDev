@@ -411,9 +411,6 @@ def view_profile(username):
     if g.current_user is None:
         return redirect('/signin')
 
-    if username == g.current_user['username']:
-        return redirect('/profile')
-
     db = Session()
 
     try:
@@ -422,16 +419,17 @@ def view_profile(username):
         if user is None:
             abort(404)
 
+        is_self = user.user_id == g.current_user['user_id']
         friend_ids = get_friend_ids(db, g.current_user['user_id'])
 
-        if user.user_id not in friend_ids:
+        if not is_self and user.user_id not in friend_ids:
             return render_template(
                 "not_friend.html",
                 target_user=user,
                 show_full_nav=True,
             ), 403
-        
-        status = "friend"
+
+        status = "self" if is_self else "friend"
         incoming_req_id = None
 
         if status == "none":
@@ -460,7 +458,7 @@ def view_profile(username):
 
         target_friend_ids = get_friend_ids(db, user.user_id)
         friend_count = len(target_friend_ids)
-        mutual_count = len(friend_ids & target_friend_ids)
+        mutual_count = 0 if is_self else len(friend_ids & target_friend_ids)
 
         today_str = date.today().isoformat()
         now_str = datetime.now().strftime("%H:%M")

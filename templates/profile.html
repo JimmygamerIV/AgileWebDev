@@ -29,7 +29,7 @@
     <h2>Personal Information</h2>
     <hr class="section-divider" />
     
-    <form method="post" action="{{ url_for('profile') }}" class="profile-form" style="margin-bottom: 28px;">
+    <form method="post" action="{{ url_for('settings') }}" class="profile-form" style="margin-bottom: 28px;">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <input type="hidden" name="action" value="update_nickname" />
 
@@ -51,7 +51,7 @@
       </div>
     </form>
 
-    <form method="post" action="{{ url_for('profile') }}" class="profile-form">
+    <form method="post" action="{{ url_for('settings') }}" class="profile-form">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <input type="hidden" name="action" value="update_email" />
 
@@ -78,7 +78,7 @@
     <h2>Change Password</h2>
     <hr class="section-divider" />
 
-    <form method="post" action="{{ url_for('profile') }}" class="profile-form">
+    <form method="post" action="{{ url_for('settings') }}" class="profile-form">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <input type="hidden" name="action" value="update_password" />
 
