@@ -77,7 +77,7 @@ To exit the virtual environment when done: `deactivate`.
 To populate the database with test users (`john`, `bombo`, `steve` — all with password `test1234`) plus a few pending friend requests to your account, first sign up through the app, then run:
 
 ```bash
-python seed.py 
+python seed.py <your-username>
 ```
 
 ## Running the tests
