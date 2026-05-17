@@ -88,17 +88,12 @@ Make sure dev dependencies are installed:
 pip install -r test-requirements.txt
 ```
 
-Run the unit tests:
+Run the tests (Unit + Selenium):
 
 ```bash
 pytest test/
 ```
 
-Run the Selenium end-to-end tests (requires Chrome installed):
-
-```bash
-pytest test/test_integration.py
-```
 
 ## Database migrations
 
