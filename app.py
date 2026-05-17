@@ -864,11 +864,15 @@ def current_class_map_data():
 
 
 
+@app.route('/profile', methods=['GET', 'POST'], endpoint='profile')
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
-    if g.current_user is None:
+    # NOTE: this route uses Flask-Login's `current_user`, NOT a `g.current_user`
+    # attribute (which was never set in this app and caused a NameError on
+    # every settings request). Redirect unauthenticated users to signin.
+    if not current_user.is_authenticated:
         session.pop('user_id', None)
-        return redirect('/signin')
+        return redirect(url_for('auth.signin'))
 
     if request.method == 'POST':
         action = request.form.get('action')
