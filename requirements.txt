@@ -7,3 +7,4 @@ python-dotenv==1.2.2
 email_validator==2.3.0
 Flask-Mail==0.10.0
 alembic==1.18.4
+Flask-Login==0.6.3
