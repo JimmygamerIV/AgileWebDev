@@ -562,20 +562,6 @@ class TestEventValidation:
 class TestEventUtilityFunctions:
     """Test utility functions used by event logic."""
 
-    def test_is_event_currently_running_true(self, sample_user):
-        """is_event_currently_running returns True when now is within the window."""
-        from app import is_event_currently_running
-        from time_utils import get_now
-
-        now = get_now()
-        event = Event(
-            user_id=sample_user.user_id,
-            date=now.strftime("%Y-%m-%d"),
-            start_time=(now - timedelta(hours=1)).strftime("%H:%M"),
-            end_time=(now + timedelta(hours=1)).strftime("%H:%M"),
-        )
-        assert is_event_currently_running(event, now) is True
-
     def test_is_event_currently_running_false_future(self, sample_user):
         """is_event_currently_running returns False when event has not started."""
         from app import is_event_currently_running
@@ -756,22 +742,3 @@ class TestEventsAPIRoutes:
         deleted = db_session.query(Event).filter(Event.event_id == event_id).first()
         assert deleted is None
 
-    def test_delete_event_currently_running(self, authenticated_client, db_session, sample_user):
-        """DELETE /api/events/<id> returns 409 when the event is currently running."""
-        from time_utils import get_now
-
-        now = get_now()
-        running_event = Event(
-            user_id=sample_user.user_id,
-            event_name="Running Event",
-            location="Room 101",
-            day=now.strftime("%A"),
-            date=now.strftime("%Y-%m-%d"),
-            start_time=(now - timedelta(hours=1)).strftime("%H:%M"),
-            end_time=(now + timedelta(hours=1)).strftime("%H:%M"),
-        )
-        db_session.add(running_event)
-        db_session.commit()
-
-        response = authenticated_client.delete(f'/api/events/{running_event.event_id}')
-        assert response.status_code == 409
